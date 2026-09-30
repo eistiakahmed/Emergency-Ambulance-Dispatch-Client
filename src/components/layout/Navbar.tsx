@@ -36,10 +36,10 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Fleet & Services", href: "/services" },
+    { name: "Services", href: "/services" },
     { name: "Hospital Beds", href: "/hospitals" },
-    { name: "About Network", href: "/about" },
-    { name: "Contact & Hubs", href: "/contact" },
+    { name: "About", href: "/about" },
+    { name: "Contact", href: "/contact" },
   ];
 
   const getDashboardHref = () => {
@@ -84,11 +84,10 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                  isActive
+                className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${isActive
                     ? "bg-red-50 text-red-700 font-bold"
                     : "text-stone-700 hover:text-red-600 hover:bg-stone-50"
-                }`}
+                  }`}
               >
                 {link.name}
               </Link>
@@ -115,8 +114,8 @@ export function Navbar() {
                     {user.role === "ADMIN"
                       ? "Admin Console"
                       : user.role === "DRIVER"
-                      ? "Driver Console"
-                      : "Patient Portal"}
+                        ? "Driver Console"
+                        : "Patient Portal"}
                   </span>
                 </Button>
               </Link>
@@ -181,11 +180,10 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  pathname === link.href
+                className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${pathname === link.href
                     ? "bg-red-50 text-red-700 font-bold"
                     : "text-stone-800 hover:bg-stone-50"
-                }`}
+                  }`}
               >
                 {link.name}
               </Link>
