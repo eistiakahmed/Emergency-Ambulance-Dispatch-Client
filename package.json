@@ -10,9 +10,18 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.13.0",
+    "@tanstack/react-query": "^5.104.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.48.0",
     "next": "16.3.7",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "react-redux": "^9.3.0",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.7.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.2",
