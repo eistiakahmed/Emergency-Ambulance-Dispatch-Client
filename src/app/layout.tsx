@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/components/providers/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,17 +14,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Emergency Ambulance',
-  description: 'A web application for managing emergency ambulance dispatch operations, providing real-time tracking, communication, and coordination of ambulance services.',
+  title: "PulseRescue | Enterprise Emergency Ambulance Dispatch System",
+  description:
+    "Rapid emergency medical dispatch, live ambulance fleet tracking, hospital emergency bed discovery, and automated triage routing.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col font-sans bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
