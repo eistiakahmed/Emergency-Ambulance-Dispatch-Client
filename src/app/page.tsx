@@ -196,7 +196,6 @@ export default function Home() {
         <section className="py-16 sm:py-24 bg-white border-b border-stone-200">
           <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
             <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
-              <Badge variant="redSubtle">Standard Operating Procedure</Badge>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-stone-900">
                 How Emergency Response Operates
               </h2>
@@ -230,7 +229,6 @@ export default function Home() {
         <section className="py-16 sm:py-24 bg-stone-50 border-b border-stone-200">
           <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
             <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
-              <Badge variant="warm">Medical Fleet Standards</Badge>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-stone-900">
                 Emergency Fleet Categories
               </h2>

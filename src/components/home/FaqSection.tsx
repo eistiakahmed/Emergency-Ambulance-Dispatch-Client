@@ -63,7 +63,6 @@ export function FaqSection() {
       <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
-          <Badge variant="redSubtle">Common Questions & Guidance</Badge>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-stone-900">
             Frequently Asked Questions
           </h2>
