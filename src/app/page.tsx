@@ -10,10 +10,7 @@ import {
   Activity,
   ArrowRight,
   CheckCircle2,
-  Sparkles,
-  MapPin,
   Check,
-  Radio,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -93,8 +90,8 @@ export default function Home() {
       <Navbar />
 
       <main className="flex-1">
-        {/* Hero Section with Full-Width Background Image & Overlay */}
-        <section className="relative overflow-hidden border-b border-stone-200 bg-white min-h-[640px] lg:min-h-[720px] flex items-center">
+        {/* Hero Section with Full-Width Background Image & Clean Left Overlay */}
+        <section className="relative overflow-hidden border-b border-stone-200 bg-white min-h-[580px] lg:min-h-[680px] flex items-center">
           {/* Full-width Background Image Layer */}
           <div className="absolute inset-0 z-0 select-none pointer-events-none">
             <Image
@@ -105,166 +102,68 @@ export default function Home() {
               quality={95}
               className="object-cover object-right lg:object-center"
             />
-            {/* Smooth Left-to-Right White Fade Overlay for Maximum Text Contrast */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 via-white/80 to-white/20 lg:from-white lg:via-white/90 lg:via-white/70 lg:to-transparent" />
+            {/* Smooth Left-to-Right White Fade Overlay for High Text Readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 via-white/75 to-transparent lg:via-white/85 lg:to-transparent/10" />
             {/* Subtle bottom gradient to blend cleanly into the next section */}
-            <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-stone-50 to-transparent" />
+            <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-stone-50 to-transparent" />
           </div>
 
-          <div className="relative z-10 mx-auto max-w-[1536px] w-full px-4 sm:px-8 lg:px-12 py-12 lg:py-16">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-              
-              {/* Left Column: Headline, Copy & CTAs floating over image */}
-              <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50/90 border border-red-200/80 text-red-700 text-xs font-bold shadow-xs backdrop-blur-xs">
-                  <span className="h-2 w-2 rounded-full bg-red-600 animate-beacon" />
-                  <span>24/7 Nationwide Emergency Medical Dispatch</span>
-                </div>
-
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-900 leading-[1.15]">
-                  Seconds Save Lives. <br />
-                  <span className="text-red-600">
-                    Rapid Ambulance Dispatch & Live ER Beds.
-                  </span>
-                </h1>
-
-                <p className="text-base sm:text-lg text-stone-700 font-medium max-w-2xl leading-relaxed mx-auto lg:mx-0 drop-shadow-xs">
-                  PulseRescue provides instant paramedic dispatch with live GPS tracking, intelligent nearest-unit matching, and real-time hospital ICU bed reservation.
-                </p>
-
-                {/* Primary Action Buttons */}
-                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
-                  <Link href="/dashboard/emergency/new" className="w-full sm:w-auto">
-                    <Button
-                      variant="emergency"
-                      size="lg"
-                      className="w-full sm:w-auto gap-2.5 text-sm sm:text-base px-7 h-13 shadow-lg shadow-red-600/30 font-bold"
-                    >
-                      <Siren className="h-5 w-5" />
-                      <span>Request Immediate Ambulance</span>
-                    </Button>
-                  </Link>
-
-                  <Link href="/hospitals" className="w-full sm:w-auto">
-                    <Button
-                      variant="warm"
-                      size="lg"
-                      className="w-full sm:w-auto gap-2 text-sm sm:text-base px-6 h-13 font-bold"
-                    >
-                      <Building2 className="h-5 w-5" />
-                      <span>Find Hospital Beds</span>
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* Trust Points */}
-                <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs font-bold text-stone-700">
-                  <div className="flex items-center gap-2 bg-white/70 backdrop-blur-xs px-2.5 py-1 rounded-md border border-stone-200/50">
-                    <CheckCircle2 className="h-4 w-4 text-red-600" />
-                    <span>Dispatch Under 60s</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/70 backdrop-blur-xs px-2.5 py-1 rounded-md border border-stone-200/50">
-                    <CheckCircle2 className="h-4 w-4 text-red-600" />
-                    <span>Certified Paramedics</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/70 backdrop-blur-xs px-2.5 py-1 rounded-md border border-stone-200/50">
-                    <CheckCircle2 className="h-4 w-4 text-red-600" />
-                    <span>Real-Time ER Sync</span>
-                  </div>
-                </div>
+          <div className="relative z-10 mx-auto max-w-[1536px] w-full px-4 sm:px-8 lg:px-12 py-16 lg:py-24">
+            <div className="max-w-2xl lg:max-w-3xl space-y-6 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50/90 border border-red-200/80 text-red-700 text-xs font-bold shadow-xs backdrop-blur-xs">
+                <span className="h-2 w-2 rounded-full bg-red-600 animate-beacon" />
+                <span>24/7 Nationwide Emergency Medical Dispatch</span>
               </div>
 
-              {/* Right Column: Glassmorphic Live Dispatch Radar Card */}
-              <div className="lg:col-span-5">
-                <div className="rounded-3xl border border-white/80 bg-white/80 backdrop-blur-md p-5 sm:p-6 shadow-2xl space-y-4">
-                  {/* Card Header */}
-                  <div className="flex items-center justify-between border-b border-stone-200/60 pb-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="h-3 w-3 rounded-full bg-red-600 animate-beacon" />
-                      <div>
-                        <p className="text-sm font-bold text-stone-900">
-                          Central Dispatch Radar
-                        </p>
-                        <p className="text-[11px] text-stone-500 font-medium">
-                          Dhaka Metro Command Station
-                        </p>
-                      </div>
-                    </div>
-                    <Badge variant="redSubtle" className="font-bold">24 Units Active</Badge>
-                  </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-900 leading-[1.12]">
+                Seconds Save Lives. <br />
+                <span className="text-red-600">
+                  Rapid Ambulance Dispatch & Live ER Beds.
+                </span>
+              </h1>
 
-                  {/* Active Telemetry Items */}
-                  <div className="space-y-2.5">
-                    <div className="p-3 rounded-2xl bg-white/90 border border-stone-200/80 shadow-xs flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-xl bg-red-100 text-red-700 flex items-center justify-center font-bold">
-                          <Ambulance className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-stone-900">
-                            Unit #ALS-104 (Critical Care)
-                          </p>
-                          <p className="text-[11px] text-stone-500 flex items-center gap-1">
-                            <MapPin className="h-3 w-3 text-red-600" /> Dhanmondi Station
-                          </p>
-                        </div>
-                      </div>
-                      <Badge variant="default" className="text-[10px]">
-                        Available
-                      </Badge>
-                    </div>
+              <p className="text-base sm:text-lg text-stone-700 font-medium max-w-2xl leading-relaxed mx-auto lg:mx-0">
+                PulseRescue provides instant paramedic dispatch with live GPS tracking, intelligent nearest-unit matching, and real-time hospital ICU bed reservation.
+              </p>
 
-                    <div className="p-3 rounded-2xl bg-white/90 border border-stone-200/80 shadow-xs flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-bold">
-                          <Radio className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-stone-900">
-                            Unit #BLS-208 (Rapid Responder)
-                          </p>
-                          <p className="text-[11px] text-stone-500 flex items-center gap-1">
-                            <MapPin className="h-3 w-3 text-amber-700" /> Gulshan-2 Bay
-                          </p>
-                        </div>
-                      </div>
-                      <Badge variant="amber" className="text-[10px]">
-                        On Standby
-                      </Badge>
-                    </div>
+              {/* Primary Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+                <Link href="/dashboard/emergency/new" className="w-full sm:w-auto">
+                  <Button
+                    variant="emergency"
+                    size="lg"
+                    className="w-full sm:w-auto gap-2.5 text-sm sm:text-base px-8 h-13 shadow-lg shadow-red-600/30 font-bold"
+                  >
+                    <Siren className="h-5 w-5" />
+                    <span>Request Immediate Ambulance</span>
+                  </Button>
+                </Link>
 
-                    <div className="p-3 rounded-2xl bg-white/90 border border-stone-200/80 shadow-xs flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-xl bg-stone-100 text-stone-800 flex items-center justify-center font-bold">
-                          <Building2 className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-stone-900">
-                            Dhaka Medical ER Center
-                          </p>
-                          <p className="text-[11px] text-stone-500">
-                            8 ICU Beds • 14 ER Bays Open
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-bold text-red-600">
-                        98% Capacity
-                      </span>
-                    </div>
-                  </div>
+                <Link href="/hospitals" className="w-full sm:w-auto">
+                  <Button
+                    variant="warm"
+                    size="lg"
+                    className="w-full sm:w-auto gap-2 text-sm sm:text-base px-7 h-13 font-bold"
+                  >
+                    <Building2 className="h-5 w-5" />
+                    <span>Find Hospital Beds</span>
+                  </Button>
+                </Link>
+              </div>
 
-                  {/* 1-Click Evaluation Shortcut */}
-                  <div className="pt-2 border-t border-stone-200/60">
-                    <p className="text-xs font-bold text-stone-600 mb-2">
-                      Evaluator Shortcut:
-                    </p>
-                    <Link href="/login">
-                      <Button variant="outline" size="sm" className="w-full gap-2 text-xs font-bold bg-white/90 hover:bg-white shadow-xs">
-                        <Sparkles className="h-4 w-4 text-amber-600" />
-                        <span>1-Click Role Login Bar (Admin / Driver / Patient)</span>
-                      </Button>
-                    </Link>
-                  </div>
+              {/* Trust Points */}
+              <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-6 text-xs font-bold text-stone-700">
+                <div className="flex items-center gap-2 bg-white/80 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-stone-200/70 shadow-xs">
+                  <CheckCircle2 className="h-4 w-4 text-red-600" />
+                  <span>Dispatch Under 60s</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/80 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-stone-200/70 shadow-xs">
+                  <CheckCircle2 className="h-4 w-4 text-red-600" />
+                  <span>Certified Paramedics</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/80 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-stone-200/70 shadow-xs">
+                  <CheckCircle2 className="h-4 w-4 text-red-600" />
+                  <span>Real-Time ER Sync</span>
                 </div>
               </div>
             </div>
