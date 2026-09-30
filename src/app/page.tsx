@@ -3,8 +3,6 @@ import Link from "next/link";
 import {
   Siren,
   PhoneCall,
-  ShieldCheck,
-  Clock,
   HeartPulse,
   Building2,
   Ambulance,
@@ -19,7 +17,6 @@ import {
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardWarm } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
@@ -69,7 +66,7 @@ export default function Home() {
     {
       step: "01",
       title: "Instant SOS Request",
-      desc: "Tap the emergency button. Our system acquires your GPS coordinates and assesses priority triage immediately.",
+      desc: "Tap the emergency dispatch button. Our system acquires your GPS coordinates and assesses priority triage immediately.",
     },
     {
       step: "02",
@@ -96,9 +93,9 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden border-b border-stone-200 bg-white py-16 sm:py-24">
+        <section className="relative overflow-hidden border-b border-stone-200 bg-white py-12 sm:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
               {/* Left Column */}
               <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
@@ -107,7 +104,7 @@ export default function Home() {
                   <span>24/7 Nationwide Emergency Medical Dispatch</span>
                 </div>
 
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-900 leading-[1.15]">
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-900 leading-[1.15]">
                   Seconds Save Lives. <br />
                   <span className="text-red-600">
                     Rapid Ambulance Dispatch & Live ER Beds.
@@ -119,12 +116,12 @@ export default function Home() {
                 </p>
 
                 {/* Primary Action Buttons */}
-                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
                   <Link href="/dashboard/emergency/new" className="w-full sm:w-auto">
                     <Button
                       variant="emergency"
                       size="lg"
-                      className="w-full sm:w-auto gap-3 text-base px-8 h-14"
+                      className="w-full sm:w-auto gap-2.5 text-sm sm:text-base px-7 h-13"
                     >
                       <Siren className="h-5 w-5" />
                       <span>Request Immediate Ambulance</span>
@@ -135,7 +132,7 @@ export default function Home() {
                     <Button
                       variant="warm"
                       size="lg"
-                      className="w-full sm:w-auto gap-2 text-base px-7 h-14"
+                      className="w-full sm:w-auto gap-2 text-sm sm:text-base px-6 h-13"
                     >
                       <Building2 className="h-5 w-5" />
                       <span>Find Hospital Beds</span>
@@ -144,27 +141,27 @@ export default function Home() {
                 </div>
 
                 {/* Trust Points */}
-                <div className="pt-6 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs font-semibold text-stone-600">
+                <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs font-semibold text-stone-600">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-red-600" />
-                    <span>Average Dispatch: Under 60s</span>
+                    <span>Dispatch Under 60s</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-red-600" />
-                    <span>Certified Emergency Paramedics</span>
+                    <span>Certified Paramedics</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-red-600" />
-                    <span>Real-Time ER Bed Sync</span>
+                    <span>Real-Time ER Sync</span>
                   </div>
                 </div>
               </div>
 
               {/* Right Column: Live Dispatch Radar Card */}
               <div className="lg:col-span-5">
-                <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-xl space-y-5">
+                <div className="rounded-3xl border border-stone-200 bg-white p-5 sm:p-6 shadow-xl space-y-4">
                   {/* Card Header */}
-                  <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+                  <div className="flex items-center justify-between border-b border-stone-100 pb-3.5">
                     <div className="flex items-center gap-2.5">
                       <div className="h-3 w-3 rounded-full bg-red-600 animate-beacon" />
                       <div>
@@ -180,10 +177,10 @@ export default function Home() {
                   </div>
 
                   {/* Active Telemetry Items */}
-                  <div className="space-y-3">
-                    <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between">
+                  <div className="space-y-2.5">
+                    <div className="p-3 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-red-100 text-red-700 flex items-center justify-center font-bold">
+                        <div className="h-9 w-9 rounded-xl bg-red-100 text-red-700 flex items-center justify-center font-bold">
                           <Ambulance className="h-5 w-5" />
                         </div>
                         <div>
@@ -191,7 +188,7 @@ export default function Home() {
                             Unit #ALS-104 (Critical Care)
                           </p>
                           <p className="text-[11px] text-stone-500 flex items-center gap-1">
-                            <MapPin className="h-3 w-3 text-red-600" /> Dhanmondi Central Station
+                            <MapPin className="h-3 w-3 text-red-600" /> Dhanmondi Station
                           </p>
                         </div>
                       </div>
@@ -200,9 +197,9 @@ export default function Home() {
                       </Badge>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between">
+                    <div className="p-3 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-bold">
+                        <div className="h-9 w-9 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-bold">
                           <Radio className="h-5 w-5" />
                         </div>
                         <div>
@@ -219,9 +216,9 @@ export default function Home() {
                       </Badge>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between">
+                    <div className="p-3 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-stone-200 text-stone-800 flex items-center justify-center font-bold">
+                        <div className="h-9 w-9 rounded-xl bg-stone-200 text-stone-800 flex items-center justify-center font-bold">
                           <Building2 className="h-5 w-5" />
                         </div>
                         <div>
@@ -258,15 +255,15 @@ export default function Home() {
         </section>
 
         {/* 4 Stats Metrics */}
-        <section className="border-b border-stone-200 bg-stone-50 py-12">
+        <section className="border-b border-stone-200 bg-stone-50 py-10 sm:py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               {metrics.map((m, idx) => (
                 <div
                   key={idx}
-                  className="rounded-2xl border border-stone-200 bg-white p-6 text-center space-y-1 shadow-xs"
+                  className="rounded-2xl border border-stone-200 bg-white p-5 sm:p-6 text-center space-y-1 shadow-xs"
                 >
-                  <p className="text-3xl sm:text-4xl font-black tracking-tight text-red-600">
+                  <p className="text-2xl sm:text-4xl font-black tracking-tight text-red-600">
                     {m.value}
                   </p>
                   <p className="text-xs sm:text-sm font-semibold text-stone-600">
@@ -279,11 +276,11 @@ export default function Home() {
         </section>
 
         {/* How It Works (3 Steps) */}
-        <section className="py-20 sm:py-28 bg-white border-b border-stone-200">
+        <section className="py-16 sm:py-24 bg-white border-b border-stone-200">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
               <Badge variant="redSubtle">Standard Operating Procedure</Badge>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-stone-900">
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-stone-900">
                 How Emergency Response Operates
               </h2>
               <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
@@ -291,16 +288,16 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {steps.map((s, idx) => (
                 <div
                   key={idx}
-                  className="relative rounded-3xl border border-stone-200 bg-stone-50/80 p-8 space-y-4 hover:border-stone-300 transition-colors"
+                  className="relative rounded-3xl border border-stone-200 bg-stone-50/80 p-6 sm:p-8 space-y-4 hover:border-stone-300 transition-colors"
                 >
-                  <span className="text-5xl font-black text-stone-200">
+                  <span className="text-4xl sm:text-5xl font-black text-stone-200">
                     {s.step}
                   </span>
-                  <h3 className="text-xl font-bold text-stone-900">
+                  <h3 className="text-lg sm:text-xl font-bold text-stone-900">
                     {s.title}
                   </h3>
                   <p className="text-sm text-stone-600 leading-relaxed">
@@ -313,11 +310,11 @@ export default function Home() {
         </section>
 
         {/* Specialized Fleet Capabilities */}
-        <section className="py-20 bg-stone-50 border-b border-stone-200">
+        <section className="py-16 sm:py-24 bg-stone-50 border-b border-stone-200">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
               <Badge variant="warm">Medical Fleet Standards</Badge>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-stone-900">
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-stone-900">
                 Emergency Fleet Categories
               </h2>
               <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
@@ -325,13 +322,13 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {fleetCategories.map((f, idx) => {
                 const Icon = f.icon;
                 return (
                   <div
                     key={idx}
-                    className="rounded-3xl border border-stone-200 bg-white p-7 space-y-6 shadow-xs flex flex-col justify-between hover:border-stone-300 transition-all"
+                    className="rounded-3xl border border-stone-200 bg-white p-6 sm:p-7 space-y-5 sm:space-y-6 shadow-xs flex flex-col justify-between hover:border-stone-300 transition-all"
                   >
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
@@ -342,7 +339,7 @@ export default function Home() {
                       </div>
 
                       <div className="space-y-1">
-                        <h3 className="text-xl font-bold text-stone-900">
+                        <h3 className="text-lg sm:text-xl font-bold text-stone-900">
                           {f.title}
                         </h3>
                         <p className="text-xs font-semibold text-stone-500">
@@ -363,7 +360,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <Link href="/dashboard/emergency/new" className="pt-4">
+                    <Link href="/dashboard/emergency/new" className="pt-2 sm:pt-4">
                       <Button variant="outline" className="w-full justify-between font-bold text-xs">
                         <span>Dispatch This Unit</span>
                         <ArrowRight className="h-4 w-4 text-red-600" />
@@ -377,15 +374,15 @@ export default function Home() {
         </section>
 
         {/* Emergency Call-To-Action Banner */}
-        <section className="py-16 sm:py-24 bg-white">
+        <section className="py-14 sm:py-20 bg-white">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="rounded-3xl bg-stone-900 text-white p-8 sm:p-14 overflow-hidden shadow-2xl border border-stone-800">
+            <div className="rounded-3xl bg-stone-900 text-white p-7 sm:p-14 overflow-hidden shadow-2xl border border-stone-800">
               <div className="max-w-2xl space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600 text-xs font-bold text-white">
                   <PhoneCall className="h-3.5 w-3.5" />
                   <span>Immediate Medical Attention</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+                <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
                   In a Medical Emergency? Do Not Wait.
                 </h2>
                 <p className="text-sm sm:text-base text-stone-300 leading-relaxed">
