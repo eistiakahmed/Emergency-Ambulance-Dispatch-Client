@@ -94,7 +94,7 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden border-b border-stone-200 bg-white py-12 sm:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
               {/* Left Column */}
@@ -256,7 +256,7 @@ export default function Home() {
 
         {/* 4 Stats Metrics */}
         <section className="border-b border-stone-200 bg-stone-50 py-10 sm:py-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               {metrics.map((m, idx) => (
                 <div
@@ -277,7 +277,7 @@ export default function Home() {
 
         {/* How It Works (3 Steps) */}
         <section className="py-16 sm:py-24 bg-white border-b border-stone-200">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
             <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
               <Badge variant="redSubtle">Standard Operating Procedure</Badge>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-stone-900">
@@ -311,7 +311,7 @@ export default function Home() {
 
         {/* Specialized Fleet Capabilities */}
         <section className="py-16 sm:py-24 bg-stone-50 border-b border-stone-200">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
             <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
               <Badge variant="warm">Medical Fleet Standards</Badge>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-stone-900">
@@ -375,7 +375,7 @@ export default function Home() {
 
         {/* Emergency Call-To-Action Banner */}
         <section className="py-14 sm:py-20 bg-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
             <div className="rounded-3xl bg-stone-900 text-white p-7 sm:p-14 overflow-hidden shadow-2xl border border-stone-800">
               <div className="max-w-2xl space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600 text-xs font-bold text-white">

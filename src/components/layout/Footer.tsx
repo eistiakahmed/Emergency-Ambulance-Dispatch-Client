@@ -5,7 +5,7 @@ import { Siren, Phone, Mail, MapPin, ShieldCheck } from "lucide-react";
 export function Footer() {
   return (
     <footer className="border-t border-stone-200 bg-stone-900 text-stone-300">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1536px] px-4 py-14 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">

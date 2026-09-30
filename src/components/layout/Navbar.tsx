@@ -57,7 +57,7 @@ export function Navbar() {
         <span>24/7 NATIONAL EMERGENCY AMBULANCE DISPATCH • HOTLINE 999</span>
       </div>
 
-      <div className="relative mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex h-20 max-w-[1536px] items-center justify-between px-4 sm:px-8 lg:px-12">
         {/* Left: Web Name & Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-3 group">
@@ -77,7 +77,7 @@ export function Navbar() {
         </div>
 
         {/* Center: Desktop Navigation Links */}
-        <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-1 lg:gap-2">
+        <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-1 xl:gap-2">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -97,7 +97,7 @@ export function Navbar() {
         </nav>
 
         {/* Right: Desktop Action Buttons */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3">
           <a
             href="tel:999"
             className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-colors text-xs font-bold"
@@ -149,7 +149,7 @@ export function Navbar() {
         </div>
 
         {/* Tablet & Mobile: Icon Menu Button */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <a
             href="tel:999"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600 text-white font-bold text-xs shadow-xs"
@@ -160,7 +160,7 @@ export function Navbar() {
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl text-stone-700 hover:bg-stone-100 border border-stone-200"
+            className="p-2 rounded-xl text-stone-700 hover:bg-stone-100 border border-stone-200 cursor-pointer"
             aria-label="Toggle navigation"
           >
             {mobileMenuOpen ? (
@@ -174,7 +174,7 @@ export function Navbar() {
 
       {/* Tablet & Mobile Slide-down Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-stone-200 bg-white px-4 pt-3 pb-6 space-y-4 shadow-lg animate-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden border-t border-stone-200 bg-white px-4 pt-3 pb-6 space-y-4 shadow-lg animate-in slide-in-from-top-2 duration-200">
           <div className="space-y-1">
             {navLinks.map((link) => (
               <Link
