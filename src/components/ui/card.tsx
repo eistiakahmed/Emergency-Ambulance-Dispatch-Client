@@ -8,7 +8,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-2xl border border-slate-200/80 bg-white text-slate-900 shadow-sm transition-all duration-200 dark:border-slate-800/80 dark:bg-slate-900 dark:text-slate-100",
+      "rounded-2xl border border-stone-200 bg-white text-stone-900 shadow-sm transition-all duration-200 hover:border-stone-300",
       className
     )}
     {...props}
@@ -16,20 +16,20 @@ const Card = React.forwardRef<
 ));
 Card.displayName = "Card";
 
-const CardGlass = React.forwardRef<
+const CardWarm = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "glass-card rounded-2xl p-6 transition-all duration-200 hover:shadow-md",
+      "rounded-2xl border border-stone-200 bg-stone-50/80 p-6 transition-all duration-200",
       className
     )}
     {...props}
   />
 ));
-CardGlass.displayName = "CardGlass";
+CardWarm.displayName = "CardWarm";
 
 const CardHeader = React.forwardRef<
   HTMLDivElement,
@@ -44,13 +44,13 @@ const CardHeader = React.forwardRef<
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<
-  HTMLParagraphElement,
+  HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
     className={cn(
-      "text-xl font-semibold leading-none tracking-tight text-slate-900 dark:text-slate-100",
+      "text-xl font-bold leading-tight tracking-tight text-stone-900",
       className
     )}
     {...props}
@@ -64,7 +64,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-slate-500 dark:text-slate-400", className)}
+    className={cn("text-sm text-stone-600 leading-relaxed", className)}
     {...props}
   />
 ));
@@ -92,7 +92,7 @@ CardFooter.displayName = "CardFooter";
 
 export {
   Card,
-  CardGlass,
+  CardWarm,
   CardHeader,
   CardFooter,
   CardTitle,

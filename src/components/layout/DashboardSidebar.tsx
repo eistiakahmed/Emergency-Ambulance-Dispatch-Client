@@ -147,8 +147,8 @@ export function DashboardSidebar() {
     user?.role === "ADMIN"
       ? "default"
       : user?.role === "DRIVER"
-      ? "secondary"
-      : "success";
+      ? "amber"
+      : "warm";
 
   return (
     <>

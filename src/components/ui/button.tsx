@@ -3,31 +3,32 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 outline-none select-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer outline-none select-none disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-rose-600 text-white shadow-md hover:bg-rose-700 active:bg-rose-800 dark:bg-rose-600 dark:hover:bg-rose-700",
+          "bg-red-600 text-white shadow-md hover:bg-red-700 active:bg-red-800 shadow-red-600/20",
         emergency:
-          "bg-linear-to-r from-red-600 to-rose-600 text-white font-semibold shadow-lg shadow-rose-600/30 hover:shadow-rose-600/50 hover:brightness-110",
+          "bg-red-600 text-white font-bold shadow-lg shadow-red-600/30 hover:bg-red-700 hover:shadow-red-600/40",
+        warm:
+          "bg-stone-900 text-stone-50 shadow-sm hover:bg-stone-800 active:bg-stone-950",
         secondary:
-          "bg-sky-600 text-white shadow-sm hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600",
+          "bg-stone-100 text-stone-900 border border-stone-200 hover:bg-stone-200 active:bg-stone-300",
         outline:
-          "border border-slate-200 bg-white text-slate-800 shadow-sm hover:bg-slate-50 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800/80",
+          "border border-stone-300 bg-white text-stone-800 shadow-xs hover:bg-stone-50 hover:border-stone-400",
         ghost:
-          "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800/70",
+          "text-stone-700 hover:bg-stone-100 hover:text-stone-900",
         destructive:
-          "bg-red-600 text-white shadow-sm hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800",
-        glass:
-          "glass-panel text-slate-800 hover:bg-white/90 shadow-sm dark:text-slate-100 dark:hover:bg-slate-800/90",
-        link: "text-rose-600 underline-offset-4 hover:underline dark:text-rose-400 p-0 h-auto",
+          "bg-red-700 text-white hover:bg-red-800",
+        link:
+          "text-red-600 underline-offset-4 hover:underline p-0 h-auto font-medium",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-8 rounded-lg px-3 text-xs",
-        lg: "h-12 rounded-xl px-6 text-base font-semibold",
-        icon: "h-10 w-10 p-0",
+        default: "h-11 px-5 py-2.5",
+        sm: "h-9 rounded-lg px-3.5 text-xs",
+        lg: "h-13 rounded-xl px-7 text-base",
+        icon: "h-10 w-10 p-0 rounded-xl",
         iconSm: "h-8 w-8 p-0 rounded-lg",
       },
     },
