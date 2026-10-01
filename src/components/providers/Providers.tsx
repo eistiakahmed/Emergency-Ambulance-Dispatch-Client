@@ -17,9 +17,13 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
     async function loadUser() {
       try {
         const token = getAccessToken();
-        // If we have a token or cookies, verify current user
-        const userData = await api.get<User>("/auth/me", { skipAuthRefresh: false });
-        if (userData) {
+        if (!token) {
+          dispatch(setLoading(false));
+          return;
+        }
+        // Restore session from backend profile endpoint
+        const userData = await api.get<User>("/users/me", { skipAuthRefresh: false });
+        if (userData && userData.id) {
           dispatch(setUser(userData));
         } else {
           dispatch(setUser(null));

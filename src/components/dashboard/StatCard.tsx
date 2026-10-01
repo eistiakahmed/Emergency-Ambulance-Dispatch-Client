@@ -44,9 +44,9 @@ const variantStyles = {
     valueText: "text-blue-700",
   },
   stone: {
-    card: "border-stone-200 bg-stone-900 text-white hover:bg-stone-950",
-    iconBg: "bg-stone-800 text-stone-200 border border-stone-700",
-    valueText: "text-white",
+    card: "border-stone-200 bg-white hover:border-stone-400 shadow-2xs",
+    iconBg: "bg-stone-100 text-stone-800 border border-stone-200",
+    valueText: "text-stone-900",
   },
 };
 
@@ -89,12 +89,7 @@ export function StatCard({
       )}
     >
       <div className="flex items-center justify-between gap-3">
-        <span
-          className={cn(
-            "text-xs font-bold uppercase tracking-wider",
-            variant === "stone" ? "text-stone-400" : "text-stone-500"
-          )}
-        >
+        <span className="text-xs font-bold uppercase tracking-wider text-stone-500">
           {title}
         </span>
         <div
@@ -137,12 +132,7 @@ export function StatCard({
       </div>
 
       {description && (
-        <p
-          className={cn(
-            "mt-1.5 text-xs",
-            variant === "stone" ? "text-stone-400" : "text-stone-500"
-          )}
-        >
+        <p className="mt-1.5 text-xs text-stone-500">
           {description}
         </p>
       )}

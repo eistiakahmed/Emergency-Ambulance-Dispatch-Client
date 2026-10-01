@@ -20,16 +20,16 @@ export function DashboardShell({
   children,
 }: DashboardShellProps) {
   return (
-    <div className="min-h-screen bg-slate-50/60 dark:bg-slate-950">
+    <div className="min-h-screen bg-stone-50 font-sans text-stone-900 antialiased flex flex-col">
       <DashboardSidebar />
-      <div className="flex flex-col lg:pl-72 min-h-screen">
+      <div className="flex flex-col lg:pl-64 min-h-screen">
         <DashboardHeader
           title={title}
           subtitle={subtitle}
           onRefresh={onRefresh}
           isRefreshing={isRefreshing}
         />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1536px] w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1440px] w-full mx-auto space-y-6">
           {children}
         </main>
       </div>

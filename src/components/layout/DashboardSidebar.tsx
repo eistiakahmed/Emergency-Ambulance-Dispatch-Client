@@ -10,22 +10,21 @@ import {
   Building2,
   FileText,
   Clock,
-  History,
-  CreditCard,
-  User,
-  Shield,
   Radio,
   LogOut,
   X,
   PlusCircle,
   TrendingUp,
+  User,
+  ShieldAlert,
+  ArrowRight,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { setSidebarOpen } from "@/store/slices/uiSlice";
 import { api } from "@/lib/api";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface NavItem {
   name: string;
@@ -49,82 +48,79 @@ export function DashboardSidebar() {
     } finally {
       dispatch(logout());
       toast.success("Signed out successfully");
+      window.location.assign("/login");
     }
   };
 
-  // Define navigation by role
-  const getNavItems = (): NavItem[] => {
-    if (!user) return [];
+  // Determine role from route or user object
+  const isAdmin = pathname.startsWith("/admin") || user?.role === "ADMIN";
+  const isDriver = pathname.startsWith("/provider") || user?.role === "DRIVER";
 
-    if (user.role === "ADMIN") {
+  const getNavItems = (): NavItem[] => {
+    if (isAdmin) {
       return [
         {
-          name: "Executive Overview",
+          name: "Command Center",
           href: "/admin",
           icon: LayoutDashboard,
         },
         {
-          name: "Live Dispatch Queue",
-          href: "/admin/dispatch",
+          name: "Dispatch Workbench",
+          href: "/admin#dispatch",
           icon: Radio,
           badge: "Live",
         },
         {
-          name: "Fleet & Hospitals",
-          href: "/admin/manage",
+          name: "Fleet & Drivers",
+          href: "/admin#fleet",
           icon: Ambulance,
         },
         {
-          name: "Audit Logs",
-          href: "/admin/reports",
-          icon: FileText,
+          name: "Hospital ICU Beds",
+          href: "/hospitals",
+          icon: Building2,
         },
       ];
     }
 
-    if (user.role === "DRIVER") {
+    if (isDriver) {
       return [
         {
-          name: "Active Task Console",
+          name: "Driver Cockpit",
           href: "/provider",
           icon: Radio,
           badge: "FSM",
         },
         {
-          name: "Shift Earnings & Trips",
-          href: "/provider/earnings",
-          icon: TrendingUp,
+          name: "Active Mission",
+          href: "/provider#mission",
+          icon: Ambulance,
         },
         {
-          name: "Driver & Vehicle Specs",
-          href: "/provider/profile",
-          icon: User,
+          name: "Shift History",
+          href: "/provider#history",
+          icon: Clock,
         },
       ];
     }
 
-    // Default: PATIENT
+    // Default: Patient
     return [
       {
-        name: "My Emergencies",
+        name: "Patient Portal",
         href: "/dashboard",
         icon: LayoutDashboard,
       },
       {
-        name: "Request Ambulance",
+        name: "Request SOS Ambulance",
         href: "/dashboard/emergency/new",
         icon: PlusCircle,
         highlight: true,
       },
       {
-        name: "Medical Profile",
-        href: "/dashboard/profile",
-        icon: User,
-      },
-      {
-        name: "Payments & Invoices",
-        href: "/dashboard/payments",
-        icon: CreditCard,
+        name: "Emergency Trips",
+        href: "/dashboard/trips",
+        icon: Clock,
       },
       {
         name: "Hospital Bed Finder",
@@ -136,129 +132,127 @@ export function DashboardSidebar() {
 
   const navItems = getNavItems();
 
-  const roleLabel =
-    user?.role === "ADMIN"
-      ? "Dispatch Admin"
-      : user?.role === "DRIVER"
-      ? "Emergency Driver"
-      : "Patient Member";
-
-  const roleVariant =
-    user?.role === "ADMIN"
-      ? "default"
-      : user?.role === "DRIVER"
-      ? "amber"
-      : "warm";
+  const roleLabel = isAdmin
+    ? "System Admin"
+    : isDriver
+    ? "EMS Driver"
+    : "Patient Member";
 
   return (
     <>
       {/* Mobile Backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-stone-900/50 backdrop-blur-xs lg:hidden"
           onClick={() => dispatch(setSidebarOpen(false))}
         />
       )}
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 flex w-72 flex-col border-r border-slate-200/80 bg-white/95 backdrop-blur-md transition-transform duration-300 dark:border-slate-800/80 dark:bg-slate-950/95 lg:translate-x-0 ${
+        className={cn(
+          "fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col border-r border-stone-200 bg-white shadow-xs transition-transform duration-200 lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        )}
       >
         {/* Brand Header */}
-        <div className="flex h-18 items-center justify-between px-6 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex h-16 items-center justify-between px-5 border-b border-stone-100">
           <Link
             href="/"
-            className="flex items-center gap-3"
+            className="flex items-center gap-2.5 group"
             onClick={() => dispatch(setSidebarOpen(false))}
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-tr from-rose-600 to-red-500 text-white shadow-md shadow-rose-500/30">
-              <Siren className="h-5 w-5 animate-pulse" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-600 text-white shadow-sm shadow-red-600/25 group-hover:bg-red-700 transition-colors">
+              <Siren className="h-4.5 w-4.5" />
             </div>
-            <div>
-              <span className="font-bold text-slate-900 dark:text-white tracking-tight">
+            <div className="flex flex-col">
+              <span className="text-base font-black tracking-tight text-stone-900 flex items-center gap-1">
                 PulseRescue
+                <span className="h-1.5 w-1.5 rounded-full bg-red-600" />
               </span>
-              <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
-                Command Console
-              </p>
+              <span className="text-[9px] font-bold uppercase tracking-wider text-stone-400">
+                {roleLabel} Console
+              </span>
             </div>
           </Link>
 
           {/* Close for mobile */}
           <button
             onClick={() => dispatch(setSidebarOpen(false))}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden"
+            className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 lg:hidden cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* User Card */}
-        <div className="p-4 mx-3 my-3 rounded-2xl bg-slate-50 border border-slate-100 dark:bg-slate-900/60 dark:border-slate-800/60">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-700 font-bold dark:bg-rose-950 dark:text-rose-300">
-              {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+        <div className="p-3 mx-3 my-3 rounded-xl bg-stone-50 border border-stone-200/70">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-stone-900 text-white font-bold text-xs">
+              {user?.name ? user.name.charAt(0).toUpperCase() : isAdmin ? "A" : isDriver ? "D" : "P"}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
-                {user?.name || "Anonymous User"}
+              <p className="truncate text-xs font-bold text-stone-900">
+                {user?.name || (isAdmin ? "Admin Console" : isDriver ? "Driver Unit" : "Patient Portal")}
               </p>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <Badge variant={roleVariant} className="text-[10px] px-2 py-0">
+                <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.2 rounded border border-red-100 uppercase tracking-wider">
                   {roleLabel}
-                </Badge>
+                </span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Navigation Section */}
-        <div className="flex-1 overflow-y-auto px-4 py-2 space-y-1">
-          <p className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="flex-1 overflow-y-auto px-3 py-1 space-y-1">
+          <p className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-400">
             Navigation Menu
           </p>
 
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || (item.href.includes("#") && pathname === item.href.split("#")[0]);
             const Icon = item.icon;
 
             return (
               <Link
-                key={item.href}
+                key={item.name}
                 href={item.href}
                 onClick={() => dispatch(setSidebarOpen(false))}
-                className={`group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                className={cn(
+                  "group flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all",
                   isActive
-                    ? "bg-rose-600 text-white font-semibold shadow-md shadow-rose-600/20 dark:bg-rose-600"
+                    ? "bg-stone-900 text-white font-bold shadow-2xs"
                     : item.highlight
-                    ? "bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-300 dark:hover:bg-rose-950/60 font-semibold"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/60 dark:hover:text-white"
-                }`}
+                    ? "bg-red-50 text-red-700 hover:bg-red-100 font-bold border border-red-200"
+                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                )}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5">
                   <Icon
-                    className={`h-4.5 w-4.5 ${
+                    className={cn(
+                      "h-4 w-4 shrink-0",
                       isActive
                         ? "text-white"
                         : item.highlight
-                        ? "text-rose-600 dark:text-rose-400"
-                        : "text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200"
-                    }`}
+                        ? "text-red-600"
+                        : "text-stone-400 group-hover:text-stone-700"
+                    )}
                   />
                   <span>{item.name}</span>
                 </div>
 
                 {item.badge && (
-                  <Badge
-                    variant={isActive ? "outline" : "critical"}
-                    className={`text-[10px] px-1.5 py-0 ${
-                      isActive ? "bg-white/20 text-white border-transparent" : ""
-                    }`}
+                  <span
+                    className={cn(
+                      "text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md",
+                      isActive
+                        ? "bg-white/20 text-white"
+                        : "bg-red-600 text-white"
+                    )}
                   >
                     {item.badge}
-                  </Badge>
+                  </span>
                 )}
               </Link>
             );
@@ -266,20 +260,20 @@ export function DashboardSidebar() {
         </div>
 
         {/* Bottom Actions */}
-        <div className="p-4 border-t border-slate-100 dark:border-slate-800 space-y-1">
+        <div className="p-3 border-t border-stone-100 space-y-1">
           <Link
             href="/"
-            className="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-stone-600 hover:bg-stone-100 transition-colors"
           >
-            <Siren className="h-4 w-4 text-slate-400" />
-            <span>Public Emergency Portal</span>
+            <Siren className="h-3.5 w-3.5 text-stone-400" />
+            <span>Public Home</span>
           </Link>
 
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors"
+            className="flex w-full items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
           >
-            <LogOut className="h-4 w-4 text-red-500" />
+            <LogOut className="h-3.5 w-3.5 text-red-500" />
             <span>Sign Out</span>
           </button>
         </div>
