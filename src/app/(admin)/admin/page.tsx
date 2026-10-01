@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { AdminKpiGrid } from "@/components/admin/AdminKpiGrid";
+import { AnalyticsChart } from "@/components/admin/AnalyticsChart";
 import { DispatchWorkbench } from "@/components/admin/DispatchWorkbench";
 
 export const metadata: Metadata = {
@@ -25,7 +26,10 @@ export default function AdminDashboardPage() {
       {/* 2. Real-time KPI Stats Grid */}
       <AdminKpiGrid />
 
-      {/* 3. Live Dispatch Queue & Workbench */}
+      {/* 3. Analytics & Volume Trend Chart */}
+      <AnalyticsChart />
+
+      {/* 4. Live Dispatch Queue & Workbench */}
       <Suspense
         fallback={
           <div className="h-64 rounded-2xl border border-stone-200 bg-white animate-pulse p-6" />
