@@ -7,6 +7,7 @@ export type AmbulanceType =
   | "BASIC_LIFE_SUPPORT"
   | "ADVANCED_LIFE_SUPPORT"
   | "PATIENT_TRANSPORT"
+  | "NEONATAL"
   | "NEONATAL_ICU";
 
 export type AmbulanceStatus =

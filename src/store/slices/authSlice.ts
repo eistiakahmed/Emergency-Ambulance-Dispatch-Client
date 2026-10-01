@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@/types";
 import { setAccessToken } from "@/lib/api";
+import { setAuthCookies } from "@/lib/api/auth";
 
 interface AuthState {
   user: User | null;
@@ -29,11 +30,15 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.isLoading = false;
       setAccessToken(action.payload.accessToken);
+      setAuthCookies(action.payload.accessToken, action.payload.user.role);
     },
     setUser: (state, action: PayloadAction<User | null>) => {
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
       state.isLoading = false;
+      if (action.payload && state.accessToken) {
+        setAuthCookies(state.accessToken, action.payload.role);
+      }
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
@@ -44,6 +49,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = false;
       state.isLoading = false;
       setAccessToken(null);
+      setAuthCookies(null, null);
     },
   },
 });

@@ -24,9 +24,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${inter.variable} ${inter.className} h-full antialiased`}
     >
-      <body className={`${inter.className} min-h-full flex flex-col bg-stone-50 text-stone-900 selection:bg-red-500 selection:text-white`}>
+      <body
+        suppressHydrationWarning
+        className={`${inter.className} min-h-full flex flex-col bg-stone-50 text-stone-900 selection:bg-red-500 selection:text-white`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

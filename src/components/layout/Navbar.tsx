@@ -22,6 +22,11 @@ export function Navbar() {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -52,8 +57,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-stone-200 bg-white shadow-xs">
       {/* Top Urgent Emergency Alert Bar */}
-      <div className="bg-red-600 text-white py-1.5 px-4 text-xs font-bold tracking-wide text-center flex items-center justify-center gap-2">
-        <span className="flex h-2 w-2 rounded-full bg-white animate-beacon" />
+      <div className="bg-red-600 text-white py-1.5 px-4 text-xs font-bold tracking-wide text-center flex items-center justify-center">
         <span>24/7 NATIONAL EMERGENCY AMBULANCE DISPATCH • HOTLINE 999</span>
       </div>
 
@@ -105,7 +109,7 @@ export function Navbar() {
             <span>999 HOTLINE</span>
           </a>
 
-          {isAuthenticated && user ? (
+          {mounted && isAuthenticated && user ? (
             <div className="flex items-center gap-2">
               <Link href={getDashboardHref()}>
                 <Button variant="outline" size="sm" className="gap-2 text-xs font-bold">
@@ -202,7 +206,7 @@ export function Navbar() {
               </Button>
             </Link>
 
-            {isAuthenticated && user ? (
+            {mounted && isAuthenticated && user ? (
               <div className="space-y-2">
                 <Link
                   href={getDashboardHref()}
