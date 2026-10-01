@@ -8,16 +8,11 @@ import {
   LayoutDashboard,
   Ambulance,
   Building2,
-  FileText,
   Clock,
   Radio,
   LogOut,
   X,
   PlusCircle,
-  TrendingUp,
-  User,
-  ShieldAlert,
-  ArrowRight,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
@@ -52,7 +47,6 @@ export function DashboardSidebar() {
     }
   };
 
-  // Determine role from route or user object
   const isAdmin = pathname.startsWith("/admin") || user?.role === "ADMIN";
   const isDriver = pathname.startsWith("/provider") || user?.role === "DRIVER";
 
@@ -66,13 +60,12 @@ export function DashboardSidebar() {
         },
         {
           name: "Dispatch Workbench",
-          href: "/admin#dispatch",
+          href: "/admin/dispatch",
           icon: Radio,
-          badge: "Live",
         },
         {
           name: "Fleet & Drivers",
-          href: "/admin#fleet",
+          href: "/admin/fleet",
           icon: Ambulance,
         },
         {
@@ -89,7 +82,6 @@ export function DashboardSidebar() {
           name: "Driver Cockpit",
           href: "/provider",
           icon: Radio,
-          badge: "FSM",
         },
         {
           name: "Active Mission",
@@ -132,18 +124,12 @@ export function DashboardSidebar() {
 
   const navItems = getNavItems();
 
-  const roleLabel = isAdmin
-    ? "System Admin"
-    : isDriver
-    ? "EMS Driver"
-    : "Patient Member";
-
   return (
     <>
       {/* Mobile Backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-stone-900/50 backdrop-blur-xs lg:hidden"
+          className="fixed inset-0 z-40 bg-stone-900/40 backdrop-blur-xs lg:hidden"
           onClick={() => dispatch(setSidebarOpen(false))}
         />
       )}
@@ -151,18 +137,18 @@ export function DashboardSidebar() {
       {/* Sidebar Container */}
       <aside
         className={cn(
-          "fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col border-r border-stone-200 bg-white shadow-xs transition-transform duration-200 lg:translate-x-0",
+          "fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col border-r border-stone-200 bg-white shadow-2xs transition-transform duration-200 lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        {/* Brand Header */}
+        {/* Clean Logo Header */}
         <div className="flex h-16 items-center justify-between px-5 border-b border-stone-100">
           <Link
             href="/"
             className="flex items-center gap-2.5 group"
             onClick={() => dispatch(setSidebarOpen(false))}
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-600 text-white shadow-sm shadow-red-600/25 group-hover:bg-red-700 transition-colors">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-600 text-white shadow-xs group-hover:bg-red-700 transition-colors">
               <Siren className="h-4.5 w-4.5" />
             </div>
             <div className="flex flex-col">
@@ -170,8 +156,8 @@ export function DashboardSidebar() {
                 PulseRescue
                 <span className="h-1.5 w-1.5 rounded-full bg-red-600" />
               </span>
-              <span className="text-[9px] font-bold uppercase tracking-wider text-stone-400">
-                {roleLabel} Console
+              <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">
+                {isAdmin ? "Admin Console" : isDriver ? "Driver Console" : "Patient Portal"}
               </span>
             </div>
           </Link>
@@ -185,33 +171,10 @@ export function DashboardSidebar() {
           </button>
         </div>
 
-        {/* User Card */}
-        <div className="p-3 mx-3 my-3 rounded-xl bg-stone-50 border border-stone-200/70">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-stone-900 text-white font-bold text-xs">
-              {user?.name ? user.name.charAt(0).toUpperCase() : isAdmin ? "A" : isDriver ? "D" : "P"}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-bold text-stone-900">
-                {user?.name || (isAdmin ? "Admin Console" : isDriver ? "Driver Unit" : "Patient Portal")}
-              </p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.2 rounded border border-red-100 uppercase tracking-wider">
-                  {roleLabel}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Navigation Section */}
-        <div className="flex-1 overflow-y-auto px-3 py-1 space-y-1">
-          <p className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-400">
-            Navigation Menu
-          </p>
-
+        <div className="flex-1 overflow-y-auto p-3 space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href.includes("#") && pathname === item.href.split("#")[0]);
+            const isActive = pathname === item.href;
             const Icon = item.icon;
 
             return (
@@ -220,22 +183,22 @@ export function DashboardSidebar() {
                 href={item.href}
                 onClick={() => dispatch(setSidebarOpen(false))}
                 className={cn(
-                  "group flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all",
+                  "group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors",
                   isActive
-                    ? "bg-stone-900 text-white font-bold shadow-2xs"
+                    ? "bg-red-50 text-red-700 border border-red-200/80 shadow-2xs"
                     : item.highlight
-                    ? "bg-red-50 text-red-700 hover:bg-red-100 font-bold border border-red-200"
+                    ? "bg-red-600 text-white hover:bg-red-700 shadow-xs"
                     : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
                 )}
               >
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-3">
                   <Icon
                     className={cn(
                       "h-4 w-4 shrink-0",
                       isActive
-                        ? "text-white"
-                        : item.highlight
                         ? "text-red-600"
+                        : item.highlight
+                        ? "text-white"
                         : "text-stone-400 group-hover:text-stone-700"
                     )}
                   />
@@ -247,8 +210,8 @@ export function DashboardSidebar() {
                     className={cn(
                       "text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md",
                       isActive
-                        ? "bg-white/20 text-white"
-                        : "bg-red-600 text-white"
+                        ? "bg-red-600 text-white"
+                        : "bg-stone-200 text-stone-700"
                     )}
                   >
                     {item.badge}
@@ -259,22 +222,17 @@ export function DashboardSidebar() {
           })}
         </div>
 
-        {/* Bottom Actions */}
-        <div className="p-3 border-t border-stone-100 space-y-1">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-stone-600 hover:bg-stone-100 transition-colors"
-          >
-            <Siren className="h-3.5 w-3.5 text-stone-400" />
-            <span>Public Home</span>
-          </Link>
-
+        {/* Clean Bottom Sign Out */}
+        <div className="p-3 border-t border-stone-100">
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+            className="flex w-full items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-stone-700 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
           >
-            <LogOut className="h-3.5 w-3.5 text-red-500" />
-            <span>Sign Out</span>
+            <div className="flex items-center gap-2.5">
+              <LogOut className="h-4 w-4 text-stone-400 group-hover:text-red-600" />
+              <span>Sign Out</span>
+            </div>
+            <span className="text-[10px] font-mono text-stone-400">Exit</span>
           </button>
         </div>
       </aside>
