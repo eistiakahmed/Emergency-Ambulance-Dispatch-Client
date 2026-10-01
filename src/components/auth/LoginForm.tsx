@@ -59,7 +59,7 @@ export function LoginForm() {
       setIsSubmitting(true);
       const res = await authApi.login(formData);
 
-      if (res?.user && res?.accessToken) {
+      if (res?.user) {
         dispatch(
           setCredentials({
             user: res.user,
@@ -71,15 +71,15 @@ export function LoginForm() {
           description: "Authenticated successfully.",
         });
 
-        if (redirectParam) {
-          router.push(redirectParam);
-        } else if (res.user.role === "ADMIN") {
-          router.push("/admin");
-        } else if (res.user.role === "DRIVER") {
-          router.push("/provider");
-        } else {
-          router.push("/dashboard");
-        }
+        const target =
+          redirectParam ||
+          (res.user.role === "ADMIN"
+            ? "/admin"
+            : res.user.role === "DRIVER"
+            ? "/provider"
+            : "/dashboard");
+
+        window.location.assign(target);
       }
     } catch (err: unknown) {
       const message =

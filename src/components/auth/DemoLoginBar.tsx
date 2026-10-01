@@ -66,7 +66,7 @@ export function DemoLoginBar({
         password: config.password,
       });
 
-      if (res?.user && res?.accessToken) {
+      if (res?.user) {
         dispatch(
           setCredentials({
             user: res.user,
@@ -76,7 +76,7 @@ export function DemoLoginBar({
         toast.success(`Logged in as ${config.title}!`, {
           description: `Redirecting to ${config.roleLabel}...`,
         });
-        router.push(config.redirectUrl);
+        window.location.assign(config.redirectUrl);
       }
     } catch (err: unknown) {
       const message =

@@ -6,7 +6,16 @@ import type {
   RegisterDriverInput,
 } from "@/lib/schemas/auth.schema";
 
-interface AuthResponseData {
+interface RawAuthResponse {
+  user: User;
+  accessToken?: string;
+  tokens?: {
+    accessToken: string;
+    refreshToken?: string;
+  };
+}
+
+export interface AuthResponseData {
   user: User;
   accessToken: string;
 }
@@ -34,23 +43,29 @@ export const setAuthCookies = (token: string | null, role: Role | null) => {
 
 export const authApi = {
   login: async (credentials: LoginInput): Promise<AuthResponseData> => {
-    const data = await api.post<AuthResponseData>("/auth/login", {
+    const raw = await api.post<RawAuthResponse>("/auth/login", {
       email: credentials.email,
       password: credentials.password,
     });
 
-    if (data?.accessToken && data?.user) {
-      setAccessToken(data.accessToken);
-      setAuthCookies(data.accessToken, data.user.role);
+    const token = raw?.accessToken || raw?.tokens?.accessToken || "";
+    const user = raw?.user;
+
+    if (token && user) {
+      setAccessToken(token);
+      setAuthCookies(token, user.role);
     }
 
-    return data;
+    return {
+      user,
+      accessToken: token,
+    };
   },
 
   registerPatient: async (
     payload: RegisterPatientInput
   ): Promise<AuthResponseData> => {
-    const data = await api.post<AuthResponseData>("/auth/register", {
+    const raw = await api.post<RawAuthResponse>("/auth/register", {
       name: payload.name,
       email: payload.email,
       phone: payload.phone,
@@ -58,18 +73,24 @@ export const authApi = {
       role: "PATIENT",
     });
 
-    if (data?.accessToken && data?.user) {
-      setAccessToken(data.accessToken);
-      setAuthCookies(data.accessToken, data.user.role);
+    const token = raw?.accessToken || raw?.tokens?.accessToken || "";
+    const user = raw?.user;
+
+    if (token && user) {
+      setAccessToken(token);
+      setAuthCookies(token, user.role);
     }
 
-    return data;
+    return {
+      user,
+      accessToken: token,
+    };
   },
 
   registerDriver: async (
     payload: RegisterDriverInput
   ): Promise<AuthResponseData> => {
-    const data = await api.post<AuthResponseData>("/auth/register", {
+    const raw = await api.post<RawAuthResponse>("/auth/register", {
       name: payload.name,
       email: payload.email,
       phone: payload.phone,
@@ -79,12 +100,18 @@ export const authApi = {
       vehicleType: payload.vehicleType,
     });
 
-    if (data?.accessToken && data?.user) {
-      setAccessToken(data.accessToken);
-      setAuthCookies(data.accessToken, data.user.role);
+    const token = raw?.accessToken || raw?.tokens?.accessToken || "";
+    const user = raw?.user;
+
+    if (token && user) {
+      setAccessToken(token);
+      setAuthCookies(token, user.role);
     }
 
-    return data;
+    return {
+      user,
+      accessToken: token,
+    };
   },
 
   getMe: async (): Promise<User> => {
