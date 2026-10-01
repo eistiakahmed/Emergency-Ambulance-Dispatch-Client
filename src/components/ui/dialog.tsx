@@ -1,21 +1,43 @@
 "use client";
 
 import * as React from "react";
+import { useEffect } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface DialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+export interface DialogProps {
+  open?: boolean;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  onClose?: () => void;
+  title?: string;
+  description?: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-export function Dialog({ open, onOpenChange, children }: DialogProps) {
+export function Dialog({
+  open,
+  isOpen,
+  onOpenChange,
+  onClose,
+  title,
+  description,
+  children,
+  className,
+}: DialogProps) {
+  const isVisible = open !== undefined ? open : Boolean(isOpen);
+
+  const handleClose = () => {
+    if (onOpenChange) onOpenChange(false);
+    if (onClose) onClose();
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onOpenChange(false);
+      if (e.key === "Escape") handleClose();
     };
-    if (open) {
+    if (isVisible) {
       document.body.style.overflow = "hidden";
       window.addEventListener("keydown", handleKeyDown);
     } else {
@@ -25,24 +47,34 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
       document.body.style.overflow = "unset";
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [open, onOpenChange]);
+  }, [isVisible]);
 
-  if (!open) return null;
+  if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-150">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity"
-        onClick={() => onOpenChange(false)}
+        className="fixed inset-0 bg-stone-950/60 backdrop-blur-xs transition-opacity"
+        onClick={handleClose}
       />
       {/* Content Container */}
-      <div className="relative z-50 w-full max-w-lg">{children}</div>
+      <div className={cn("relative z-50 w-full max-w-lg", className)}>
+        {title || description ? (
+          <DialogContent onClose={handleClose}>
+            <DialogHeader>
+              {title && <DialogTitle>{title}</DialogTitle>}
+              {description && <DialogDescription>{description}</DialogDescription>}
+            </DialogHeader>
+            {children}
+          </DialogContent>
+        ) : (
+          children
+        )}
+      </div>
     </div>
   );
 }
-
-import { useEffect } from "react";
 
 export function DialogContent({
   className,
@@ -56,14 +88,14 @@ export function DialogContent({
   return (
     <div
       className={cn(
-        "glass-panel relative w-full rounded-2xl p-6 shadow-2xl transition-all duration-200 animate-in fade-in zoom-in-95",
+        "relative w-full rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 transition-all duration-200 animate-in fade-in zoom-in-95",
         className
       )}
     >
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
+          className="absolute right-4 top-4 rounded-xl p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700 transition-colors cursor-pointer"
         >
           <X className="h-5 w-5" />
           <span className="sr-only">Close</span>
@@ -82,7 +114,7 @@ export function DialogHeader({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("flex flex-col space-y-1.5 text-left mb-4", className)}>
+    <div className={cn("flex flex-col space-y-1 text-left mb-4", className)}>
       {children}
     </div>
   );
@@ -98,7 +130,7 @@ export function DialogTitle({
   return (
     <h2
       className={cn(
-        "text-lg font-semibold leading-none tracking-tight text-slate-900 dark:text-slate-100",
+        "text-base sm:text-lg font-black tracking-tight text-stone-900",
         className
       )}
     >
@@ -116,7 +148,7 @@ export function DialogDescription({
 }) {
   return (
     <p
-      className={cn("text-sm text-slate-500 dark:text-slate-400 mt-1", className)}
+      className={cn("text-xs text-stone-500 mt-0.5 leading-normal", className)}
     >
       {children}
     </p>

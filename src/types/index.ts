@@ -8,25 +8,40 @@ export type AmbulanceType =
   | "ADVANCED_LIFE_SUPPORT"
   | "PATIENT_TRANSPORT"
   | "NEONATAL"
-  | "NEONATAL_ICU";
+  | "NEONATAL_ICU"
+  | "ALS"
+  | "BLS";
 
 export type AmbulanceStatus =
   | "AVAILABLE"
   | "DISPATCHED"
   | "ON_TRIP"
+  | "BUSY"
   | "MAINTENANCE"
-  | "OUT_OF_SERVICE";
+  | "OUT_OF_SERVICE"
+  | "OFFLINE";
 
 export type EmergencyPriority = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
 
-export type EmergencyStatus = "PENDING" | "DISPATCHED" | "COMPLETED" | "CANCELLED";
+export type EmergencyStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "DISPATCHED"
+  | "EN_ROUTE"
+  | "PATIENT_PICKED_UP"
+  | "HOSPITAL_ARRIVAL"
+  | "COMPLETED"
+  | "CANCELLED";
 
 export type TripStatus =
   | "ASSIGNED"
+  | "ACCEPTED"
+  | "EN_ROUTE"
   | "EN_ROUTE_PICKUP"
   | "PATIENT_PICKED_UP"
   | "EN_ROUTE_HOSPITAL"
   | "ARRIVED_HOSPITAL"
+  | "HOSPITAL_ARRIVAL"
   | "COMPLETED"
   | "CANCELLED";
 
@@ -51,6 +66,8 @@ export interface User {
 export interface DriverProfile {
   id: string;
   userId: string;
+  name?: string;
+  phone?: string;
   licenseNumber: string;
   status: DriverStatus;
   currentLatitude?: number | null;
@@ -64,15 +81,19 @@ export interface DriverProfile {
 // Ambulance
 export interface Ambulance {
   id: string;
-  plateNumber: string;
-  type: AmbulanceType;
-  status: AmbulanceStatus;
-  baseLatitude: number;
-  baseLongitude: number;
+  plateNumber?: string;
+  vehicleNumber?: string;
+  model?: string;
+  type: AmbulanceType | string;
+  status: AmbulanceStatus | string;
+  baseLatitude?: number;
+  baseLongitude?: number;
+  latitude?: number;
+  longitude?: number;
   equipmentList?: string[];
   driver?: DriverProfile | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Hospital
@@ -82,12 +103,15 @@ export interface Hospital {
   address: string;
   latitude: number;
   longitude: number;
-  contactNumber: string;
-  emergencyAvailable: boolean;
-  icuBedsAvailable: number;
-  totalIcuBeds: number;
-  erBedsAvailable: number;
-  totalErBeds: number;
+  contactNumber?: string;
+  emergencyAvailable?: boolean;
+  icuBedsAvailable?: number;
+  availableIcuBeds?: number;
+  totalIcuBeds?: number;
+  erBedsAvailable?: number;
+  availableGeneralBeds?: number;
+  totalErBeds?: number;
+  totalGeneralBeds?: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -95,35 +119,43 @@ export interface Hospital {
 // Emergency Request
 export interface Emergency {
   id: string;
-  patientId: string;
+  patientId?: string;
   patient?: User;
-  priority: EmergencyPriority;
-  status: EmergencyStatus;
+  patientName?: string;
+  patientPhone?: string;
+  callerPhone?: string;
+  emergencyType?: string;
+  priority?: EmergencyPriority | string;
+  severityLevel?: EmergencyPriority | string;
+  status: EmergencyStatus | string;
   pickupAddress: string;
-  pickupLatitude: number;
-  pickupLongitude: number;
+  pickupLatitude?: number;
+  pickupLongitude?: number;
   description?: string | null;
-  callerPhone: string;
+  notes?: string | null;
   patientCondition?: string | null;
   destinationHospitalId?: string | null;
   destinationHospital?: Hospital | null;
   trips?: Trip[];
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
+
+export type EmergencyRequest = Emergency;
 
 // Trip
 export interface Trip {
   id: string;
-  emergencyId: string;
+  emergencyId?: string;
   emergency?: Emergency;
+  emergencyRequest?: Emergency;
   ambulanceId: string;
   ambulance?: Ambulance;
-  driverId: string;
+  driverId?: string;
   driver?: DriverProfile;
   hospitalId?: string | null;
   hospital?: Hospital | null;
-  status: TripStatus;
+  status: TripStatus | string;
   distanceKm?: number | null;
   baseFare?: number | null;
   distanceFare?: number | null;
@@ -132,7 +164,7 @@ export interface Trip {
   completedAt?: string | null;
   payment?: Payment | null;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 // Payment
@@ -188,6 +220,13 @@ export interface PaginatedMeta {
 export interface PaginatedData<T> {
   items: T[];
   meta: PaginatedMeta;
+}
+
+export interface PaginatedResponse<T> {
+  success?: boolean;
+  message?: string;
+  data: T[];
+  meta?: PaginatedMeta;
 }
 
 // Nearby Ambulance Query result with ETA

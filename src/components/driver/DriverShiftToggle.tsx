@@ -46,7 +46,13 @@ export function DriverShiftToggle() {
       async (pos) => {
         try {
           await updateStatusMutation.mutateAsync({
-            status: vehicle?.status || "AVAILABLE",
+            status:
+              (vehicle?.status as
+                | "AVAILABLE"
+                | "BUSY"
+                | "ON_TRIP"
+                | "MAINTENANCE"
+                | "OFFLINE") || "AVAILABLE",
             latitude: pos.coords.latitude,
             longitude: pos.coords.longitude,
           });

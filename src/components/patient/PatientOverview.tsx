@@ -21,6 +21,7 @@ import { useActiveTrip } from "@/lib/hooks/useTrips";
 import { useEmergencies } from "@/lib/hooks/useEmergencies";
 import { useHospitals } from "@/lib/hooks/useHospitals";
 import { useAppSelector } from "@/store/hooks";
+import type { Hospital, Emergency, Trip } from "@/types";
 
 export function PatientOverview() {
   const { user } = useAppSelector((state) => state.auth);
@@ -168,7 +169,7 @@ export function PatientOverview() {
         <StatCard
           title="Available ICU Beds"
           value={
-            hospitals.reduce((acc, h) => acc + (h.availableIcuBeds || 0), 0) || "42"
+            hospitals.reduce((acc: number, h: Hospital) => acc + (h.availableIcuBeds || 0), 0) || "42"
           }
           description="Network-wide free capacity"
           icon={Activity}
@@ -211,7 +212,7 @@ export function PatientOverview() {
             />
           ) : (
             <div className="space-y-2.5">
-              {emergencies.slice(0, 4).map((em) => (
+              {emergencies.slice(0, 4).map((em: Emergency) => (
                 <div
                   key={em.id}
                   className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl border border-stone-200 bg-white hover:border-stone-300 transition-all gap-3"
@@ -261,7 +262,7 @@ export function PatientOverview() {
           </div>
 
           <div className="space-y-2.5">
-            {hospitals.map((h) => (
+            {hospitals.map((h: Hospital) => (
               <div
                 key={h.id}
                 className="p-3.5 rounded-2xl border border-stone-200 bg-white space-y-2 hover:border-emerald-300 transition-colors"

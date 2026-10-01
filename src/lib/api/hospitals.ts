@@ -1,5 +1,5 @@
-import { api } from "./index";
-import type { Hospital, ApiResponse, PaginatedResponse } from "@/types";
+import { api } from "../api";
+import type { Hospital, PaginatedResponse } from "@/types";
 
 export interface HospitalFilterParams {
   page?: number;
@@ -7,6 +7,7 @@ export interface HospitalFilterParams {
   search?: string;
   hasIcu?: boolean;
   minIcuBeds?: number;
+  [key: string]: string | number | boolean | undefined | null;
 }
 
 export interface UpdateBedCapacityPayload {
@@ -19,16 +20,14 @@ export interface UpdateBedCapacityPayload {
 export const hospitalsApi = {
   // List hospitals with search and bed capacity filters
   list: async (params?: HospitalFilterParams): Promise<PaginatedResponse<Hospital>> => {
-    const res = await api.get<PaginatedResponse<Hospital>>("/hospitals", {
+    return api.get<PaginatedResponse<Hospital>>("/hospitals", {
       params,
     });
-    return res.data;
   },
 
   // Get hospital by ID
   getById: async (id: string): Promise<Hospital> => {
-    const res = await api.get<ApiResponse<Hospital>>(`/hospitals/${id}`);
-    return res.data.data;
+    return api.get<Hospital>(`/hospitals/${id}`);
   },
 
   // Admin/Staff update bed capacities
@@ -36,23 +35,17 @@ export const hospitalsApi = {
     id: string,
     payload: UpdateBedCapacityPayload
   ): Promise<Hospital> => {
-    const res = await api.patch<ApiResponse<Hospital>>(
-      `/hospitals/${id}/beds`,
-      payload
-    );
-    return res.data.data;
+    return api.patch<Hospital>(`/hospitals/${id}/beds`, payload);
   },
 
   // Admin create hospital
   create: async (data: Partial<Hospital>): Promise<Hospital> => {
-    const res = await api.post<ApiResponse<Hospital>>("/hospitals", data);
-    return res.data.data;
+    return api.post<Hospital>("/hospitals", data);
   },
 
   // Admin update hospital details
   update: async (id: string, data: Partial<Hospital>): Promise<Hospital> => {
-    const res = await api.patch<ApiResponse<Hospital>>(`/hospitals/${id}`, data);
-    return res.data.data;
+    return api.patch<Hospital>(`/hospitals/${id}`, data);
   },
 
   // Admin delete hospital

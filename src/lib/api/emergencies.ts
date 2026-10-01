@@ -1,5 +1,5 @@
-import { api } from "./index";
-import type { EmergencyRequest, ApiResponse, PaginatedResponse } from "@/types";
+import { api } from "../api";
+import type { EmergencyRequest, PaginatedResponse } from "@/types";
 
 export interface EmergencyFilterParams {
   page?: number;
@@ -7,6 +7,7 @@ export interface EmergencyFilterParams {
   status?: string;
   emergencyType?: string;
   patientId?: string;
+  [key: string]: string | number | boolean | undefined | null;
 }
 
 export interface CreateEmergencyPayload {
@@ -24,32 +25,25 @@ export interface CreateEmergencyPayload {
 export const emergenciesApi = {
   // Create SOS emergency request
   create: async (payload: CreateEmergencyPayload): Promise<EmergencyRequest> => {
-    const res = await api.post<ApiResponse<EmergencyRequest>>("/emergencies", payload);
-    return res.data.data;
+    return api.post<EmergencyRequest>("/emergencies", payload);
   },
 
   // List emergencies with pagination & filters
   list: async (
     params?: EmergencyFilterParams
   ): Promise<PaginatedResponse<EmergencyRequest>> => {
-    const res = await api.get<PaginatedResponse<EmergencyRequest>>("/emergencies", {
+    return api.get<PaginatedResponse<EmergencyRequest>>("/emergencies", {
       params,
     });
-    return res.data;
   },
 
   // Get emergency by ID
   getById: async (id: string): Promise<EmergencyRequest> => {
-    const res = await api.get<ApiResponse<EmergencyRequest>>(`/emergencies/${id}`);
-    return res.data.data;
+    return api.get<EmergencyRequest>(`/emergencies/${id}`);
   },
 
   // Cancel emergency request
   cancel: async (id: string, reason: string): Promise<EmergencyRequest> => {
-    const res = await api.post<ApiResponse<EmergencyRequest>>(
-      `/emergencies/${id}/cancel`,
-      { reason }
-    );
-    return res.data.data;
+    return api.post<EmergencyRequest>(`/emergencies/${id}/cancel`, { reason });
   },
 };

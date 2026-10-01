@@ -1,5 +1,5 @@
-import { api } from "./index";
-import type { Trip, ApiResponse, PaginatedResponse, TripStatus } from "@/types";
+import { api } from "../api";
+import type { Trip, PaginatedResponse, TripStatus } from "@/types";
 
 export interface TripFilterParams {
   page?: number;
@@ -7,6 +7,7 @@ export interface TripFilterParams {
   status?: TripStatus | string;
   driverId?: string;
   patientId?: string;
+  [key: string]: string | number | boolean | undefined | null;
 }
 
 export interface UpdateTripStatusPayload {
@@ -24,26 +25,22 @@ export interface CreateTripPayload {
 export const tripsApi = {
   // Get active trip for current logged in user (Driver or Patient)
   getActive: async (): Promise<Trip | null> => {
-    const res = await api.get<ApiResponse<Trip | null>>("/trips/active");
-    return res.data.data;
+    return api.get<Trip | null>("/trips/active");
   },
 
   // List all trips (Admin or History)
   list: async (params?: TripFilterParams): Promise<PaginatedResponse<Trip>> => {
-    const res = await api.get<PaginatedResponse<Trip>>("/trips", { params });
-    return res.data;
+    return api.get<PaginatedResponse<Trip>>("/trips", { params });
   },
 
   // Get single trip by ID
   getById: async (id: string): Promise<Trip> => {
-    const res = await api.get<ApiResponse<Trip>>(`/trips/${id}`);
-    return res.data.data;
+    return api.get<Trip>(`/trips/${id}`);
   },
 
   // Admin dispatch: Create trip
   create: async (payload: CreateTripPayload): Promise<Trip> => {
-    const res = await api.post<ApiResponse<Trip>>("/trips", payload);
-    return res.data.data;
+    return api.post<Trip>("/trips", payload);
   },
 
   // Driver update trip milestone status
@@ -51,7 +48,6 @@ export const tripsApi = {
     id: string,
     payload: UpdateTripStatusPayload
   ): Promise<Trip> => {
-    const res = await api.patch<ApiResponse<Trip>>(`/trips/${id}/status`, payload);
-    return res.data.data;
+    return api.patch<Trip>(`/trips/${id}/status`, payload);
   },
 };

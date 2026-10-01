@@ -5,24 +5,26 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string | boolean;
   leftIcon?: React.ReactNode;
+  prefixIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, leftIcon, rightIcon, ...props }, ref) => {
+  ({ className, type, error, leftIcon, prefixIcon, rightIcon, ...props }, ref) => {
+    const iconLeft = leftIcon || prefixIcon;
     return (
       <div className="w-full">
         <div className="relative flex items-center">
-          {leftIcon && (
+          {iconLeft && (
             <div className="absolute left-3.5 flex items-center pointer-events-none text-stone-400">
-              {leftIcon}
+              {iconLeft}
             </div>
           )}
           <input
             type={type}
             className={cn(
               "flex h-11 w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-sm text-stone-900 shadow-xs transition-all placeholder:text-stone-400 focus:bg-white focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:opacity-60",
-              leftIcon && "pl-10",
+              iconLeft && "pl-10",
               rightIcon && "pr-10",
               error && "border-red-500 focus:border-red-600 focus:ring-red-500/20 bg-red-50/30",
               className

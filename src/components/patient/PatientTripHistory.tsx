@@ -83,7 +83,7 @@ export function PatientTripHistory() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100 font-medium text-stone-800">
-                {trips.map((trip) => (
+                {trips.map((trip: Trip) => (
                   <tr
                     key={trip.id}
                     className="hover:bg-stone-50/60 transition-colors"

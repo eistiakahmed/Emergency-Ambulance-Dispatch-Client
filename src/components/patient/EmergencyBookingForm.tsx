@@ -24,6 +24,7 @@ import { FormField } from "@/components/ui/FormField";
 import { useHospitals } from "@/lib/hooks/useHospitals";
 import { useCreateEmergency } from "@/lib/hooks/useEmergencies";
 import { useAppSelector } from "@/store/hooks";
+import type { Hospital } from "@/types";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -352,7 +353,7 @@ export function EmergencyBookingForm() {
             <option value="">
               Auto-Select Nearest Emergency Hospital (Recommended)
             </option>
-            {hospitals.map((h) => (
+            {hospitals.map((h: Hospital) => (
               <option key={h.id} value={h.id}>
                 {h.name} — {h.availableIcuBeds} ICU / {h.availableGeneralBeds} Gen Free
               </option>
