@@ -25,22 +25,22 @@ const MILESTONES: {
   label: string;
   shortDesc: string;
   nextLabel: string;
-  nextStatus: TripStatus;
+  nextStatus?: TripStatus;
   icon: typeof Navigation;
 }[] = [
   {
-    status: "ACCEPTED",
+    status: "ASSIGNED",
     label: "Ambulance Dispatched",
     shortDesc: "Crew assigned and en route to base",
-    nextLabel: "Start Navigation to Pickup",
-    nextStatus: "EN_ROUTE",
+    nextLabel: "Start Navigation to Patient Pickup",
+    nextStatus: "EN_ROUTE_PICKUP",
     icon: Navigation,
   },
   {
-    status: "EN_ROUTE",
+    status: "EN_ROUTE_PICKUP",
     label: "En Route to Pickup",
     shortDesc: "Vehicle travelling to patient coordinates",
-    nextLabel: "Confirm Patient Onboard",
+    nextLabel: "Confirm Patient Onboard (Vitals Stable)",
     nextStatus: "PATIENT_PICKED_UP",
     icon: UserCheck,
   },
@@ -48,15 +48,15 @@ const MILESTONES: {
     status: "PATIENT_PICKED_UP",
     label: "Patient Onboard",
     shortDesc: "Vitals stabilized, transporting to hospital",
-    nextLabel: "Arrived at Emergency ER",
-    nextStatus: "HOSPITAL_ARRIVAL",
+    nextLabel: "Arrived at Emergency Trauma ER",
+    nextStatus: "ARRIVED_HOSPITAL",
     icon: HospitalIcon,
   },
   {
-    status: "HOSPITAL_ARRIVAL",
+    status: "ARRIVED_HOSPITAL",
     label: "At Hospital Destination",
-    shortDesc: "Transferring patient to emergency trauma unit",
-    nextLabel: "Complete & Finalize Trip",
+    shortDesc: "Transferring patient to emergency intake team",
+    nextLabel: "Complete & Finalize Mission",
     nextStatus: "COMPLETED",
     icon: Flag,
   },

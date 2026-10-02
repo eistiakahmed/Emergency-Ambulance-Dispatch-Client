@@ -85,12 +85,12 @@ export function DashboardSidebar() {
         },
         {
           name: "Active Mission",
-          href: "/provider#mission",
+          href: "/provider/mission",
           icon: Ambulance,
         },
         {
           name: "Shift History",
-          href: "/provider#history",
+          href: "/provider/history",
           icon: Clock,
         },
       ];

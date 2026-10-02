@@ -34,8 +34,10 @@ export function PatientTripHistory() {
 
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
 
-  const trips = tripsData?.data || [];
-  const meta = tripsData?.meta;
+  const trips: Trip[] = Array.isArray(tripsData)
+    ? (tripsData as Trip[])
+    : tripsData?.data || [];
+  const meta = Array.isArray(tripsData) ? undefined : tripsData?.meta;
 
   const filterGroups = [
     {
