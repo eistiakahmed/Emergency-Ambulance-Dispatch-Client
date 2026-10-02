@@ -31,8 +31,12 @@ export function PatientOverview() {
   });
   const { data: hospitalsData } = useHospitals({ limit: 4 });
 
-  const emergencies = emergenciesData?.data || [];
-  const hospitals = hospitalsData?.data || [];
+  const emergencies = Array.isArray(emergenciesData)
+    ? (emergenciesData as Emergency[])
+    : emergenciesData?.data || [];
+  const hospitals = Array.isArray(hospitalsData)
+    ? (hospitalsData as Hospital[])
+    : hospitalsData?.data || [];
 
   return (
     <div className="space-y-6">

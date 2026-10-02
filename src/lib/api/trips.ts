@@ -38,9 +38,12 @@ export const tripsApi = {
     return api.get<Trip>(`/trips/${id}`);
   },
 
-  // Admin dispatch: Create trip
+  // Admin dispatch: Create / Dispatch trip
   create: async (payload: CreateTripPayload): Promise<Trip> => {
-    return api.post<Trip>("/trips", payload);
+    return api.post<Trip>("/trips/dispatch", payload);
+  },
+  dispatch: async (payload: CreateTripPayload): Promise<Trip> => {
+    return api.post<Trip>("/trips/dispatch", payload);
   },
 
   // Driver update trip milestone status

@@ -38,8 +38,10 @@ export function DispatchWorkbench() {
     null
   );
 
-  const emergencies = emergenciesData?.data || [];
-  const meta = emergenciesData?.meta;
+  const emergencies: EmergencyRequest[] = Array.isArray(emergenciesData)
+    ? (emergenciesData as EmergencyRequest[])
+    : emergenciesData?.data || [];
+  const meta = Array.isArray(emergenciesData) ? undefined : emergenciesData?.meta;
 
   const filterGroups = [
     {

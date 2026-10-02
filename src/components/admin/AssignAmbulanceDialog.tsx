@@ -34,7 +34,9 @@ export function AssignAmbulanceDialog({
 
   const [selectedAmbulanceId, setSelectedAmbulanceId] = useState<string>("");
 
-  const availableAmbulances = ambulancesData?.data || [];
+  const availableAmbulances: Ambulance[] = Array.isArray(ambulancesData)
+    ? (ambulancesData as Ambulance[])
+    : ambulancesData?.data || [];
 
   const handleDispatch = async () => {
     if (!emergency || !selectedAmbulanceId) {
@@ -116,7 +118,7 @@ export function AssignAmbulanceDialog({
                       </div>
                       <div>
                         <div className="font-bold text-stone-900">
-                          {amb.vehicleNumber}
+                          {amb.plateNumber || amb.vehicleNumber || "EMS Unit"}
                         </div>
                         <div className="text-[10px] text-stone-500">
                           Type: {amb.type} • Driver: {amb.driver?.name || "Assigned Driver"}

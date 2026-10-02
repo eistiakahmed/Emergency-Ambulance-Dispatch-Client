@@ -4,3 +4,4 @@ export * from "./ambulances";
 export * from "./hospitals";
 export * from "./emergencies";
 export * from "./trips";
+export * from "./admin";

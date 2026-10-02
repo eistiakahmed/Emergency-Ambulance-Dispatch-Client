@@ -27,10 +27,18 @@ export function AdminKpiGrid() {
   });
   const { data: tripsData, isLoading: loadingTrips } = useTrips({ limit: 50 });
 
-  const emergencies = emergenciesData?.data || [];
-  const ambulances = ambulancesData?.data || [];
-  const hospitals = hospitalsData?.data || [];
-  const trips = tripsData?.data || [];
+  const emergencies = Array.isArray(emergenciesData)
+    ? emergenciesData
+    : emergenciesData?.data || [];
+  const ambulances = Array.isArray(ambulancesData)
+    ? ambulancesData
+    : ambulancesData?.data || [];
+  const hospitals = Array.isArray(hospitalsData)
+    ? hospitalsData
+    : hospitalsData?.data || [];
+  const trips = Array.isArray(tripsData)
+    ? tripsData
+    : tripsData?.data || [];
 
   const pendingEmergencies = emergencies.filter((e) => e.status === "PENDING").length;
   const activeTripsCount = trips.filter(

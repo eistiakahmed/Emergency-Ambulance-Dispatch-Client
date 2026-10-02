@@ -1,5 +1,8 @@
 import React, { Suspense } from "react";
+import Link from "next/link";
 import type { Metadata } from "next";
+import { Building2, Radio, Ambulance, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { AdminKpiGrid } from "@/components/admin/AdminKpiGrid";
 import { AnalyticsChart } from "@/components/admin/AnalyticsChart";
 import { DispatchWorkbench } from "@/components/admin/DispatchWorkbench";
@@ -13,14 +16,51 @@ export const metadata: Metadata = {
 export default function AdminDashboardPage() {
   return (
     <div className="space-y-8">
-      {/* 1. Header Overview */}
-      <div className="border-b border-stone-200 pb-4">
-        <h1 className="text-xl sm:text-2xl font-black tracking-tight text-stone-900">
-          Emergency Command Center
-        </h1>
-        <p className="text-xs text-stone-500 mt-0.5">
-          Live national dispatch overview, active ICU fleet distribution, and hospital intake network.
-        </p>
+      {/* 1. Header Overview with Quick Command Actions */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-stone-200 pb-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-stone-900">
+            Emergency Command Center
+          </h1>
+          <p className="text-xs text-stone-500 mt-0.5">
+            Live national dispatch overview, active ICU fleet distribution, and hospital intake network.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href="/admin/hospitals">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs font-bold gap-1.5 border-stone-300 hover:bg-stone-100"
+            >
+              <Building2 className="h-3.5 w-3.5 text-stone-600" />
+              <span>Manage Hospitals</span>
+            </Button>
+          </Link>
+
+          <Link href="/admin/fleet">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs font-bold gap-1.5 border-stone-300 hover:bg-stone-100"
+            >
+              <Ambulance className="h-3.5 w-3.5 text-stone-600" />
+              <span>Fleet Control</span>
+            </Button>
+          </Link>
+
+          <Link href="/admin/dispatch">
+            <Button
+              variant="emergency"
+              size="sm"
+              className="text-xs font-bold gap-1.5 shadow-xs"
+            >
+              <Radio className="h-3.5 w-3.5" />
+              <span>Dispatch Queue</span>
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* 2. Real-time KPI Stats Grid */}

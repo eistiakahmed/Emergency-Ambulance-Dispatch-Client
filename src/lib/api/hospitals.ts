@@ -10,9 +10,23 @@ export interface HospitalFilterParams {
   [key: string]: string | number | boolean | undefined | null;
 }
 
+export interface CreateHospitalPayload {
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  contactPhone: string;
+  emergencyBedsTotal?: number;
+  emergencyBedsAvailable?: number;
+  hasIcu?: boolean;
+  icuBedsAvailable?: number;
+}
+
+export interface UpdateHospitalPayload extends Partial<CreateHospitalPayload> {}
+
 export interface UpdateBedCapacityPayload {
-  availableIcuBeds?: number;
-  availableGeneralBeds?: number;
+  emergencyBedsAvailable?: number;
+  icuBedsAvailable?: number;
   totalIcuBeds?: number;
   totalGeneralBeds?: number;
 }
@@ -39,12 +53,12 @@ export const hospitalsApi = {
   },
 
   // Admin create hospital
-  create: async (data: Partial<Hospital>): Promise<Hospital> => {
+  create: async (data: CreateHospitalPayload): Promise<Hospital> => {
     return api.post<Hospital>("/hospitals", data);
   },
 
   // Admin update hospital details
-  update: async (id: string, data: Partial<Hospital>): Promise<Hospital> => {
+  update: async (id: string, data: UpdateHospitalPayload): Promise<Hospital> => {
     return api.patch<Hospital>(`/hospitals/${id}`, data);
   },
 
@@ -53,3 +67,4 @@ export const hospitalsApi = {
     await api.delete(`/hospitals/${id}`);
   },
 };
+

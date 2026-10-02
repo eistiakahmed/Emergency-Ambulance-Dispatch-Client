@@ -13,8 +13,10 @@ export interface EmergencyFilterParams {
 export interface CreateEmergencyPayload {
   patientName: string;
   patientPhone: string;
-  emergencyType: "CARDIAC" | "TRAUMA" | "RESPIRATORY" | "PREGNANCY" | "GENERAL" | "OTHER";
-  severityLevel: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+  priority?: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+  severityLevel?: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+  emergencyType?: "CARDIAC" | "TRAUMA" | "RESPIRATORY" | "PREGNANCY" | "GENERAL" | "OTHER";
+  symptoms?: string;
   pickupAddress: string;
   pickupLatitude: number;
   pickupLongitude: number;
@@ -25,7 +27,26 @@ export interface CreateEmergencyPayload {
 export const emergenciesApi = {
   // Create SOS emergency request
   create: async (payload: CreateEmergencyPayload): Promise<EmergencyRequest> => {
-    return api.post<EmergencyRequest>("/emergencies", payload);
+    const formattedPriority = payload.priority || payload.severityLevel || "MEDIUM";
+    const formattedSymptoms =
+      payload.symptoms ||
+      (payload.emergencyType
+        ? `${payload.emergencyType} Emergency: ${payload.notes || "Immediate medical dispatch requested"}`
+        : payload.notes || "Urgent emergency medical request");
+
+    const body = {
+      patientName: payload.patientName,
+      patientPhone: payload.patientPhone,
+      priority: formattedPriority,
+      pickupAddress: payload.pickupAddress,
+      pickupLatitude: payload.pickupLatitude,
+      pickupLongitude: payload.pickupLongitude,
+      symptoms: formattedSymptoms,
+      ...(payload.notes ? { notes: payload.notes } : {}),
+      ...(payload.destinationHospitalId ? { destinationHospitalId: payload.destinationHospitalId } : {}),
+    };
+
+    return api.post<EmergencyRequest>("/emergencies", body);
   },
 
   // List emergencies with pagination & filters

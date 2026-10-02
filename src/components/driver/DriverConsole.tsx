@@ -32,15 +32,20 @@ export function DriverConsole() {
     null
   );
 
-  const pendingEmergency = pendingEmergenciesData?.data?.[0];
+  const pendingEmergencies = Array.isArray(pendingEmergenciesData)
+    ? pendingEmergenciesData
+    : pendingEmergenciesData?.data || [];
+  const pendingEmergency = pendingEmergencies[0];
+
   const showIncomingAlert =
     Boolean(pendingEmergency) &&
     pendingEmergency?.id !== dismissedEmergencyId &&
     !activeTrip &&
     vehicle?.status === "AVAILABLE";
 
+  const trips = Array.isArray(tripsData) ? tripsData : tripsData?.data || [];
   const completedTripsCount =
-    tripsData?.data?.filter((t) => t.status === "COMPLETED")?.length || 0;
+    trips.filter((t) => t.status === "COMPLETED").length || 0;
 
   return (
     <div className="space-y-6">

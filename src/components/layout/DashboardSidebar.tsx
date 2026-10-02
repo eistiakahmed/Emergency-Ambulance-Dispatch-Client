@@ -69,8 +69,8 @@ export function DashboardSidebar() {
           icon: Ambulance,
         },
         {
-          name: "Hospital ICU Beds",
-          href: "/hospitals",
+          name: "Hospital Bed Network",
+          href: "/admin/hospitals",
           icon: Building2,
         },
       ];

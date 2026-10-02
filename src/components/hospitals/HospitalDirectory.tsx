@@ -36,8 +36,10 @@ export function HospitalDirectory() {
     minIcuBeds: minIcu ? 1 : undefined,
   });
 
-  const hospitals = hospitalsData?.data || [];
-  const meta = hospitalsData?.meta;
+  const hospitals: Hospital[] = Array.isArray(hospitalsData)
+    ? (hospitalsData as Hospital[])
+    : hospitalsData?.data || [];
+  const meta = Array.isArray(hospitalsData) ? undefined : hospitalsData?.meta;
 
   const filterGroups = [
     {

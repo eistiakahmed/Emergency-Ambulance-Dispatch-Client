@@ -45,14 +45,10 @@ export function DriverShiftToggle() {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
+          const validStatus: "AVAILABLE" | "BUSY" | "OFFLINE" =
+            vehicle?.status === "OFFLINE" ? "OFFLINE" : "AVAILABLE";
           await updateStatusMutation.mutateAsync({
-            status:
-              (vehicle?.status as
-                | "AVAILABLE"
-                | "BUSY"
-                | "ON_TRIP"
-                | "MAINTENANCE"
-                | "OFFLINE") || "AVAILABLE",
+            status: validStatus,
             latitude: pos.coords.latitude,
             longitude: pos.coords.longitude,
           });

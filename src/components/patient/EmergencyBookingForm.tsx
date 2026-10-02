@@ -114,7 +114,9 @@ export function EmergencyBookingForm() {
   const [notes, setNotes] = useState("");
   const [locating, setLocating] = useState(false);
 
-  const hospitals = hospitalsData?.data || [];
+  const hospitals = Array.isArray(hospitalsData)
+    ? hospitalsData
+    : hospitalsData?.data || [];
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) {

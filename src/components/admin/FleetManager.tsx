@@ -33,8 +33,10 @@ export function FleetManager() {
     type,
   });
 
-  const ambulances = ambulancesData?.data || [];
-  const meta = ambulancesData?.meta;
+  const ambulances: Ambulance[] = Array.isArray(ambulancesData)
+    ? (ambulancesData as Ambulance[])
+    : ambulancesData?.data || [];
+  const meta = Array.isArray(ambulancesData) ? undefined : ambulancesData?.meta;
 
   const filterGroups = [
     {

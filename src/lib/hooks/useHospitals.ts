@@ -53,7 +53,7 @@ export function useUpdateBedCapacity() {
       );
       queryClient.invalidateQueries({ queryKey: HOSPITAL_KEYS.lists() });
       toast.success("Bed capacity updated successfully", {
-        description: `${updatedHospital.name}: ${updatedHospital.availableIcuBeds} ICU / ${updatedHospital.availableGeneralBeds} Gen available`,
+        description: `${updatedHospital.name}: ${updatedHospital.icuBedsAvailable || 0} ICU / ${updatedHospital.emergencyBedsAvailable || 0} ER available`,
       });
     },
     onError: (err: unknown) => {
@@ -63,3 +63,75 @@ export function useUpdateBedCapacity() {
     },
   });
 }
+
+// Mutation to register / create a new hospital (Admin)
+export function useCreateHospital() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: Parameters<typeof hospitalsApi.create>[0]) =>
+      hospitalsApi.create(payload),
+    onSuccess: (newHospital) => {
+      queryClient.invalidateQueries({ queryKey: HOSPITAL_KEYS.lists() });
+      toast.success("Hospital Registered Successfully", {
+        description: `${newHospital.name} added to the emergency intake network.`,
+      });
+    },
+    onError: (err: unknown) => {
+      const message =
+        err instanceof Error ? err.message : "Failed to register hospital";
+      toast.error("Hospital Creation Failed", { description: message });
+    },
+  });
+}
+
+// Mutation to update hospital info (Admin)
+export function useUpdateHospital() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: Parameters<typeof hospitalsApi.update>[1];
+    }) => hospitalsApi.update(id, payload),
+    onSuccess: (updatedHospital) => {
+      queryClient.setQueryData(
+        HOSPITAL_KEYS.detail(updatedHospital.id),
+        updatedHospital
+      );
+      queryClient.invalidateQueries({ queryKey: HOSPITAL_KEYS.lists() });
+      toast.success("Hospital Updated", {
+        description: `${updatedHospital.name} details have been updated.`,
+      });
+    },
+    onError: (err: unknown) => {
+      const message =
+        err instanceof Error ? err.message : "Failed to update hospital";
+      toast.error("Update Failed", { description: message });
+    },
+  });
+}
+
+// Mutation to delete / remove hospital (Admin)
+export function useDeleteHospital() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => hospitalsApi.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: HOSPITAL_KEYS.lists() });
+      toast.success("Hospital Removed", {
+        description: "Hospital has been decommissioned from dispatch routing.",
+      });
+    },
+    onError: (err: unknown) => {
+      const message =
+        err instanceof Error ? err.message : "Failed to delete hospital";
+      toast.error("Deletion Failed", { description: message });
+    },
+  });
+}
+

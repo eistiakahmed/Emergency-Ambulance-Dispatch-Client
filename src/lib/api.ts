@@ -1,7 +1,7 @@
 import type { ApiResponse } from "@/types";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL;
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 let accessTokenMemory: string | null = null;
 
@@ -58,7 +58,7 @@ async function request<T>(
   if (params) {
     const searchParams = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
-      if (value !== undefined && value !== null) {
+      if (value !== undefined && value !== null && value !== "") {
         searchParams.append(key, String(value));
       }
     }
@@ -89,17 +89,28 @@ async function request<T>(
     const res = await fetch(url, config);
 
     // Handle Token Refresh on 401 Unauthorized
-    if (res.status === 401 && !skipAuthRefresh && !endpoint.includes("/auth/login") && !endpoint.includes("/auth/refresh")) {
+    if (
+      res.status === 401 &&
+      !skipAuthRefresh &&
+      !endpoint.includes("/auth/login") &&
+      !endpoint.includes("/auth/refresh-token")
+    ) {
       try {
-        const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
+        const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
           method: "POST",
           credentials: "include",
         });
 
         if (refreshRes.ok) {
-          const refreshData = (await refreshRes.json()) as ApiResponse<{ accessToken: string }>;
-          if (refreshData.data?.accessToken) {
-            setAccessToken(refreshData.data.accessToken);
+          const refreshData = (await refreshRes.json()) as ApiResponse<{
+            accessToken?: string;
+            tokens?: { accessToken: string };
+          }>;
+          const newToken =
+            refreshData.data?.accessToken ||
+            refreshData.data?.tokens?.accessToken;
+          if (newToken) {
+            setAccessToken(newToken);
             return request<T>(endpoint, { ...options, skipAuthRefresh: true });
           }
         } else {
@@ -118,7 +129,12 @@ async function request<T>(
       throw new ApiError(errorMessage, res.status, data?.errors);
     }
 
-    return (data?.data ?? data) as T;
+    // Preserve paginated envelope with meta if present
+    if (data && typeof data === "object" && "meta" in data && "data" in data) {
+      return data as T;
+    }
+
+    return (data?.data !== undefined ? data.data : data) as T;
   } catch (error) {
     if (error instanceof ApiError) {
       throw error;
