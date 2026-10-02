@@ -83,7 +83,7 @@ export function RegisterForm() {
         toast.success(`Account Created!`, {
           description: `Welcome to Pulse EMS, ${res.user.name}.`,
         });
-        router.push("/dashboard");
+        window.location.assign("/dashboard");
       }
     } catch (err: unknown) {
       const message =
@@ -128,7 +128,7 @@ export function RegisterForm() {
         toast.success(`Driver Onboarded!`, {
           description: `Welcome to the active fleet, ${res.user.name}.`,
         });
-        router.push("/provider");
+        window.location.assign("/provider");
       }
     } catch (err: unknown) {
       const message =
