@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import {
+  ChevronDown,
+  HelpCircle,
+  MessageSquare,
+  PhoneCall,
+} from "lucide-react";
 import Link from "next/link";
-import { ChevronDown, HelpCircle, PhoneCall, ArrowRight, MessageSquare } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 interface FaqItem {
@@ -60,14 +64,15 @@ export function FaqSection() {
 
   return (
     <section className="py-16 sm:py-24 bg-stone-50 border-b border-stone-200">
-      <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-384 px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-stone-900">
             Frequently Asked Questions
           </h2>
           <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
-            Everything you need to know about emergency dispatch protocols, fleet capabilities, bed reservation, and response times.
+            Everything you need to know about emergency dispatch protocols,
+            fleet capabilities, bed reservation, and response times.
           </p>
         </div>
 
@@ -138,7 +143,8 @@ export function FaqSection() {
                   Still have questions?
                 </h3>
                 <p className="text-sm text-stone-600 leading-relaxed">
-                  Our emergency triage operators and dispatch specialists are on duty 24/7 to assist with urgent inquiries.
+                  Our emergency triage operators and dispatch specialists are on
+                  duty 24/7 to assist with urgent inquiries.
                 </p>
               </div>
 
@@ -152,7 +158,10 @@ export function FaqSection() {
                 </a>
 
                 <Link href="/contact" className="block w-full">
-                  <Button variant="outline" className="w-full justify-center gap-2 font-bold text-xs h-11">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-center gap-2 font-bold text-xs h-11"
+                  >
                     <MessageSquare className="h-4 w-4" />
                     <span>Contact Operations Hub</span>
                   </Button>
@@ -166,10 +175,14 @@ export function FaqSection() {
                 Response Reliability
               </p>
               <p className="text-2xl font-black text-stone-900">
-                99.98% <span className="text-xs font-semibold text-stone-600">Dispatch Uptime</span>
+                99.98%{" "}
+                <span className="text-xs font-semibold text-stone-600">
+                  Dispatch Uptime
+                </span>
               </p>
               <p className="text-xs text-stone-500">
-                Automated failover redundant servers across major telecom networks.
+                Automated failover redundant servers across major telecom
+                networks.
               </p>
             </div>
           </div>

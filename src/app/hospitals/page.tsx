@@ -1,9 +1,9 @@
-import React, { Suspense } from "react";
-import type { Metadata } from "next";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { HospitalDirectory } from "@/components/hospitals/HospitalDirectory";
 import { Activity, ShieldCheck } from "lucide-react";
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { HospitalDirectory } from "@/components/hospitals/HospitalDirectory";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata: Metadata = {
   title: "Hospital ICU & Emergency Bed Finder | PulseRescue",
@@ -16,7 +16,7 @@ export default function HospitalsPage() {
     <div className="flex min-h-screen flex-col bg-stone-50 font-sans text-stone-900 selection:bg-red-500 selection:text-white">
       <Navbar />
 
-      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 max-w-360 w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 pb-6">
           <div className="space-y-1">
@@ -28,8 +28,9 @@ export default function HospitalsPage() {
               Hospital ICU & Emergency Bed Directory
             </h1>
             <p className="text-xs sm:text-sm text-stone-500 max-w-2xl leading-relaxed">
-              Real-time telemetry showing live Intensive Care Unit (ICU) and General Emergency
-              Ward capacities across all certified medical partners.
+              Real-time telemetry showing live Intensive Care Unit (ICU) and
+              General Emergency Ward capacities across all certified medical
+              partners.
             </p>
           </div>
 

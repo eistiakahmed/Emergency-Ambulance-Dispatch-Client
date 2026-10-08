@@ -1,5 +1,5 @@
-import { api } from "../api";
 import type { Hospital, PaginatedResponse } from "@/types";
+import { api } from "../api";
 
 export interface HospitalFilterParams {
   page?: number;
@@ -33,7 +33,9 @@ export interface UpdateBedCapacityPayload {
 
 export const hospitalsApi = {
   // List hospitals with search and bed capacity filters
-  list: async (params?: HospitalFilterParams): Promise<PaginatedResponse<Hospital>> => {
+  list: async (
+    params?: HospitalFilterParams,
+  ): Promise<PaginatedResponse<Hospital>> => {
     return api.get<PaginatedResponse<Hospital>>("/hospitals", {
       params,
     });
@@ -47,7 +49,7 @@ export const hospitalsApi = {
   // Admin/Staff update bed capacities
   updateBedCapacity: async (
     id: string,
-    payload: UpdateBedCapacityPayload
+    payload: UpdateBedCapacityPayload,
   ): Promise<Hospital> => {
     return api.patch<Hospital>(`/hospitals/${id}/beds`, payload);
   },
@@ -58,7 +60,10 @@ export const hospitalsApi = {
   },
 
   // Admin update hospital details
-  update: async (id: string, data: UpdateHospitalPayload): Promise<Hospital> => {
+  update: async (
+    id: string,
+    data: UpdateHospitalPayload,
+  ): Promise<Hospital> => {
     return api.patch<Hospital>(`/hospitals/${id}`, data);
   },
 
@@ -67,4 +72,3 @@ export const hospitalsApi = {
     await api.delete(`/hospitals/${id}`);
   },
 };
-

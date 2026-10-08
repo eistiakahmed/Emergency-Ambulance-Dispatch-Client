@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { Provider } from "react-redux";
 import { Toaster } from "sonner";
+import { api, getAccessToken } from "@/lib/api";
 import { store } from "@/store";
 import { useAppDispatch } from "@/store/hooks";
-import { setUser, setLoading } from "@/store/slices/authSlice";
-import { api, getAccessToken } from "@/lib/api";
+import { setLoading, setUser } from "@/store/slices/authSlice";
 import type { User } from "@/types";
 
 function AuthInitializer({ children }: { children: React.ReactNode }) {
@@ -22,8 +23,10 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
           return;
         }
         // Restore session from backend profile endpoint
-        const userData = await api.get<User>("/users/me", { skipAuthRefresh: false });
-        if (userData && userData.id) {
+        const userData = await api.get<User>("/users/me", {
+          skipAuthRefresh: false,
+        });
+        if (userData?.id) {
           dispatch(setUser(userData));
         } else {
           dispatch(setUser(null));
@@ -54,7 +57,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             retry: 1,
           },
         },
-      })
+      }),
   );
 
   return (

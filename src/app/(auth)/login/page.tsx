@@ -1,6 +1,6 @@
-import React, { Suspense } from "react";
-import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { LoginForm } from "@/components/auth/LoginForm";
 

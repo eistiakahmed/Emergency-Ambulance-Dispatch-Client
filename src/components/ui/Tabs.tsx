@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 
 export interface TabItem {
@@ -29,7 +29,7 @@ export function Tabs({
     <div
       className={cn(
         "flex items-center p-1 bg-stone-100 rounded-xl border border-stone-200/80 gap-1",
-        className
+        className,
       )}
     >
       {tabs.map((tab) => {
@@ -44,7 +44,7 @@ export function Tabs({
               isActive
                 ? "bg-white text-stone-900 shadow-sm border border-stone-200/60"
                 : "text-stone-500 hover:text-stone-900 hover:bg-stone-50/50",
-              tabClassName
+              tabClassName,
             )}
           >
             {tab.icon && <span className="shrink-0">{tab.icon}</span>}
@@ -55,7 +55,7 @@ export function Tabs({
                   "px-1.5 py-0.5 text-[10px] font-bold rounded-full",
                   isActive
                     ? "bg-red-100 text-red-700"
-                    : "bg-stone-200 text-stone-600"
+                    : "bg-stone-200 text-stone-600",
                 )}
               >
                 {tab.badge}

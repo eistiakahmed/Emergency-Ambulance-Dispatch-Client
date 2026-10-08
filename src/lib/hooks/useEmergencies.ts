@@ -1,11 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  emergenciesApi,
-  type EmergencyFilterParams,
-  type CreateEmergencyPayload,
-} from "@/lib/api/emergencies";
-import { toast } from "sonner";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import {
+  type CreateEmergencyPayload,
+  type EmergencyFilterParams,
+  emergenciesApi,
+} from "@/lib/api/emergencies";
 
 export const EMERGENCY_KEYS = {
   all: ["emergencies"] as const,

@@ -1,11 +1,11 @@
-import React, { Suspense } from "react";
-import Link from "next/link";
+import { Ambulance, Building2, Radio } from "lucide-react";
 import type { Metadata } from "next";
-import { Building2, Radio, Ambulance, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Suspense } from "react";
 import { AdminKpiGrid } from "@/components/admin/AdminKpiGrid";
 import { AnalyticsChart } from "@/components/admin/AnalyticsChart";
 import { DispatchWorkbench } from "@/components/admin/DispatchWorkbench";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Admin Central Command & Dispatch Workbench | PulseRescue",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function AdminDashboardPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* 1. Header Overview with Quick Command Actions */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-stone-200 pb-4">
         <div>
@@ -23,7 +23,8 @@ export default function AdminDashboardPage() {
             Emergency Command Center
           </h1>
           <p className="text-xs text-stone-500 mt-0.5">
-            Live national dispatch overview, active ICU fleet distribution, and hospital intake network.
+            Live national dispatch overview, active ICU fleet distribution, and
+            hospital intake network.
           </p>
         </div>
 

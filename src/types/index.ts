@@ -45,7 +45,13 @@ export type TripStatus =
   | "COMPLETED"
   | "CANCELLED";
 
-export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+export type PaymentStatus =
+  | "PENDING"
+  | "PROCESSING"
+  | "SUCCEEDED"
+  | "PAID"
+  | "FAILED"
+  | "REFUNDED";
 
 // User & Auth
 export interface User {
@@ -104,10 +110,16 @@ export interface Hospital {
   latitude: number;
   longitude: number;
   contactNumber?: string;
+  contactPhone?: string;
+  phone?: string;
   emergencyAvailable?: boolean;
+  emergencyBedsAvailable?: number;
+  emergencyBedsTotal?: number;
+  hasIcu?: boolean;
   icuBedsAvailable?: number;
   availableIcuBeds?: number;
   totalIcuBeds?: number;
+  icuTotal?: number;
   erBedsAvailable?: number;
   availableGeneralBeds?: number;
   totalErBeds?: number;
@@ -188,13 +200,20 @@ export interface Payment {
 export interface AuditLog {
   id: string;
   action: string;
-  entity: string;
+  entity?: string;
   entityId?: string | null;
   userId?: string | null;
   user?: User | null;
   details?: Record<string, unknown> | null;
   ipAddress?: string | null;
   createdAt: string;
+  actorId?: string | null;
+  actorRole?: string;
+  actor?: { id: string; name: string; email: string; role: Role } | null;
+  resourceType?: string;
+  resourceId?: string;
+  oldValues?: Record<string, unknown> | null;
+  newValues?: Record<string, unknown> | null;
 }
 
 // Standard API Response envelope

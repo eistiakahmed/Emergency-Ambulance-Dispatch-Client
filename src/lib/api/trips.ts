@@ -1,5 +1,5 @@
+import type { PaginatedResponse, Trip, TripStatus } from "@/types";
 import { api } from "../api";
-import type { Trip, PaginatedResponse, TripStatus } from "@/types";
 
 export interface TripFilterParams {
   page?: number;
@@ -49,7 +49,7 @@ export const tripsApi = {
   // Driver update trip milestone status
   updateStatus: async (
     id: string,
-    payload: UpdateTripStatusPayload
+    payload: UpdateTripStatusPayload,
   ): Promise<Trip> => {
     return api.patch<Trip>(`/trips/${id}/status`, payload);
   },

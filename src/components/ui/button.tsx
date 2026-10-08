@@ -1,5 +1,5 @@
-import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -11,18 +11,14 @@ const buttonVariants = cva(
           "bg-red-600 text-white shadow-md hover:bg-red-700 active:bg-red-800 shadow-red-600/20",
         emergency:
           "bg-red-600 text-white font-bold shadow-lg shadow-red-600/30 hover:bg-red-700 hover:shadow-red-600/40",
-        warm:
-          "bg-stone-900 text-stone-50 shadow-sm hover:bg-stone-800 active:bg-stone-950",
+        warm: "bg-stone-900 text-stone-50 shadow-sm hover:bg-stone-800 active:bg-stone-950",
         secondary:
           "bg-stone-100 text-stone-900 border border-stone-200 hover:bg-stone-200 active:bg-stone-300",
         outline:
           "border border-stone-300 bg-white text-stone-800 shadow-xs hover:bg-stone-50 hover:border-stone-400",
-        ghost:
-          "text-stone-700 hover:bg-stone-100 hover:text-stone-900",
-        destructive:
-          "bg-red-700 text-white hover:bg-red-800",
-        link:
-          "text-red-600 underline-offset-4 hover:underline p-0 h-auto font-medium",
+        ghost: "text-stone-700 hover:bg-stone-100 hover:text-stone-900",
+        destructive: "bg-red-700 text-white hover:bg-red-800",
+        link: "text-red-600 underline-offset-4 hover:underline p-0 h-auto font-medium",
       },
       size: {
         default: "h-11 px-5 py-2.5",
@@ -36,7 +32,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface ButtonProps
@@ -46,7 +42,10 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, isLoading, children, disabled, ...props }, ref) => {
+  (
+    { className, variant, size, isLoading, children, disabled, ...props },
+    ref,
+  ) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
@@ -83,7 +82,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

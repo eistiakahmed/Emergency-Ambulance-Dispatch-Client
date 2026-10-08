@@ -1,24 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
 import {
+  ArrowRight,
   CheckCircle2,
-  Navigation,
-  UserCheck,
-  Hospital as HospitalIcon,
   Flag,
+  Hospital as HospitalIcon,
   Loader2,
   MapPin,
+  Navigation,
   Phone,
-  ArrowRight,
   ShieldCheck,
+  UserCheck,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
+import { Button } from "@/components/ui/button";
 import { useUpdateTripStatus } from "@/lib/hooks/useTrips";
-import type { Trip, TripStatus } from "@/types";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import type { Trip, TripStatus } from "@/types";
 
 const MILESTONES: {
   status: TripStatus;
@@ -31,7 +29,7 @@ const MILESTONES: {
   {
     status: "ASSIGNED",
     label: "Ambulance Dispatched",
-    shortDesc: "Crew assigned and en route to base",
+    shortDesc: "Crew assigned and en route to pickup",
     nextLabel: "Start Navigation to Patient Pickup",
     nextStatus: "EN_ROUTE_PICKUP",
     icon: Navigation,
@@ -47,15 +45,23 @@ const MILESTONES: {
   {
     status: "PATIENT_PICKED_UP",
     label: "Patient Onboard",
-    shortDesc: "Vitals stabilized, transporting to hospital",
-    nextLabel: "Arrived at Emergency Trauma ER",
+    shortDesc: "Vitals stabilized, departed for ER",
+    nextLabel: "Start Transit to Emergency ER",
+    nextStatus: "EN_ROUTE_HOSPITAL",
+    icon: HospitalIcon,
+  },
+  {
+    status: "EN_ROUTE_HOSPITAL",
+    label: "En Route to Hospital",
+    shortDesc: "Direct transit to emergency trauma wing",
+    nextLabel: "Confirm Arrival at Hospital ER",
     nextStatus: "ARRIVED_HOSPITAL",
     icon: HospitalIcon,
   },
   {
     status: "ARRIVED_HOSPITAL",
     label: "At Hospital Destination",
-    shortDesc: "Transferring patient to emergency intake team",
+    shortDesc: "Transferring patient to emergency intake",
     nextLabel: "Complete & Finalize Mission",
     nextStatus: "COMPLETED",
     icon: Flag,
@@ -105,7 +111,7 @@ export function TripMilestoneStepper({ trip }: { trip: Trip }) {
       </div>
 
       {/* Stepper Progress Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 pt-1">
         {MILESTONES.map((m, idx) => {
           const isPassed = currentIndex > idx || isFinished;
           const isCurrent = currentIndex === idx && !isFinished;
@@ -119,8 +125,8 @@ export function TripMilestoneStepper({ trip }: { trip: Trip }) {
                 isCurrent
                   ? "border-red-600 bg-red-50/70 ring-2 ring-red-500/20 shadow-xs"
                   : isPassed
-                  ? "border-emerald-300 bg-emerald-50/50"
-                  : "border-stone-200 bg-stone-50/40 opacity-60"
+                    ? "border-emerald-300 bg-emerald-50/50"
+                    : "border-stone-200 bg-stone-50/40 opacity-60",
               )}
             >
               <div className="flex items-center justify-between">
@@ -130,8 +136,8 @@ export function TripMilestoneStepper({ trip }: { trip: Trip }) {
                     isPassed
                       ? "bg-emerald-600 text-white"
                       : isCurrent
-                      ? "bg-red-600 text-white"
-                      : "bg-stone-200 text-stone-600"
+                        ? "bg-red-600 text-white"
+                        : "bg-stone-200 text-stone-600",
                   )}
                 >
                   {isPassed ? <CheckCircle2 className="h-4 w-4" /> : idx + 1}
@@ -140,7 +146,11 @@ export function TripMilestoneStepper({ trip }: { trip: Trip }) {
                 <StepIcon
                   className={cn(
                     "h-4 w-4",
-                    isCurrent ? "text-red-600" : isPassed ? "text-emerald-600" : "text-stone-400"
+                    isCurrent
+                      ? "text-red-600"
+                      : isPassed
+                        ? "text-emerald-600"
+                        : "text-stone-400",
                   )}
                 />
               </div>
@@ -187,7 +197,8 @@ export function TripMilestoneStepper({ trip }: { trip: Trip }) {
             Designated Hospital
           </span>
           <p className="font-bold text-stone-900 text-sm">
-            {trip.emergencyRequest?.destinationHospital?.name || "Nearest Emergency Hospital"}
+            {trip.emergencyRequest?.destinationHospital?.name ||
+              "Nearest Emergency Hospital"}
           </p>
           <p className="text-stone-600 flex items-start gap-1">
             <HospitalIcon className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
@@ -217,7 +228,9 @@ export function TripMilestoneStepper({ trip }: { trip: Trip }) {
               </>
             ) : (
               <>
-                <span>ADVANCE STATUS: {currentMilestone.nextLabel.toUpperCase()}</span>
+                <span>
+                  ADVANCE STATUS: {currentMilestone.nextLabel.toUpperCase()}
+                </span>
                 <ArrowRight className="h-4 w-4" />
               </>
             )}
@@ -228,7 +241,10 @@ export function TripMilestoneStepper({ trip }: { trip: Trip }) {
       {isFinished && (
         <div className="flex items-center gap-2 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
           <ShieldCheck className="h-5 w-5 text-emerald-600 shrink-0" />
-          <span>This emergency mission is marked as COMPLETED. Vehicle is ready for new calls.</span>
+          <span>
+            This emergency mission is marked as COMPLETED. Vehicle is ready for
+            new calls.
+          </span>
         </div>
       )}
     </div>

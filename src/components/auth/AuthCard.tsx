@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 
 interface AuthCardProps {
@@ -22,7 +22,7 @@ export function AuthCard({
       <div
         className={cn(
           "relative overflow-hidden rounded-2xl sm:rounded-3xl border border-stone-200 bg-white p-6 sm:p-10 shadow-sm shadow-stone-200/50",
-          className
+          className,
         )}
       >
         <div className="space-y-6">

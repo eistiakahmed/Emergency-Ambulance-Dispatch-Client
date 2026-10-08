@@ -1,12 +1,11 @@
-import React from "react";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { HeroSection } from "@/components/home/HeroSection";
-import { MetricsSection } from "@/components/home/MetricsSection";
-import { HowItWorksSection } from "@/components/home/HowItWorksSection";
-import { FleetSection } from "@/components/home/FleetSection";
-import { FaqSection } from "@/components/home/FaqSection";
 import { EmergencyCtaSection } from "@/components/home/EmergencyCtaSection";
+import { FaqSection } from "@/components/home/FaqSection";
+import { FleetSection } from "@/components/home/FleetSection";
+import { HeroSection } from "@/components/home/HeroSection";
+import { HowItWorksSection } from "@/components/home/HowItWorksSection";
+import { MetricsSection } from "@/components/home/MetricsSection";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
 
 export default function Home() {
   return (

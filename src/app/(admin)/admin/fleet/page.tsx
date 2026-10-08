@@ -1,10 +1,11 @@
-import React, { Suspense } from "react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { FleetManager } from "@/components/admin/FleetManager";
 
 export const metadata: Metadata = {
   title: "Ambulance Fleet & Driver Governance | PulseRescue Admin",
-  description: "Live monitoring of ambulance fleet readiness, ALS equipment, and driver assignments.",
+  description:
+    "Live monitoring of ambulance fleet readiness, ALS equipment, and driver assignments.",
 };
 
 export default function AdminFleetPage() {
@@ -15,7 +16,8 @@ export default function AdminFleetPage() {
           Ambulance Fleet & Drivers
         </h1>
         <p className="text-xs text-stone-500 mt-0.5">
-          Real-time readiness monitoring for Advanced Life Support (ALS) and Basic Life Support (BLS) ambulances.
+          Real-time readiness monitoring for Advanced Life Support (ALS) and
+          Basic Life Support (BLS) ambulances.
         </p>
       </div>
 

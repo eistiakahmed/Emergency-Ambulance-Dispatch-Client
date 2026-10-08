@@ -1,25 +1,23 @@
 "use client";
 
-import React from "react";
-import { useSearchParams } from "next/navigation";
 import {
+  Calendar,
   Clock,
-  ShieldCheck,
-  MapPin,
-  Hospital as HospitalIcon,
-  Search,
-  CheckCircle2,
   DollarSign,
+  Hospital as HospitalIcon,
+  MapPin,
+  ShieldCheck,
   TrendingUp,
   User,
-  Calendar,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { EmptyState } from "@/components/dashboard/EmptyState";
+import { Pagination } from "@/components/dashboard/Pagination";
+import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
-import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
-import { Pagination } from "@/components/dashboard/Pagination";
-import { EmptyState } from "@/components/dashboard/EmptyState";
 import { useTrips } from "@/lib/hooks/useTrips";
+import { formatFare } from "@/lib/utils";
 import type { Trip } from "@/types";
 
 export function DriverHistoryView() {
@@ -40,8 +38,14 @@ export function DriverHistoryView() {
 
   const completedTrips = trips.filter((t) => t.status === "COMPLETED");
   const totalCompleted = meta?.total ?? completedTrips.length;
-  const totalKm = completedTrips.reduce((acc, t) => acc + (t.distanceKm || 8.5), 0);
-  const totalFare = completedTrips.reduce((acc, t) => acc + (t.totalFare || 1200), 0);
+  const totalKm = completedTrips.reduce(
+    (acc, t) => acc + Number(t.distanceKm || 0),
+    0,
+  );
+  const totalFare = completedTrips.reduce(
+    (acc, t) => acc + Number(t.totalFare || 0),
+    0,
+  );
 
   const filterGroups = [
     {
@@ -67,14 +71,14 @@ export function DriverHistoryView() {
         />
         <StatCard
           title="Total Distance Logged"
-          value={`${totalKm.toFixed(1)} km`}
+          value={`${Number(totalKm).toFixed(1)} km`}
           description="GPS tracked transport routing"
           icon={TrendingUp}
           variant="blue"
         />
         <StatCard
           title="Total Service Value"
-          value={`৳${totalFare.toLocaleString()}`}
+          value={formatFare(totalFare, "both")}
           description="Fare & reimbursement balance"
           icon={DollarSign}
           variant="stone"
@@ -111,7 +115,8 @@ export function DriverHistoryView() {
               <tbody className="divide-y divide-stone-100">
                 {trips.map((trip) => {
                   const emergency = trip.emergency || trip.emergencyRequest;
-                  const hospital = trip.hospital || emergency?.destinationHospital;
+                  const hospital =
+                    trip.hospital || emergency?.destinationHospital;
 
                   return (
                     <tr
@@ -126,13 +131,17 @@ export function DriverHistoryView() {
                       {/* Pickup & Patient */}
                       <td className="py-3.5 px-4">
                         <div className="space-y-0.5 max-w-xs">
-                          <span className="font-bold text-stone-900 block flex items-center gap-1">
+                          <span className="font-bold text-stone-900 flex items-center gap-1">
                             <User className="h-3 w-3 text-stone-400" />
-                            <span>{emergency?.patientName || "Emergency Patient"}</span>
+                            <span>
+                              {emergency?.patientName || "Emergency Patient"}
+                            </span>
                           </span>
-                          <span className="text-[11px] text-stone-500 block truncate flex items-center gap-1">
+                          <span className="text-[11px] text-stone-500 truncate flex items-center gap-1">
                             <MapPin className="h-3 w-3 text-stone-400 shrink-0" />
-                            <span>{emergency?.pickupAddress || "Central Dhaka"}</span>
+                            <span>
+                              {emergency?.pickupAddress || "Central Dhaka"}
+                            </span>
                           </span>
                         </div>
                       </td>
@@ -140,10 +149,11 @@ export function DriverHistoryView() {
                       {/* Destination Hospital */}
                       <td className="py-3.5 px-4">
                         <div className="space-y-0.5 max-w-xs">
-                          <span className="font-semibold text-stone-800 block flex items-center gap-1">
+                          <span className="font-semibold text-stone-800 flex items-center gap-1">
                             <HospitalIcon className="h-3.5 w-3.5 text-red-600 shrink-0" />
                             <span className="truncate">
-                              {hospital?.name || "Dhaka Medical College Emergency"}
+                              {hospital?.name ||
+                                "Dhaka Medical College Emergency"}
                             </span>
                           </span>
                         </div>
@@ -152,10 +162,12 @@ export function DriverHistoryView() {
                       {/* Distance & Fare */}
                       <td className="py-3.5 px-4 font-mono text-stone-700">
                         <span className="font-bold block text-stone-900">
-                          {trip.distanceKm ? `${trip.distanceKm.toFixed(1)} km` : "6.2 km"}
+                          {trip.distanceKm != null
+                            ? `${Number(trip.distanceKm).toFixed(1)} km`
+                            : "—"}
                         </span>
-                        <span className="text-[10px] text-stone-500">
-                          ৳{trip.totalFare || 1200}
+                        <span className="text-[10px] text-stone-500 font-mono">
+                          {formatFare(trip.totalFare, "both")}
                         </span>
                       </td>
 
@@ -169,12 +181,15 @@ export function DriverHistoryView() {
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3 text-stone-400 shrink-0" />
                           <span>
-                            {new Date(trip.createdAt).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {new Date(trip.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              },
+                            )}
                           </span>
                         </div>
                       </td>

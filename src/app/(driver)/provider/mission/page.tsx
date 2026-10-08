@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { DriverMissionView } from "@/components/driver/DriverMissionView";
 
 export const metadata: Metadata = {
@@ -16,7 +16,8 @@ export default function DriverMissionPage() {
           Active Mission & Navigation
         </h1>
         <p className="text-xs text-stone-500 mt-0.5">
-          Live milestone progression from dispatch acceptance to patient transport and hospital ER handover.
+          Live milestone progression from dispatch acceptance to patient
+          transport and hospital ER handover.
         </p>
       </div>
 

@@ -1,8 +1,8 @@
 "use client";
 
-import * as React from "react";
-import { useEffect } from "react";
 import { X } from "lucide-react";
+import type * as React from "react";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 export interface DialogProps {
@@ -47,7 +47,7 @@ export function Dialog({
       document.body.style.overflow = "unset";
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isVisible]);
+  }, [isVisible, handleClose]);
 
   if (!isVisible) return null;
 
@@ -64,7 +64,9 @@ export function Dialog({
           <DialogContent onClose={handleClose}>
             <DialogHeader>
               {title && <DialogTitle>{title}</DialogTitle>}
-              {description && <DialogDescription>{description}</DialogDescription>}
+              {description && (
+                <DialogDescription>{description}</DialogDescription>
+              )}
             </DialogHeader>
             {children}
           </DialogContent>
@@ -89,7 +91,7 @@ export function DialogContent({
     <div
       className={cn(
         "relative w-full rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 transition-all duration-200 animate-in fade-in zoom-in-95",
-        className
+        className,
       )}
     >
       {onClose && (
@@ -131,7 +133,7 @@ export function DialogTitle({
     <h2
       className={cn(
         "text-base sm:text-lg font-black tracking-tight text-stone-900",
-        className
+        className,
       )}
     >
       {children}
@@ -166,7 +168,7 @@ export function DialogFooter({
     <div
       className={cn(
         "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 mt-6",
-        className
+        className,
       )}
     >
       {children}

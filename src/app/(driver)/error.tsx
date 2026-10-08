@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function DriverError({
@@ -16,7 +16,7 @@ export default function DriverError({
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center p-12 text-center rounded-3xl border border-stone-200 bg-white space-y-4">
+    <div className="flex flex-col items-center justify-center p-12 text-center rounded-2xl border border-stone-200 bg-white space-y-4">
       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 border border-amber-200">
         <AlertTriangle className="h-6 w-6" />
       </div>

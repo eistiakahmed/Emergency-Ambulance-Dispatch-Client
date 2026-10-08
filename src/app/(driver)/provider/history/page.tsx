@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { DriverHistoryView } from "@/components/driver/DriverHistoryView";
 
 export const metadata: Metadata = {
@@ -16,7 +16,8 @@ export default function DriverHistoryPage() {
           Shift & Mission History
         </h1>
         <p className="text-xs text-stone-500 mt-0.5">
-          Archived log of completed emergency hospital transfers, route distances, and shift telemetry.
+          Archived log of completed emergency hospital transfers, route
+          distances, and shift telemetry.
         </p>
       </div>
 

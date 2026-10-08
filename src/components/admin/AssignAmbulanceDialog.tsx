@@ -1,21 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  Siren,
   Ambulance as AmbulanceIcon,
-  MapPin,
   Check,
   Loader2,
-  ShieldAlert,
+  MapPin,
+  Siren,
 } from "lucide-react";
-import { Dialog } from "@/components/ui/dialog";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
 import { useAmbulances } from "@/lib/hooks/useAmbulances";
 import { useCreateTrip } from "@/lib/hooks/useTrips";
-import type { EmergencyRequest } from "@/types";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import type { Ambulance, EmergencyRequest } from "@/types";
 
 export interface AssignAmbulanceDialogProps {
   emergency: EmergencyRequest | null;
@@ -92,7 +91,8 @@ export function AssignAmbulanceDialog({
             <div className="p-4 rounded-xl border border-dashed border-amber-300 bg-amber-50 text-amber-900 text-center space-y-1">
               <p className="font-bold">No Ambulances Currently Available</p>
               <p className="text-[11px] text-amber-700">
-                All fleet vehicles are on active duty or offline. Wait for a unit to complete.
+                All fleet vehicles are on active duty or offline. Wait for a
+                unit to complete.
               </p>
             </div>
           ) : (
@@ -109,7 +109,7 @@ export function AssignAmbulanceDialog({
                       "w-full flex items-center justify-between p-3 rounded-xl border text-left transition-all cursor-pointer",
                       isSelected
                         ? "border-red-600 bg-red-50/80 ring-2 ring-red-500/20 shadow-xs"
-                        : "border-stone-200 hover:border-stone-300 bg-stone-50/40"
+                        : "border-stone-200 hover:border-stone-300 bg-stone-50/40",
                     )}
                   >
                     <div className="flex items-center gap-2.5">
@@ -121,7 +121,8 @@ export function AssignAmbulanceDialog({
                           {amb.plateNumber || amb.vehicleNumber || "EMS Unit"}
                         </div>
                         <div className="text-[10px] text-stone-500">
-                          Type: {amb.type} • Driver: {amb.driver?.name || "Assigned Driver"}
+                          Type: {amb.type} • Driver:{" "}
+                          {amb.driver?.name || "Assigned Driver"}
                         </div>
                       </div>
                     </div>

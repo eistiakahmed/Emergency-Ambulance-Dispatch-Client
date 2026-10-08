@@ -9,7 +9,7 @@ const Card = React.forwardRef<
     ref={ref}
     className={cn(
       "rounded-2xl border border-stone-200 bg-white text-stone-900 shadow-sm transition-all duration-200 hover:border-stone-300",
-      className
+      className,
     )}
     {...props}
   />
@@ -24,7 +24,7 @@ const CardWarm = React.forwardRef<
     ref={ref}
     className={cn(
       "rounded-2xl border border-stone-200 bg-stone-50/80 p-6 transition-all duration-200",
-      className
+      className,
     )}
     {...props}
   />
@@ -51,7 +51,7 @@ const CardTitle = React.forwardRef<
     ref={ref}
     className={cn(
       "text-xl font-bold leading-tight tracking-tight text-stone-900",
-      className
+      className,
     )}
     {...props}
   />

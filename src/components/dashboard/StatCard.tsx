@@ -1,5 +1,4 @@
-import React from "react";
-import { type LucideIcon, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { type LucideIcon, Minus, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface StatCardProps {
@@ -67,7 +66,7 @@ export function StatCard({
       <div
         className={cn(
           "rounded-2xl border p-5 bg-white space-y-3 animate-pulse",
-          className
+          className,
         )}
       >
         <div className="flex items-center justify-between">
@@ -85,7 +84,7 @@ export function StatCard({
       className={cn(
         "rounded-2xl border p-5 transition-all duration-200",
         styles.card,
-        className
+        className,
       )}
     >
       <div className="flex items-center justify-between gap-3">
@@ -95,7 +94,7 @@ export function StatCard({
         <div
           className={cn(
             "flex h-10 w-10 items-center justify-center rounded-xl shrink-0",
-            styles.iconBg
+            styles.iconBg,
           )}
         >
           <Icon className="h-5 w-5" />
@@ -106,7 +105,7 @@ export function StatCard({
         <span
           className={cn(
             "text-2xl sm:text-3xl font-black tracking-tight",
-            styles.valueText
+            styles.valueText,
           )}
         >
           {value}
@@ -119,8 +118,8 @@ export function StatCard({
               trend.direction === "up"
                 ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                 : trend.direction === "down"
-                ? "bg-red-50 text-red-700 border border-red-200"
-                : "bg-stone-100 text-stone-600 border border-stone-200"
+                  ? "bg-red-50 text-red-700 border border-red-200"
+                  : "bg-stone-100 text-stone-600 border border-stone-200",
             )}
           >
             {trend.direction === "up" && <TrendingUp className="h-3 w-3" />}
@@ -132,9 +131,7 @@ export function StatCard({
       </div>
 
       {description && (
-        <p className="mt-1.5 text-xs text-stone-500">
-          {description}
-        </p>
+        <p className="mt-1.5 text-xs text-stone-500">{description}</p>
       )}
     </div>
   );

@@ -1,21 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import {
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  PhoneCall,
+  Siren,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Siren,
-  PhoneCall,
-  Menu,
-  X,
-  LogOut,
-  LayoutDashboard,
-} from "lucide-react";
+import React, { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { api } from "@/lib/api";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
-import { api } from "@/lib/api";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -88,10 +88,11 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${isActive
+                className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                  isActive
                     ? "bg-red-50 text-red-700 font-bold"
                     : "text-stone-700 hover:text-red-600 hover:bg-stone-50"
-                  }`}
+                }`}
               >
                 {link.name}
               </Link>
@@ -112,7 +113,11 @@ export function Navbar() {
           {mounted && isAuthenticated && user ? (
             <div className="flex items-center gap-2">
               <Link href={getDashboardHref()}>
-                <Button variant="outline" size="sm" className="gap-2 text-xs font-bold">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 text-xs font-bold"
+                >
                   <LayoutDashboard className="h-4 w-4 text-red-600" />
                   <span>
                     {user.role === "ADMIN"
@@ -142,7 +147,11 @@ export function Navbar() {
                 </Button>
               </Link>
               <Link href="/dashboard/emergency/new">
-                <Button variant="emergency" size="sm" className="gap-1.5 text-xs font-bold">
+                <Button
+                  variant="emergency"
+                  size="sm"
+                  className="gap-1.5 text-xs font-bold"
+                >
                   <Siren className="h-4 w-4" />
                   <span>Request SOS</span>
                 </Button>
@@ -184,10 +193,11 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${pathname === link.href
+                className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                  pathname === link.href
                     ? "bg-red-50 text-red-700 font-bold"
                     : "text-stone-800 hover:bg-stone-50"
-                  }`}
+                }`}
               >
                 {link.name}
               </Link>
@@ -200,7 +210,10 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="block w-full"
             >
-              <Button variant="emergency" className="w-full justify-center gap-2 font-bold">
+              <Button
+                variant="emergency"
+                className="w-full justify-center gap-2 font-bold"
+              >
                 <Siren className="h-4 w-4" />
                 <span>Request Immediate Ambulance</span>
               </Button>
@@ -213,7 +226,10 @@ export function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block w-full"
                 >
-                  <Button variant="outline" className="w-full justify-center font-bold">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-center font-bold"
+                  >
                     Go to Dashboard Console
                   </Button>
                 </Link>

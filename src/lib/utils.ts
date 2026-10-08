@@ -5,12 +5,31 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(amount: number, currency: string = "USD"): string {
+export function formatCurrency(
+  amount: number,
+  currency: string = "USD",
+): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currency,
     minimumFractionDigits: 2,
   }).format(amount);
+}
+
+export function formatFare(
+  amount: number | null | undefined,
+  mode: "usd" | "bdt" | "both" = "usd",
+): string {
+  const usd = Number(amount || 0);
+  const bdt = usd > 500 ? Math.round(usd) : Math.max(0, Math.round(usd * 120));
+
+  if (mode === "bdt") {
+    return `৳${bdt.toLocaleString()}`;
+  }
+  if (mode === "both") {
+    return `$${usd.toFixed(2)} (৳${bdt.toLocaleString()})`;
+  }
+  return `$${usd.toFixed(2)}`;
 }
 
 export function formatDate(date: string | Date): string {

@@ -1,11 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
-  ambulancesApi,
   type AmbulanceFilterParams,
+  ambulancesApi,
   type NearbyAmbulanceParams,
   type UpdateDriverStatusPayload,
 } from "@/lib/api/ambulances";
-import { toast } from "sonner";
 
 export const AMBULANCE_KEYS = {
   all: ["ambulances"] as const,
@@ -31,7 +31,7 @@ export function useAmbulances(params?: AmbulanceFilterParams) {
 // Hook for nearby ambulances
 export function useNearbyAmbulances(
   params: NearbyAmbulanceParams,
-  enabled: boolean = true
+  enabled: boolean = true,
 ) {
   return useQuery({
     queryKey: AMBULANCE_KEYS.nearby(params),

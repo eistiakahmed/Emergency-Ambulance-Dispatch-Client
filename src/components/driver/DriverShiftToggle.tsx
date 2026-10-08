@@ -1,19 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  Power,
-  Radio,
-  Navigation,
-  Loader2,
   Ambulance as AmbulanceIcon,
-  CheckCircle2,
-  AlertCircle,
+  Loader2,
+  Navigation,
+  Power,
 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useMyVehicle, useUpdateDriverStatus } from "@/lib/hooks/useAmbulances";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 
 export function DriverShiftToggle() {
   const { data: vehicle, isLoading } = useMyVehicle();
@@ -63,7 +60,7 @@ export function DriverShiftToggle() {
         setUpdatingLocation(false);
         toast.error("Location Fetch Error", { description: err.message });
       },
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true },
     );
   };
 
@@ -78,8 +75,8 @@ export function DriverShiftToggle() {
               isOnline
                 ? "bg-emerald-50 text-emerald-600 border-emerald-200"
                 : isOnTrip
-                ? "bg-blue-50 text-blue-600 border-blue-200"
-                : "bg-stone-100 text-stone-400 border-stone-200"
+                  ? "bg-blue-50 text-blue-600 border-blue-200"
+                  : "bg-stone-100 text-stone-400 border-stone-200",
             )}
           >
             <AmbulanceIcon className="h-6 w-6" />
@@ -96,8 +93,8 @@ export function DriverShiftToggle() {
                   isOnline
                     ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                     : isOnTrip
-                    ? "bg-blue-50 text-blue-700 border-blue-200"
-                    : "bg-stone-100 text-stone-600 border-stone-200"
+                      ? "bg-blue-50 text-blue-700 border-blue-200"
+                      : "bg-stone-100 text-stone-600 border-stone-200",
                 )}
               >
                 <span
@@ -106,19 +103,24 @@ export function DriverShiftToggle() {
                     isOnline
                       ? "bg-emerald-500 animate-ping"
                       : isOnTrip
-                      ? "bg-blue-500 animate-ping"
-                      : "bg-stone-400"
+                        ? "bg-blue-500 animate-ping"
+                        : "bg-stone-400",
                   )}
                 />
                 <span>
-                  {isOnline ? "ON DUTY (READY)" : isOnTrip ? "ON ACTIVE CALL" : "OFF DUTY"}
+                  {isOnline
+                    ? "ON DUTY (READY)"
+                    : isOnTrip
+                      ? "ON ACTIVE CALL"
+                      : "OFF DUTY"}
                 </span>
               </span>
             </div>
 
             <p className="text-xs text-stone-500 mt-0.5">
-              Type: <strong>{vehicle?.type || "ALS (Advanced Life Support)"}</strong> • Model:{" "}
-              {vehicle?.model || "Mercedes Sprinter"}
+              Type:{" "}
+              <strong>{vehicle?.type || "ALS (Advanced Life Support)"}</strong>{" "}
+              • Model: {vehicle?.model || "Mercedes Sprinter"}
             </p>
           </div>
         </div>
@@ -149,7 +151,7 @@ export function DriverShiftToggle() {
             onClick={handleToggleShift}
             className={cn(
               "h-9 px-4 text-xs font-bold gap-1.5",
-              !isOnline && "bg-emerald-600 hover:bg-emerald-700 text-white"
+              !isOnline && "bg-emerald-600 hover:bg-emerald-700 text-white",
             )}
           >
             {updateStatusMutation.isPending ? (

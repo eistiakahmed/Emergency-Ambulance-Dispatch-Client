@@ -1,10 +1,11 @@
-import React, { Suspense } from "react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PatientTripHistory } from "@/components/patient/PatientTripHistory";
 
 export const metadata: Metadata = {
   title: "My Emergency Trips & Invoices | PulseRescue",
-  description: "View past ambulance emergency calls, trip logs, and payment receipts.",
+  description:
+    "View past ambulance emergency calls, trip logs, and payment receipts.",
 };
 
 export default function PatientTripsPage() {
@@ -15,7 +16,8 @@ export default function PatientTripsPage() {
           Emergency Trip History
         </h1>
         <p className="text-xs text-stone-500 mt-0.5">
-          Review previous ambulance dispatches, route details, hospital drop-offs, and receipts.
+          Review previous ambulance dispatches, route details, hospital
+          drop-offs, and receipts.
         </p>
       </div>
 

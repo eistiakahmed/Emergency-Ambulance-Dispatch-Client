@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 
 export const metadata = {
@@ -12,12 +12,5 @@ export default function DriverLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <DashboardShell
-      title="Driver Dispatch Console"
-      subtitle="Shift availability status, live GPS beacon, and active emergency trip controls."
-    >
-      {children}
-    </DashboardShell>
-  );
+  return <DashboardShell>{children}</DashboardShell>;
 }

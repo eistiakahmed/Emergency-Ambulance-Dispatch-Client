@@ -1,13 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  TrendingUp,
-  Activity,
-  BarChart3,
-  Clock,
-  ShieldCheck,
-} from "lucide-react";
+import { BarChart3 } from "lucide-react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const HOURLY_DISPATCH_DATA = [
@@ -22,10 +16,14 @@ const HOURLY_DISPATCH_DATA = [
 ];
 
 export function AnalyticsChart() {
-  const [activeMetric, setActiveMetric] = useState<"calls" | "response">("calls");
+  const [activeMetric, setActiveMetric] = useState<"calls" | "response">(
+    "calls",
+  );
 
   const maxCalls = Math.max(...HOURLY_DISPATCH_DATA.map((d) => d.calls));
-  const maxResponse = Math.max(...HOURLY_DISPATCH_DATA.map((d) => d.responseMin));
+  const maxResponse = Math.max(
+    ...HOURLY_DISPATCH_DATA.map((d) => d.responseMin),
+  );
 
   return (
     <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-2xs space-y-6">
@@ -39,7 +37,8 @@ export function AnalyticsChart() {
             </h3>
           </div>
           <p className="text-xs text-stone-500">
-            24-hour rolling emergency call volume and ambulance arrival response times.
+            24-hour rolling emergency call volume and ambulance arrival response
+            times.
           </p>
         </div>
 
@@ -52,7 +51,7 @@ export function AnalyticsChart() {
               "px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
               activeMetric === "calls"
                 ? "bg-white text-stone-900 shadow-2xs"
-                : "text-stone-600 hover:text-stone-900"
+                : "text-stone-600 hover:text-stone-900",
             )}
           >
             Emergency Volume
@@ -64,7 +63,7 @@ export function AnalyticsChart() {
               "px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
               activeMetric === "response"
                 ? "bg-white text-stone-900 shadow-2xs"
-                : "text-stone-600 hover:text-stone-900"
+                : "text-stone-600 hover:text-stone-900",
             )}
           >
             Response Time (Min)
@@ -88,17 +87,19 @@ export function AnalyticsChart() {
               >
                 {/* Tooltip value */}
                 <span className="text-[10px] font-mono font-bold text-stone-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                  {activeMetric === "calls" ? `${item.calls} calls` : `${item.responseMin}m`}
+                  {activeMetric === "calls"
+                    ? `${item.calls} calls`
+                    : `${item.responseMin}m`}
                 </span>
 
                 {/* Animated bar */}
                 <div
                   style={{ height: `${Math.max(heightPercent, 12)}%` }}
                   className={cn(
-                    "w-full max-w-[40px] rounded-t-xl transition-all duration-300 group-hover:brightness-110",
+                    "w-full max-w-10 rounded-t-xl transition-all duration-300 group-hover:brightness-110",
                     activeMetric === "calls"
-                      ? "bg-gradient-to-t from-red-600 to-rose-400 group-hover:shadow-md group-hover:shadow-red-500/20"
-                      : "bg-gradient-to-t from-emerald-600 to-teal-400 group-hover:shadow-md group-hover:shadow-emerald-500/20"
+                      ? "bg-linear-to-t from-red-600 to-rose-400 group-hover:shadow-md group-hover:shadow-red-500/20"
+                      : "bg-linear-to-t from-emerald-600 to-teal-400 group-hover:shadow-md group-hover:shadow-emerald-500/20",
                   )}
                 />
 
@@ -118,21 +119,27 @@ export function AnalyticsChart() {
           <span className="text-stone-500 text-[10px] font-bold uppercase">
             Peak Demand Window
           </span>
-          <p className="font-bold text-stone-900 mt-0.5">18:00 - 21:00 (Evening)</p>
+          <p className="font-bold text-stone-900 mt-0.5">
+            18:00 - 21:00 (Evening)
+          </p>
         </div>
 
         <div className="p-3 rounded-xl bg-stone-50 border border-stone-200">
           <span className="text-stone-500 text-[10px] font-bold uppercase">
             Average Response Time
           </span>
-          <p className="font-bold text-emerald-700 mt-0.5">7.7 Minutes (Within Target)</p>
+          <p className="font-bold text-emerald-700 mt-0.5">
+            7.7 Minutes (Within Target)
+          </p>
         </div>
 
         <div className="p-3 rounded-xl bg-stone-50 border border-stone-200">
           <span className="text-stone-500 text-[10px] font-bold uppercase">
             Triage Success SLA
           </span>
-          <p className="font-bold text-blue-700 mt-0.5">99.4% Critical Survival Rate</p>
+          <p className="font-bold text-blue-700 mt-0.5">
+            99.4% Critical Survival Rate
+          </p>
         </div>
       </div>
     </div>

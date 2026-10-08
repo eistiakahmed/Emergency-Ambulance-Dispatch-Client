@@ -1,4 +1,3 @@
-import React from "react";
 import type { Metadata } from "next";
 import { DriverConsole } from "@/components/driver/DriverConsole";
 

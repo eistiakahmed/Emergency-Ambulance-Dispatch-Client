@@ -1,5 +1,5 @@
+import type { AuditLog, PaginatedResponse, User } from "@/types";
 import { api } from "../api";
-import type { PaginatedResponse, User, AuditLog } from "@/types";
 
 export interface AdminStats {
   totalUsers: number;
@@ -39,25 +39,31 @@ export const adminApi = {
     return api.get<AdminStats>("/admin/dashboard-stats");
   },
 
-  listUsers: async (params?: UserFilterParams): Promise<PaginatedResponse<User>> => {
+  listUsers: async (
+    params?: UserFilterParams,
+  ): Promise<PaginatedResponse<User>> => {
     return api.get<PaginatedResponse<User>>("/admin/users", { params });
   },
 
   updateUserRole: async (
     userId: string,
-    role: "ADMIN" | "DRIVER" | "PATIENT"
+    role: "ADMIN" | "DRIVER" | "PATIENT",
   ): Promise<User> => {
     return api.patch<User>(`/admin/users/${userId}/role`, { role });
   },
 
   updateUserStatus: async (
     userId: string,
-    isActive: boolean
+    isActive: boolean,
   ): Promise<User> => {
     return api.patch<User>(`/admin/users/${userId}/status`, { isActive });
   },
 
-  listAuditLogs: async (params?: Record<string, any>): Promise<PaginatedResponse<AuditLog>> => {
-    return api.get<PaginatedResponse<AuditLog>>("/admin/audit-logs", { params });
+  listAuditLogs: async (
+    params?: Record<string, any>,
+  ): Promise<PaginatedResponse<AuditLog>> => {
+    return api.get<PaginatedResponse<AuditLog>>("/admin/audit-logs", {
+      params,
+    });
   },
 };

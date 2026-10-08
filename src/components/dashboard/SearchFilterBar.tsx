@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Search, X, Filter } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Filter, Search, X } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type React from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export interface FilterOption {
@@ -83,7 +84,7 @@ export function SearchFilterBar({
     <div
       className={cn(
         "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 bg-white border border-stone-200 rounded-2xl shadow-2xs",
-        className
+        className,
       )}
     >
       {/* Search Input Box */}
@@ -131,7 +132,9 @@ export function SearchFilterBar({
               <div key={group.key} className="relative">
                 <select
                   value={activeValue}
-                  onChange={(e) => updateQuery(group.key, e.target.value || null)}
+                  onChange={(e) =>
+                    updateQuery(group.key, e.target.value || null)
+                  }
                   className="h-10 px-3 py-1 text-xs font-semibold rounded-xl border border-stone-200 bg-stone-50/70 text-stone-700 hover:bg-white hover:border-stone-300 focus:outline-none focus:ring-2 focus:ring-red-500/20 cursor-pointer"
                 >
                   <option value="">{group.label} (All)</option>

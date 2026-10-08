@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 
 export const metadata = {
@@ -12,12 +12,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <DashboardShell
-      title="Admin Command Console"
-      subtitle="Fleet governance, real-time emergency dispatch queue, and system analytics."
-    >
-      {children}
-    </DashboardShell>
-  );
+  return <DashboardShell>{children}</DashboardShell>;
 }

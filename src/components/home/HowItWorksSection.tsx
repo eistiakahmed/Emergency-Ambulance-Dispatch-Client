@@ -1,5 +1,3 @@
-import React from "react";
-
 const steps = [
   {
     step: "01",
@@ -21,13 +19,14 @@ const steps = [
 export function HowItWorksSection() {
   return (
     <section className="py-16 sm:py-24 bg-white border-b border-stone-200">
-      <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-384 px-4 sm:px-8 lg:px-12">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
           <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-stone-900">
             How Emergency Response Operates
           </h2>
           <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
-            A high-speed dispatch pipeline synchronizing patients, paramedics, and trauma hospitals in under 60 seconds.
+            A high-speed dispatch pipeline synchronizing patients, paramedics,
+            and trauma hospitals in under 60 seconds.
           </p>
         </div>
 
@@ -43,9 +42,7 @@ export function HowItWorksSection() {
               <h3 className="text-lg sm:text-xl font-bold text-stone-900">
                 {s.title}
               </h3>
-              <p className="text-sm text-stone-600 leading-relaxed">
-                {s.desc}
-              </p>
+              <p className="text-sm text-stone-600 leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>

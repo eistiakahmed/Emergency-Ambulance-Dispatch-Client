@@ -1,25 +1,65 @@
 "use client";
 
-import React, { useState } from "react";
+import { MapPin, Phone, Siren, User } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import {
-  Siren,
-  MapPin,
-  Clock,
-  Phone,
-  ArrowRight,
-  ShieldAlert,
-  User,
-  Eye,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/dashboard/StatusBadge";
-import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
-import { Pagination } from "@/components/dashboard/Pagination";
-import { EmptyState } from "@/components/dashboard/EmptyState";
+import { useState } from "react";
 import { AssignAmbulanceDialog } from "@/components/admin/AssignAmbulanceDialog";
+import { EmptyState } from "@/components/dashboard/EmptyState";
+import { Pagination } from "@/components/dashboard/Pagination";
+import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
+import { StatusBadge } from "@/components/dashboard/StatusBadge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEmergencies } from "@/lib/hooks/useEmergencies";
 import type { EmergencyRequest } from "@/types";
+
+const SKELETON_ROW_COUNT = 8;
+const SKELETON_ROW_KEYS = Array.from(
+  { length: SKELETON_ROW_COUNT },
+  (_, i) => `dispatch-skeleton-row-${i}`,
+);
+
+function DispatchTableSkeleton() {
+  return (
+    <>
+      {SKELETON_ROW_KEYS.map((rowKey) => (
+        <tr key={rowKey}>
+          {/* Ref # */}
+          <td className="py-3.5 px-4">
+            <Skeleton className="h-3.5 w-16 rounded-md" />
+          </td>
+          {/* Emergency Type */}
+          <td className="py-3.5 px-4">
+            <Skeleton className="h-3.5 w-14 rounded-md" />
+          </td>
+          {/* Patient Info (two lines) */}
+          <td className="py-3.5 px-4">
+            <div className="space-y-1.5">
+              <Skeleton className="h-3 w-24 rounded-md" />
+              <Skeleton className="h-2.5 w-20 rounded-md" />
+            </div>
+          </td>
+          {/* Pickup Address */}
+          <td className="py-3.5 px-4">
+            <Skeleton className="h-3.5 w-32 rounded-md" />
+          </td>
+          {/* Severity pill */}
+          <td className="py-3.5 px-4">
+            <Skeleton className="h-4 w-14 rounded-md" />
+          </td>
+          {/* Status pill */}
+          <td className="py-3.5 px-4">
+            <Skeleton className="h-4 w-16 rounded-full" />
+          </td>
+          {/* Dispatch Action button */}
+          <td className="py-3.5 px-4 text-right">
+            <Skeleton className="ml-auto h-7 w-24 rounded-md" />
+          </td>
+        </tr>
+      ))}
+    </>
+  );
+}
 
 export function DispatchWorkbench() {
   const searchParams = useSearchParams();
@@ -34,14 +74,15 @@ export function DispatchWorkbench() {
     emergencyType,
   });
 
-  const [assignEmergency, setAssignEmergency] = useState<EmergencyRequest | null>(
-    null
-  );
+  const [assignEmergency, setAssignEmergency] =
+    useState<EmergencyRequest | null>(null);
 
   const emergencies: EmergencyRequest[] = Array.isArray(emergenciesData)
     ? (emergenciesData as EmergencyRequest[])
     : emergenciesData?.data || [];
-  const meta = Array.isArray(emergenciesData) ? undefined : emergenciesData?.meta;
+  const meta = Array.isArray(emergenciesData)
+    ? undefined
+    : emergenciesData?.meta;
 
   const filterGroups = [
     {
@@ -77,7 +118,8 @@ export function DispatchWorkbench() {
             <span>Emergency Dispatch Workbench</span>
           </h2>
           <p className="text-xs text-stone-500">
-            Real-time emergency incident queue with manual & automated vehicle routing.
+            Real-time emergency incident queue with manual & automated vehicle
+            routing.
           </p>
         </div>
       </div>
@@ -111,85 +153,101 @@ export function DispatchWorkbench() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100 font-medium text-stone-800">
-                {emergencies.map((em) => {
-                  const isPending = em.status === "PENDING";
+                {isLoading ? (
+                  <DispatchTableSkeleton />
+                ) : (
+                  emergencies.map((em) => {
+                    const isPending = em.status === "PENDING";
 
-                  return (
-                    <tr
-                      key={em.id}
-                      className="hover:bg-stone-50/60 transition-colors"
-                    >
-                      <td className="py-3.5 px-4 font-mono font-bold text-stone-900">
-                        #{em.id.slice(0, 8)}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span className="font-bold text-stone-900">
-                          {em.emergencyType}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <div className="space-y-0.5">
-                          <div className="font-bold text-stone-900 flex items-center gap-1">
-                            <User className="h-3 w-3 text-stone-400" />
-                            <span>{em.patientName}</span>
-                          </div>
-                          <a
-                            href={`tel:${em.patientPhone}`}
-                            className="text-[11px] text-stone-500 hover:text-red-600 flex items-center gap-1"
-                          >
-                            <Phone className="h-3 w-3 text-stone-400" />
-                            <span>{em.patientPhone}</span>
-                          </a>
-                        </div>
-                      </td>
-                      <td className="py-3.5 px-4 max-w-xs truncate text-stone-700">
-                        <div className="flex items-center gap-1 truncate">
-                          <MapPin className="h-3.5 w-3.5 text-red-500 shrink-0" />
-                          <span className="truncate">{em.pickupAddress}</span>
-                        </div>
-                      </td>
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider ${
-                            em.severityLevel === "CRITICAL"
-                              ? "bg-red-600 text-white"
-                              : em.severityLevel === "HIGH"
-                              ? "bg-amber-600 text-white"
-                              : "bg-blue-600 text-white"
-                          }`}
-                        >
-                          {em.severityLevel || "CRITICAL"}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <StatusBadge status={em.status} size="sm" />
-                      </td>
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        {isPending ? (
-                          <Button
-                            variant="emergency"
-                            size="sm"
-                            onClick={() => setAssignEmergency(em)}
-                            className="h-7 px-2.5 text-xs font-black gap-1 shadow-xs"
-                          >
-                            <Siren className="h-3 w-3" />
-                            <span>Assign Unit</span>
-                          </Button>
-                        ) : (
-                          <span className="text-[11px] font-semibold text-stone-500">
-                            Unit Assigned
+                    return (
+                      <tr
+                        key={em.id}
+                        className="hover:bg-stone-50/60 transition-colors"
+                      >
+                        <td className="py-3.5 px-4 font-mono font-bold text-stone-900">
+                          #{em.id.slice(0, 8)}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <span className="font-bold text-stone-900">
+                            {em.emergencyType}
                           </span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <div className="space-y-0.5">
+                            <div className="font-bold text-stone-900 flex items-center gap-1">
+                              <User className="h-3 w-3 text-stone-400" />
+                              <span>{em.patientName}</span>
+                            </div>
+                            <a
+                              href={`tel:${em.patientPhone}`}
+                              className="text-[11px] text-stone-500 hover:text-red-600 flex items-center gap-1"
+                            >
+                              <Phone className="h-3 w-3 text-stone-400" />
+                              <span>{em.patientPhone}</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4 max-w-xs truncate text-stone-700">
+                          <div className="flex items-center gap-1 truncate">
+                            <MapPin className="h-3.5 w-3.5 text-red-500 shrink-0" />
+                            <span className="truncate">{em.pickupAddress}</span>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span
+                            className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider ${
+                              em.severityLevel === "CRITICAL"
+                                ? "bg-red-600 text-white"
+                                : em.severityLevel === "HIGH"
+                                  ? "bg-amber-600 text-white"
+                                  : "bg-blue-600 text-white"
+                            }`}
+                          >
+                            {em.severityLevel || "CRITICAL"}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <StatusBadge status={em.status} size="sm" />
+                        </td>
+                        <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                          {isPending ? (
+                            <Button
+                              variant="emergency"
+                              size="sm"
+                              onClick={() => setAssignEmergency(em)}
+                              className="h-7 px-2.5 text-xs font-black gap-1 shadow-xs"
+                            >
+                              <Siren className="h-3 w-3" />
+                              <span>Assign Unit</span>
+                            </Button>
+                          ) : (
+                            <span className="text-[11px] font-semibold text-stone-500">
+                              Unit Assigned
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
 
           {/* Pagination */}
-          {meta && (
+          {isLoading ? (
+            <div className="p-4 border-t border-stone-100">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <Skeleton className="h-3.5 w-40 rounded-md" />
+                <div className="flex items-center gap-1.5">
+                  <Skeleton className="h-8 w-24 rounded-lg" />
+                  <Skeleton className="hidden sm:block h-8 w-8 rounded-lg" />
+                  <Skeleton className="hidden sm:block h-8 w-8 rounded-lg" />
+                  <Skeleton className="h-8 w-20 rounded-lg" />
+                </div>
+              </div>
+            </div>
+          ) : meta ? (
             <div className="p-4 border-t border-stone-100">
               <Pagination
                 currentPage={meta.page}
@@ -198,7 +256,7 @@ export function DispatchWorkbench() {
                 pageSize={meta.limit}
               />
             </div>
-          )}
+          ) : null}
         </div>
       )}
 

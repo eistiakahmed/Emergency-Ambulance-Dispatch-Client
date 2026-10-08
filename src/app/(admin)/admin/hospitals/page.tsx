@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { HospitalManager } from "@/components/admin/HospitalManager";
 
 export const metadata: Metadata = {
@@ -16,7 +16,8 @@ export default function AdminHospitalsPage() {
           Hospital & ICU Bed Network
         </h1>
         <p className="text-xs text-stone-500 mt-0.5">
-          Manage partner hospital registrations, emergency trauma center capacities, and real-time bed availability.
+          Manage partner hospital registrations, emergency trauma center
+          capacities, and real-time bed availability.
         </p>
       </div>
 

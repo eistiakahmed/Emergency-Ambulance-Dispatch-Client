@@ -1,12 +1,15 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 
 export type EntityStatus =
   | "PENDING"
+  | "ASSIGNED"
   | "ACCEPTED"
   | "DISPATCHED"
   | "EN_ROUTE"
+  | "EN_ROUTE_PICKUP"
   | "PATIENT_PICKED_UP"
+  | "EN_ROUTE_HOSPITAL"
+  | "ARRIVED_HOSPITAL"
   | "HOSPITAL_ARRIVAL"
   | "COMPLETED"
   | "CANCELLED"
@@ -16,6 +19,8 @@ export type EntityStatus =
   | "MAINTENANCE"
   | "OFFLINE"
   | "ONLINE"
+  | "SUCCEEDED"
+  | "PROCESSING"
   | "PAID"
   | "UNPAID"
   | "REFUNDED"
@@ -41,6 +46,13 @@ const statusMap: Record<EntityStatus, StatusConfig> = {
     dotColor: "bg-amber-500",
     hasPulse: true,
   },
+  ASSIGNED: {
+    label: "Ambulance Dispatched",
+    bg: "bg-blue-50",
+    text: "text-blue-700",
+    border: "border-blue-200",
+    dotColor: "bg-blue-500",
+  },
   ACCEPTED: {
     label: "Driver Assigned",
     bg: "bg-blue-50",
@@ -64,6 +76,14 @@ const statusMap: Record<EntityStatus, StatusConfig> = {
     dotColor: "bg-purple-500",
     hasPulse: true,
   },
+  EN_ROUTE_PICKUP: {
+    label: "En Route to Pickup",
+    bg: "bg-indigo-50",
+    text: "text-indigo-700",
+    border: "border-indigo-200",
+    dotColor: "bg-indigo-500",
+    hasPulse: true,
+  },
   PATIENT_PICKED_UP: {
     label: "Patient Onboard",
     bg: "bg-teal-50",
@@ -71,8 +91,23 @@ const statusMap: Record<EntityStatus, StatusConfig> = {
     border: "border-teal-200",
     dotColor: "bg-teal-500",
   },
+  EN_ROUTE_HOSPITAL: {
+    label: "En Route to ER",
+    bg: "bg-purple-50",
+    text: "text-purple-700",
+    border: "border-purple-200",
+    dotColor: "bg-purple-500",
+    hasPulse: true,
+  },
+  ARRIVED_HOSPITAL: {
+    label: "At Hospital ER",
+    bg: "bg-cyan-50",
+    text: "text-cyan-700",
+    border: "border-cyan-200",
+    dotColor: "bg-cyan-500",
+  },
   HOSPITAL_ARRIVAL: {
-    label: "At Hospital",
+    label: "At Hospital ER",
     bg: "bg-cyan-50",
     text: "text-cyan-700",
     border: "border-cyan-200",
@@ -156,6 +191,21 @@ const statusMap: Record<EntityStatus, StatusConfig> = {
   },
 
   // Payment
+  SUCCEEDED: {
+    label: "Paid",
+    bg: "bg-emerald-50",
+    text: "text-emerald-700",
+    border: "border-emerald-200",
+    dotColor: "bg-emerald-500",
+  },
+  PROCESSING: {
+    label: "Processing",
+    bg: "bg-blue-50",
+    text: "text-blue-700",
+    border: "border-blue-200",
+    dotColor: "bg-blue-500",
+    hasPulse: true,
+  },
   PAID: {
     label: "Paid",
     bg: "bg-emerald-50",
@@ -207,10 +257,8 @@ export function StatusBadge({
         config.bg,
         config.text,
         config.border,
-        size === "sm"
-          ? "px-2 py-0.5 text-[10px]"
-          : "px-2.5 py-1 text-xs",
-        className
+        size === "sm" ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs",
+        className,
       )}
     >
       {config.dotColor && (
@@ -219,12 +267,15 @@ export function StatusBadge({
             <span
               className={cn(
                 "absolute inline-flex h-full w-full animate-ping rounded-full opacity-75",
-                config.dotColor
+                config.dotColor,
               )}
             />
           )}
           <span
-            className={cn("relative inline-flex h-1.5 w-1.5 rounded-full", config.dotColor)}
+            className={cn(
+              "relative inline-flex h-1.5 w-1.5 rounded-full",
+              config.dotColor,
+            )}
           />
         </span>
       )}

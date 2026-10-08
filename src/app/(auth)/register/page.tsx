@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { RegisterForm } from "@/components/auth/RegisterForm";

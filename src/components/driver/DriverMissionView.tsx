@@ -1,24 +1,11 @@
 "use client";
 
-import React from "react";
+import { Ambulance, Radio } from "lucide-react";
 import Link from "next/link";
-import {
-  Ambulance,
-  Navigation,
-  Radio,
-  Clock,
-  MapPin,
-  Phone,
-  ShieldCheck,
-  AlertCircle,
-  Building2,
-  ArrowRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { TripMilestoneStepper } from "@/components/driver/TripMilestoneStepper";
-import { EmptyState } from "@/components/dashboard/EmptyState";
-import { useActiveTrip } from "@/lib/hooks/useTrips";
+import { Button } from "@/components/ui/button";
 import { useMyVehicle } from "@/lib/hooks/useAmbulances";
+import { useActiveTrip } from "@/lib/hooks/useTrips";
 
 export function DriverMissionView() {
   const { data: activeTrip, isLoading: loadingTrip } = useActiveTrip();
@@ -37,7 +24,11 @@ export function DriverMissionView() {
               Active Emergency Mission
             </h2>
             <p className="text-xs text-stone-500">
-              Assigned Vehicle: <span className="font-mono font-bold text-stone-700">{vehicle?.plateNumber || vehicle?.vehicleNumber || "EMS-901"}</span> • Type: {vehicle?.type || "ALS Critical Unit"}
+              Assigned Vehicle:{" "}
+              <span className="font-mono font-bold text-stone-700">
+                {vehicle?.plateNumber || vehicle?.vehicleNumber || "EMS-901"}
+              </span>{" "}
+              • Type: {vehicle?.type || "ALS Critical Unit"}
             </p>
           </div>
         </div>
@@ -68,8 +59,10 @@ export function DriverMissionView() {
               No Active Emergency Mission Assigned
             </h3>
             <p className="text-xs text-stone-500 leading-relaxed">
-              Your ambulance is broadcasting active GPS telemetry to Central Dispatch.
-              When a nearby 999 emergency call is routed to your vehicle, the interactive waypoint navigation will automatically appear here.
+              Your ambulance is broadcasting active GPS telemetry to Central
+              Dispatch. When a nearby 999 emergency call is routed to your
+              vehicle, the interactive waypoint navigation will automatically
+              appear here.
             </p>
           </div>
 

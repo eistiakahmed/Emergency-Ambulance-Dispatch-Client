@@ -1,21 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  Building2,
-  MapPin,
-  Phone,
-  Bed,
   Activity,
+  Bed,
+  Building2,
   Loader2,
+  MapPin,
   Navigation,
+  Phone,
 } from "lucide-react";
-import { Dialog } from "@/components/ui/dialog";
+import type React from "react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
 import { FormField } from "@/components/ui/FormField";
 import { Input } from "@/components/ui/input";
 import { useCreateHospital } from "@/lib/hooks/useHospitals";
-import { toast } from "sonner";
 
 export interface CreateHospitalDialogProps {
   isOpen: boolean;
@@ -34,7 +35,8 @@ export function CreateHospitalDialog({
   const [latitude, setLatitude] = useState<number>(23.7808);
   const [longitude, setLongitude] = useState<number>(90.4226);
   const [emergencyBedsTotal, setEmergencyBedsTotal] = useState<number>(30);
-  const [emergencyBedsAvailable, setEmergencyBedsAvailable] = useState<number>(12);
+  const [emergencyBedsAvailable, setEmergencyBedsAvailable] =
+    useState<number>(12);
   const [hasIcu, setHasIcu] = useState(true);
   const [icuBedsAvailable, setIcuBedsAvailable] = useState<number>(4);
   const [locating, setLocating] = useState(false);
@@ -58,7 +60,7 @@ export function CreateHospitalDialog({
         setLocating(false);
         toast.error("Could not fetch location", { description: err.message });
       },
-      { timeout: 8000, enableHighAccuracy: true }
+      { timeout: 8000, enableHighAccuracy: true },
     );
   };
 
@@ -75,10 +77,10 @@ export function CreateHospitalDialog({
     if (!address.trim() || address.length < 5) {
       newErrors.address = "Detailed hospital street address is required";
     }
-    if (isNaN(latitude) || latitude < -90 || latitude > 90) {
+    if (Number.isNaN(latitude) || latitude < -90 || latitude > 90) {
       newErrors.latitude = "Valid latitude between -90 and 90 required";
     }
-    if (isNaN(longitude) || longitude < -180 || longitude > 180) {
+    if (Number.isNaN(longitude) || longitude < -180 || longitude > 180) {
       newErrors.longitude = "Valid longitude between -180 and 180 required";
     }
 
@@ -121,7 +123,12 @@ export function CreateHospitalDialog({
     >
       <form onSubmit={handleSubmit} className="space-y-4 pt-2 text-xs">
         {/* Hospital Name */}
-        <FormField label="Hospital Name" error={errors.name} required htmlFor="hospital-name">
+        <FormField
+          label="Hospital Name"
+          error={errors.name}
+          required
+          htmlFor="hospital-name"
+        >
           <div className="relative">
             <Input
               id="hospital-name"
@@ -137,7 +144,12 @@ export function CreateHospitalDialog({
 
         {/* Contact Phone & Address */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <FormField label="Emergency Contact Phone" error={errors.contactPhone} required htmlFor="hospital-phone">
+          <FormField
+            label="Emergency Contact Phone"
+            error={errors.contactPhone}
+            required
+            htmlFor="hospital-phone"
+          >
             <div className="relative">
               <Input
                 id="hospital-phone"
@@ -151,7 +163,12 @@ export function CreateHospitalDialog({
             </div>
           </FormField>
 
-          <FormField label="Full Street Address" error={errors.address} required htmlFor="hospital-address">
+          <FormField
+            label="Full Street Address"
+            error={errors.address}
+            required
+            htmlFor="hospital-address"
+          >
             <div className="relative">
               <Input
                 id="hospital-address"
@@ -176,7 +193,7 @@ export function CreateHospitalDialog({
             <Button
               type="button"
               variant="outline"
-              size="xs"
+              size="sm"
               onClick={handleFetchGps}
               disabled={locating}
               className="h-6 text-[11px] font-bold gap-1"
@@ -245,7 +262,9 @@ export function CreateHospitalDialog({
                 type="number"
                 min={1}
                 value={emergencyBedsTotal}
-                onChange={(e) => setEmergencyBedsTotal(parseInt(e.target.value, 10) || 0)}
+                onChange={(e) =>
+                  setEmergencyBedsTotal(parseInt(e.target.value, 10) || 0)
+                }
                 className="font-mono"
               />
             </div>
@@ -258,7 +277,9 @@ export function CreateHospitalDialog({
                 type="number"
                 min={0}
                 value={emergencyBedsAvailable}
-                onChange={(e) => setEmergencyBedsAvailable(parseInt(e.target.value, 10) || 0)}
+                onChange={(e) =>
+                  setEmergencyBedsAvailable(parseInt(e.target.value, 10) || 0)
+                }
                 className="font-mono"
               />
             </div>
@@ -273,7 +294,9 @@ export function CreateHospitalDialog({
                 min={0}
                 disabled={!hasIcu}
                 value={hasIcu ? icuBedsAvailable : 0}
-                onChange={(e) => setIcuBedsAvailable(parseInt(e.target.value, 10) || 0)}
+                onChange={(e) =>
+                  setIcuBedsAvailable(parseInt(e.target.value, 10) || 0)
+                }
                 className="font-mono"
               />
             </div>

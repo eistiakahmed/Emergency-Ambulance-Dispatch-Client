@@ -1,10 +1,10 @@
 import { api, setAccessToken } from "@/lib/api";
-import type { User, Role } from "@/types";
 import type {
   LoginInput,
-  RegisterPatientInput,
   RegisterDriverInput,
+  RegisterPatientInput,
 } from "@/lib/schemas/auth.schema";
+import type { Role, User } from "@/types";
 
 interface RawAuthResponse {
   user: User;
@@ -28,10 +28,10 @@ export const setAuthCookies = (token: string | null, role: Role | null) => {
     // 7-day expiration
     const maxAge = 7 * 24 * 60 * 60;
     document.cookie = `pulse_auth_token=${encodeURIComponent(
-      token
+      token,
     )}; path=/; max-age=${maxAge}; SameSite=Lax`;
     document.cookie = `pulse_user_role=${encodeURIComponent(
-      role
+      role,
     )}; path=/; max-age=${maxAge}; SameSite=Lax`;
   } else {
     document.cookie =
@@ -63,7 +63,7 @@ export const authApi = {
   },
 
   registerPatient: async (
-    payload: RegisterPatientInput
+    payload: RegisterPatientInput,
   ): Promise<AuthResponseData> => {
     const raw = await api.post<RawAuthResponse>("/auth/register", {
       name: payload.name,
@@ -88,7 +88,7 @@ export const authApi = {
   },
 
   registerDriver: async (
-    payload: RegisterDriverInput
+    payload: RegisterDriverInput,
   ): Promise<AuthResponseData> => {
     const raw = await api.post<RawAuthResponse>("/auth/register", {
       name: payload.name,
@@ -129,14 +129,35 @@ export const authApi = {
     }
   },
 
-  googleSignIn: async (idToken: string): Promise<AuthResponseData> => {
-    const data = await api.post<AuthResponseData>("/auth/google", { idToken });
+  googleSignIn: async (
+    idToken: string,
+    role?: Role,
+  ): Promise<AuthResponseData> => {
+    const raw = await api.post<RawAuthResponse>("/auth/google", {
+      idToken,
+      ...(role ? { role } : {}),
+    });
 
-    if (data?.accessToken && data?.user) {
-      setAccessToken(data.accessToken);
-      setAuthCookies(data.accessToken, data.user.role);
+    const token = raw?.accessToken || raw?.tokens?.accessToken || "";
+    const user = raw?.user;
+
+    if (token && user) {
+      setAccessToken(token);
+      setAuthCookies(token, user.role);
     }
 
-    return data;
+    return {
+      user,
+      accessToken: token,
+    };
+  },
+
+  getGoogleClientId: async (): Promise<string> => {
+    try {
+      const res = await api.get<{ clientId: string }>("/auth/google-client-id");
+      return res?.clientId || "";
+    } catch {
+      return "";
+    }
   },
 };

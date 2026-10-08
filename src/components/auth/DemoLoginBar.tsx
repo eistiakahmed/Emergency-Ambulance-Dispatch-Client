@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import { authApi } from "@/lib/api/auth";
+import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/store/hooks";
 import { setCredentials } from "@/store/slices/authSlice";
-import { cn } from "@/lib/utils";
 
 export interface DemoRoleConfig {
   title: string;
@@ -50,7 +50,7 @@ export function DemoLoginBar({
   onFillCredentials,
   className,
 }: DemoLoginBarProps) {
-  const router = useRouter();
+  const _router = useRouter();
   const dispatch = useAppDispatch();
   const [loadingRole, setLoadingRole] = useState<string | null>(null);
 
@@ -71,7 +71,7 @@ export function DemoLoginBar({
           setCredentials({
             user: res.user,
             accessToken: res.accessToken,
-          })
+          }),
         );
         toast.success(`Logged in as ${config.title}!`, {
           description: `Redirecting to ${config.roleLabel}...`,
@@ -80,7 +80,9 @@ export function DemoLoginBar({
       }
     } catch (err: unknown) {
       const message =
-        err instanceof Error ? err.message : "Failed to sign in with demo credentials";
+        err instanceof Error
+          ? err.message
+          : "Failed to sign in with demo credentials";
       toast.error("Demo Login Failed", {
         description: message,
       });
@@ -101,7 +103,7 @@ export function DemoLoginBar({
       </div>
 
       {/* 3 Role Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2 w-full">
         {DEMO_ROLES.map((roleConfig) => {
           const isLoading = loadingRole === roleConfig.roleLabel;
 
@@ -111,27 +113,37 @@ export function DemoLoginBar({
               type="button"
               disabled={loadingRole !== null}
               onClick={() => handleDemoLogin(roleConfig)}
-              className="group relative flex flex-row sm:flex-col items-center sm:items-start justify-between p-2.5 sm:p-3 text-left rounded-xl border border-stone-200 bg-stone-50/60 hover:bg-white hover:border-red-400 hover:shadow-sm transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-60 gap-2"
+              className="group relative flex flex-row sm:flex-col items-center sm:items-stretch justify-between p-2.5 text-left rounded-xl border border-stone-200 bg-stone-50/70 hover:bg-white hover:border-red-400 hover:shadow-xs transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-60 gap-1.5 w-full min-w-0 max-w-full overflow-hidden"
+              style={{ overflow: "hidden", maxWidth: "100%" }}
             >
               {/* Role Title & Email */}
-              <div className="min-w-0 flex-1 space-y-0.5">
-                <div className="text-xs font-bold text-stone-900 group-hover:text-red-600 transition-colors">
+              <div className="min-w-0 flex-1 sm:w-full space-y-0.5 overflow-hidden max-w-full">
+                <div className="text-xs font-bold text-stone-900 group-hover:text-red-600 transition-colors truncate">
                   {roleConfig.roleLabel}
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-stone-500 font-mono truncate">
+                <div
+                  className="text-[10px] sm:text-[10.5px] text-stone-500 truncate block w-full max-w-full leading-tight"
+                  style={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    maxWidth: "100%",
+                  }}
+                  title={roleConfig.email}
+                >
                   {roleConfig.email}
                 </div>
               </div>
 
               {/* 1-Click Action Trigger */}
-              <div className="flex items-center gap-1.5 sm:w-full sm:justify-between sm:pt-2 sm:border-t sm:border-stone-200/60 text-[11px] font-semibold text-stone-700 group-hover:text-red-600 shrink-0">
-                <span className="text-[11px]">
+              <div className="flex items-center gap-1 sm:w-full sm:justify-between sm:pt-1.5 sm:border-t sm:border-stone-200/60 text-[11px] font-semibold text-stone-700 group-hover:text-red-600 shrink-0">
+                <span className="text-[10px] sm:text-[11px]">
                   {isLoading ? "Logging in..." : "1-Click"}
                 </span>
                 {isLoading ? (
-                  <Loader2 className="h-3 w-3 animate-spin text-red-600" />
+                  <Loader2 className="h-3 w-3 animate-spin text-red-600 shrink-0" />
                 ) : (
-                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" />
                 )}
               </div>
             </button>

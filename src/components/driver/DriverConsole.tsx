@@ -1,24 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
 import {
-  Siren,
   Ambulance as AmbulanceIcon,
   Clock,
-  ShieldCheck,
   Radio,
-  MapPin,
-  ListOrdered,
+  ShieldCheck,
 } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { StatCard } from "@/components/dashboard/StatCard";
 import { DriverShiftToggle } from "@/components/driver/DriverShiftToggle";
 import { IncomingEmergencyAlert } from "@/components/driver/IncomingEmergencyAlert";
 import { TripMilestoneStepper } from "@/components/driver/TripMilestoneStepper";
-import { StatCard } from "@/components/dashboard/StatCard";
-import { EmptyState } from "@/components/dashboard/EmptyState";
-import { useActiveTrip, useTrips } from "@/lib/hooks/useTrips";
-import { useEmergencies } from "@/lib/hooks/useEmergencies";
 import { useMyVehicle } from "@/lib/hooks/useAmbulances";
+import { useEmergencies } from "@/lib/hooks/useEmergencies";
+import { useActiveTrip, useTrips } from "@/lib/hooks/useTrips";
 
 export function DriverConsole() {
   const { data: vehicle, isLoading: loadingVehicle } = useMyVehicle();
@@ -29,9 +25,9 @@ export function DriverConsole() {
   });
   const { data: tripsData } = useTrips({ limit: 5 });
 
-  const [dismissedEmergencyId, setDismissedEmergencyId] = useState<string | null>(
-    null
-  );
+  const [dismissedEmergencyId, setDismissedEmergencyId] = useState<
+    string | null
+  >(null);
 
   const pendingEmergencies = Array.isArray(pendingEmergenciesData)
     ? pendingEmergenciesData
@@ -48,8 +44,24 @@ export function DriverConsole() {
   const completedTripsCount =
     trips.filter((t) => t.status === "COMPLETED").length || 0;
 
+  const isOnDuty =
+    vehicle?.status === "AVAILABLE" ||
+    vehicle?.status === "BUSY" ||
+    vehicle?.status === "ON_TRIP";
+
   return (
     <div className="space-y-6">
+      {/* Standard Header Bar */}
+      <div className="border-b border-stone-200 pb-4">
+        <h1 className="text-xl sm:text-2xl font-black tracking-tight text-stone-900">
+          Driver Operational Cockpit
+        </h1>
+        <p className="text-xs text-stone-500 mt-0.5">
+          Shift status telemetry, live GPS beacon broadcasting, and emergency
+          mission execution.
+        </p>
+      </div>
+
       {/* 1. Driver Shift Header & GPS Telemetry */}
       <DriverShiftToggle />
 
@@ -65,7 +77,7 @@ export function DriverConsole() {
       {activeTrip ? (
         <TripMilestoneStepper trip={activeTrip} />
       ) : (
-        <div className="p-6 sm:p-8 rounded-3xl border border-dashed border-stone-200 bg-white text-center space-y-3 shadow-2xs">
+        <div className="p-6 sm:p-8 rounded-2xl border border-dashed border-stone-200 bg-white text-center space-y-3 shadow-2xs">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 mx-auto">
             <Radio className="h-6 w-6 animate-pulse" />
           </div>
@@ -74,8 +86,8 @@ export function DriverConsole() {
               Scanning Dispatch Radar for Emergency Calls
             </h3>
             <p className="text-xs text-stone-500 max-w-sm mx-auto">
-              Vehicle is connected to the centralized 999 dispatch network. Incoming SOS calls
-              will appear here automatically.
+              Vehicle is connected to the centralized 999 dispatch network.
+              Incoming SOS calls will appear here automatically.
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
@@ -97,7 +109,7 @@ export function DriverConsole() {
         </div>
       )}
 
-      {/* 4. Driver Daily Performance KPI Grid */}
+      {/* 4. Driver Operational KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard
           title="Completed Missions"
@@ -107,18 +119,30 @@ export function DriverConsole() {
           variant="emerald"
         />
         <StatCard
-          title="On-Duty Hours"
-          value="6.5 hrs"
-          description="Current shift duration"
+          title="Shift Availability"
+          value={isOnDuty ? "On Duty" : "Off Duty"}
+          description={
+            isOnDuty ? "Broadcasting live GPS to dispatch" : "Driver offline"
+          }
           icon={Clock}
-          variant="stone"
+          variant={isOnDuty ? "emerald" : "stone"}
         />
         <StatCard
           title="Assigned Vehicle"
-          value={vehicle?.vehicleNumber || "EMS-901"}
-          description={vehicle?.type || "ALS Critical Unit"}
+          value={
+            vehicle?.vehicleNumber ||
+            (loadingVehicle ? "Loading..." : "Unassigned")
+          }
+          description={
+            vehicle?.type
+              ? vehicle.type.replace(/_/g, " ")
+              : loadingVehicle
+                ? "Fetching fleet..."
+                : "No vehicle assigned yet"
+          }
           icon={AmbulanceIcon}
-          variant="red"
+          variant={vehicle ? "red" : "stone"}
+          loading={loadingVehicle}
         />
       </div>
     </div>

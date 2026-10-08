@@ -1,10 +1,10 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
-  hospitalsApi,
   type HospitalFilterParams,
+  hospitalsApi,
   type UpdateBedCapacityPayload,
 } from "@/lib/api/hospitals";
-import { toast } from "sonner";
 
 export const HOSPITAL_KEYS = {
   all: ["hospitals"] as const,
@@ -49,11 +49,11 @@ export function useUpdateBedCapacity() {
     onSuccess: (updatedHospital) => {
       queryClient.setQueryData(
         HOSPITAL_KEYS.detail(updatedHospital.id),
-        updatedHospital
+        updatedHospital,
       );
       queryClient.invalidateQueries({ queryKey: HOSPITAL_KEYS.lists() });
       toast.success("Bed capacity updated successfully", {
-        description: `${updatedHospital.name}: ${updatedHospital.icuBedsAvailable || 0} ICU / ${updatedHospital.emergencyBedsAvailable || 0} ER available`,
+        description: `${updatedHospital.name}: ${updatedHospital.icuBedsAvailable ?? updatedHospital.availableIcuBeds ?? 0} ICU / ${updatedHospital.emergencyBedsAvailable ?? updatedHospital.erBedsAvailable ?? updatedHospital.availableGeneralBeds ?? 0} ER available`,
       });
     },
     onError: (err: unknown) => {
@@ -100,7 +100,7 @@ export function useUpdateHospital() {
     onSuccess: (updatedHospital) => {
       queryClient.setQueryData(
         HOSPITAL_KEYS.detail(updatedHospital.id),
-        updatedHospital
+        updatedHospital,
       );
       queryClient.invalidateQueries({ queryKey: HOSPITAL_KEYS.lists() });
       toast.success("Hospital Updated", {
@@ -134,4 +134,3 @@ export function useDeleteHospital() {
     },
   });
 }
-

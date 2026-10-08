@@ -1,10 +1,11 @@
-import React, { Suspense } from "react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { DispatchWorkbench } from "@/components/admin/DispatchWorkbench";
 
 export const metadata: Metadata = {
   title: "Live Dispatch Workbench | PulseRescue Admin",
-  description: "Real-time emergency dispatch incident queue, triage routing, and vehicle assignment.",
+  description:
+    "Real-time emergency dispatch incident queue, triage routing, and vehicle assignment.",
 };
 
 export default function AdminDispatchPage() {
@@ -15,7 +16,8 @@ export default function AdminDispatchPage() {
           Live Dispatch Workbench
         </h1>
         <p className="text-xs text-stone-500 mt-0.5">
-          Real-time triage queue for active emergency calls, driver allocation, and automated hospital routing.
+          Real-time triage queue for active emergency calls, driver allocation,
+          and automated hospital routing.
         </p>
       </div>
 

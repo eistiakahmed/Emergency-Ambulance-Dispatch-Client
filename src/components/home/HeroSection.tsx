@@ -1,12 +1,11 @@
-import React from "react";
+import { Building2, CheckCircle2, Siren } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Siren, Building2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden border-b border-stone-200 bg-white min-h-[580px] lg:min-h-[680px] flex items-center">
+    <section className="relative overflow-hidden border-b border-stone-200 bg-white min-h-145 lg:min-h-170 flex items-center">
       {/* Full-width Background Image Layer */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
@@ -18,12 +17,12 @@ export function HeroSection() {
           className="object-cover object-right lg:object-center"
         />
         {/* Smooth Left-to-Right White Fade Overlay for High Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 via-white/75 to-transparent lg:via-white/85 lg:to-transparent/10" />
+        <div className="absolute inset-0 bg-linear-to-r from-white via-white/85 to-transparent" />
         {/* Subtle bottom gradient to blend cleanly into the next section */}
-        <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-stone-50 to-transparent" />
+        <div className="absolute bottom-0 inset-x-0 h-12 bg-linear-to-t from-stone-50 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1536px] w-full px-4 sm:px-8 lg:px-12 py-16 lg:py-24">
+      <div className="relative z-10 mx-auto max-w-384 w-full px-4 sm:px-8 lg:px-12 py-16 lg:py-24">
         <div className="max-w-2xl lg:max-w-3xl space-y-6 text-center lg:text-left">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-900 leading-[1.12]">
             Seconds Save Lives. <br />
@@ -33,7 +32,9 @@ export function HeroSection() {
           </h1>
 
           <p className="text-base sm:text-lg text-stone-700 font-medium max-w-2xl leading-relaxed mx-auto lg:mx-0">
-            PulseRescue provides instant paramedic dispatch with live GPS tracking, intelligent nearest-unit matching, and real-time hospital ICU bed reservation.
+            PulseRescue provides instant paramedic dispatch with live GPS
+            tracking, intelligent nearest-unit matching, and real-time hospital
+            ICU bed reservation.
           </p>
 
           {/* Primary Action Buttons */}

@@ -1,25 +1,19 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import {
+  Activity,
+  ArrowRight,
+  Bed,
   Building2,
   MapPin,
   Phone,
-  Activity,
-  Bed,
-  CheckCircle2,
-  AlertTriangle,
-  Siren,
-  ArrowRight,
-  ShieldCheck,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/dashboard/StatusBadge";
-import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
-import { Pagination } from "@/components/dashboard/Pagination";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { EmptyState } from "@/components/dashboard/EmptyState";
+import { Pagination } from "@/components/dashboard/Pagination";
+import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
+import { Button } from "@/components/ui/button";
 import { useHospitals } from "@/lib/hooks/useHospitals";
 import type { Hospital } from "@/types";
 

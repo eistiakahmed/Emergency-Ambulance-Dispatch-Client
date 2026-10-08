@@ -1,6 +1,6 @@
-import React from "react";
+import { ArrowLeft, PhoneCall, Siren } from "lucide-react";
 import Link from "next/link";
-import { Siren, PhoneCall, ArrowLeft } from "lucide-react";
+import type React from "react";
 
 export const metadata = {
   title: "Authentication | PulseRescue Emergency Dispatch",
@@ -17,7 +17,9 @@ export default function AuthLayout({
     <div className="min-h-screen bg-stone-50 flex flex-col justify-between selection:bg-red-500 selection:text-white font-sans">
       {/* 1. Top Urgent Emergency Alert Bar */}
       <div className="bg-red-600 text-white py-1.5 px-4 text-[11px] sm:text-xs font-bold tracking-wide text-center flex items-center justify-center">
-        <span className="truncate">24/7 NATIONAL EMERGENCY AMBULANCE DISPATCH • HOTLINE 999</span>
+        <span className="truncate">
+          24/7 NATIONAL EMERGENCY AMBULANCE DISPATCH • HOTLINE 999
+        </span>
       </div>
 
       {/* 2. Main Navbar matching Home Page */}
@@ -69,7 +71,8 @@ export default function AuthLayout({
       {/* 4. Footer */}
       <footer className="border-t border-stone-200 bg-white py-4">
         <div className="mx-auto max-w-[1536px] px-4 sm:px-8 text-center text-xs text-stone-500 font-medium">
-          © {new Date().getFullYear()} PulseRescue Emergency Dispatch System. All rights reserved.
+          © {new Date().getFullYear()} PulseRescue Emergency Dispatch System.
+          All rights reserved.
         </div>
       </footer>
     </div>

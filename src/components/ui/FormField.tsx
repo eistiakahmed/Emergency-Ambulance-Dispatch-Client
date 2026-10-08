@@ -22,7 +22,7 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <div ref={ref} className={cn("space-y-1.5 w-full", className)} {...props}>
@@ -60,7 +60,7 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 FormField.displayName = "FormField";

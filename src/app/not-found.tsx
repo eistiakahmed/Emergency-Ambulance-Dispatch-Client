@@ -1,6 +1,5 @@
-import React from "react";
+import { Home, PhoneCall, Siren } from "lucide-react";
 import Link from "next/link";
-import { Siren, ArrowLeft, Home, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
@@ -19,21 +18,29 @@ export default function NotFound() {
             Emergency Route Not Found
           </h1>
           <p className="text-xs sm:text-sm text-stone-500 leading-relaxed">
-            The page or emergency resource you are looking for has been moved, does not
-            exist, or is temporarily unavailable.
+            The page or emergency resource you are looking for has been moved,
+            does not exist, or is temporarily unavailable.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-2">
           <Link href="/" className="w-full sm:w-auto">
-            <Button variant="outline" size="sm" className="w-full font-bold text-xs gap-1.5 h-10">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full font-bold text-xs gap-1.5 h-10"
+            >
               <Home className="h-3.5 w-3.5" />
               <span>Back to Home</span>
             </Button>
           </Link>
 
           <Link href="/dashboard/emergency/new" className="w-full sm:w-auto">
-            <Button variant="emergency" size="sm" className="w-full font-black text-xs gap-1.5 h-10 shadow-xs">
+            <Button
+              variant="emergency"
+              size="sm"
+              className="w-full font-black text-xs gap-1.5 h-10 shadow-xs"
+            >
               <Siren className="h-3.5 w-3.5" />
               <span>Request SOS</span>
             </Button>
@@ -42,7 +49,9 @@ export default function NotFound() {
 
         <div className="pt-4 border-t border-stone-100 flex items-center justify-center gap-2 text-xs text-stone-500">
           <PhoneCall className="h-3.5 w-3.5 text-red-600" />
-          <span>Need Urgent Assistance? Dial <strong>999</strong> Hotline</span>
+          <span>
+            Need Urgent Assistance? Dial <strong>999</strong> Hotline
+          </span>
         </div>
       </div>
     </div>

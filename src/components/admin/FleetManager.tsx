@@ -1,22 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import {
+  AlertCircle,
   Ambulance as AmbulanceIcon,
-  Search,
+  CheckCircle2,
   MapPin,
   User,
-  Shield,
-  CheckCircle2,
-  AlertCircle,
-  Plus,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/dashboard/StatusBadge";
-import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
-import { Pagination } from "@/components/dashboard/Pagination";
+import { useSearchParams } from "next/navigation";
 import { EmptyState } from "@/components/dashboard/EmptyState";
+import { Pagination } from "@/components/dashboard/Pagination";
+import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
+import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { useAmbulances } from "@/lib/hooks/useAmbulances";
 import type { Ambulance } from "@/types";
 
@@ -129,8 +124,13 @@ export function FleetManager() {
                       <div className="flex items-center gap-1">
                         <MapPin className="h-3 w-3 text-stone-400 shrink-0" />
                         <span>
-                          {amb.baseLatitude?.toFixed(4) || "23.7937"},{" "}
-                          {amb.baseLongitude?.toFixed(4) || "90.4066"}
+                          {amb.baseLatitude != null
+                            ? Number(amb.baseLatitude).toFixed(4)
+                            : "23.7937"}
+                          ,{" "}
+                          {amb.baseLongitude != null
+                            ? Number(amb.baseLongitude).toFixed(4)
+                            : "90.4066"}
                         </span>
                       </div>
                     </td>
@@ -145,8 +145,8 @@ export function FleetManager() {
                           amb.status === "AVAILABLE"
                             ? "text-emerald-700"
                             : amb.status === "ON_TRIP" || amb.status === "BUSY"
-                            ? "text-blue-700"
-                            : "text-stone-500"
+                              ? "text-blue-700"
+                              : "text-stone-500"
                         }`}
                       >
                         {amb.status === "AVAILABLE" ? (

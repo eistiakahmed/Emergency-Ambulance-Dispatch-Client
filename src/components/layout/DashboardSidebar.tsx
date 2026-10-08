@@ -1,32 +1,35 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
-  Siren,
-  LayoutDashboard,
   Ambulance,
   Building2,
   Clock,
-  Radio,
+  CreditCard,
+  LayoutDashboard,
   LogOut,
-  X,
   PlusCircle,
+  Radio,
+  ScrollText,
+  Siren,
+  UserCircle,
+  Wallet,
+  X,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type React from "react";
+import { toast } from "sonner";
+import { api } from "@/lib/api";
+import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { setSidebarOpen } from "@/store/slices/uiSlice";
-import { api } from "@/lib/api";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 interface NavItem {
   name: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
   badge?: string;
-  highlight?: boolean;
 }
 
 export function DashboardSidebar() {
@@ -64,14 +67,19 @@ export function DashboardSidebar() {
           icon: Radio,
         },
         {
-          name: "Fleet & Drivers",
-          href: "/admin/fleet",
+          name: "Fleet & Hospitals",
+          href: "/admin/manage",
           icon: Ambulance,
         },
         {
-          name: "Hospital Bed Network",
-          href: "/admin/hospitals",
-          icon: Building2,
+          name: "Audit Logs",
+          href: "/admin/reports",
+          icon: ScrollText,
+        },
+        {
+          name: "Profile Settings",
+          href: "/admin/profile",
+          icon: UserCircle,
         },
       ];
     }
@@ -93,6 +101,16 @@ export function DashboardSidebar() {
           href: "/provider/history",
           icon: Clock,
         },
+        {
+          name: "Earnings",
+          href: "/provider/earnings",
+          icon: Wallet,
+        },
+        {
+          name: "Profile Settings",
+          href: "/provider/profile",
+          icon: UserCircle,
+        },
       ];
     }
 
@@ -107,12 +125,21 @@ export function DashboardSidebar() {
         name: "Request SOS Ambulance",
         href: "/dashboard/emergency/new",
         icon: PlusCircle,
-        highlight: true,
       },
       {
         name: "Emergency Trips",
         href: "/dashboard/trips",
         icon: Clock,
+      },
+      {
+        name: "Payments",
+        href: "/dashboard/payments",
+        icon: CreditCard,
+      },
+      {
+        name: "Profile",
+        href: "/dashboard/profile",
+        icon: UserCircle,
       },
       {
         name: "Hospital Bed Finder",
@@ -128,8 +155,10 @@ export function DashboardSidebar() {
     <>
       {/* Mobile Backdrop */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-stone-900/40 backdrop-blur-xs lg:hidden"
+        <button
+          type="button"
+          aria-label="Close sidebar overlay"
+          className="fixed inset-0 z-40 bg-stone-900/40 backdrop-blur-xs lg:hidden cursor-default w-full h-full border-none p-0 outline-none"
           onClick={() => dispatch(setSidebarOpen(false))}
         />
       )}
@@ -138,11 +167,11 @@ export function DashboardSidebar() {
       <aside
         className={cn(
           "fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col border-r border-stone-200 bg-white shadow-2xs transition-transform duration-200 lg:translate-x-0",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         {/* Clean Logo Header */}
-        <div className="flex h-16 items-center justify-between px-5 border-b border-stone-100">
+        <div className="flex h-16 items-center justify-between px-5 border-b border-stone-200">
           <Link
             href="/"
             className="flex items-center gap-2.5 group"
@@ -157,13 +186,18 @@ export function DashboardSidebar() {
                 <span className="h-1.5 w-1.5 rounded-full bg-red-600" />
               </span>
               <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">
-                {isAdmin ? "Admin Console" : isDriver ? "Driver Console" : "Patient Portal"}
+                {isAdmin
+                  ? "Admin Console"
+                  : isDriver
+                    ? "Driver Console"
+                    : "Patient Portal"}
               </span>
             </div>
           </Link>
 
           {/* Close for mobile */}
           <button
+            type="button"
             onClick={() => dispatch(setSidebarOpen(false))}
             className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 lg:hidden cursor-pointer"
           >
@@ -174,7 +208,16 @@ export function DashboardSidebar() {
         {/* Navigation Section */}
         <div className="flex-1 overflow-y-auto p-3 space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isExact = pathname === item.href;
+            const isSubRoute =
+              item.href !== "/admin" &&
+              item.href !== "/provider" &&
+              item.href !== "/dashboard" &&
+              pathname.startsWith(`${item.href}/`);
+            const isManageAlias =
+              item.href === "/admin/manage" &&
+              (pathname === "/admin/fleet" || pathname === "/admin/hospitals");
+            const isActive = isExact || isSubRoute || isManageAlias;
             const Icon = item.icon;
 
             return (
@@ -186,20 +229,18 @@ export function DashboardSidebar() {
                   "group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors",
                   isActive
                     ? "bg-red-50 text-red-700 border border-red-200/80 shadow-2xs"
-                    : item.highlight
-                    ? "bg-red-600 text-white hover:bg-red-700 shadow-xs"
-                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900",
                 )}
               >
                 <div className="flex items-center gap-3">
                   <Icon
                     className={cn(
-                      "h-4 w-4 shrink-0",
+                      "h-4 w-4 shrink-0 transition-colors",
                       isActive
                         ? "text-red-600"
-                        : item.highlight
-                        ? "text-white"
-                        : "text-stone-400 group-hover:text-stone-700"
+                        : item.name === "Request SOS Ambulance"
+                          ? "text-red-500 group-hover:text-red-600"
+                          : "text-stone-400 group-hover:text-stone-700",
                     )}
                   />
                   <span>{item.name}</span>
@@ -208,10 +249,10 @@ export function DashboardSidebar() {
                 {item.badge && (
                   <span
                     className={cn(
-                      "text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md",
+                      "text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md transition-colors",
                       isActive
                         ? "bg-red-600 text-white"
-                        : "bg-stone-200 text-stone-700"
+                        : "bg-red-100 text-red-700 group-hover:bg-red-200",
                     )}
                   >
                     {item.badge}
@@ -225,6 +266,7 @@ export function DashboardSidebar() {
         {/* Clean Bottom Sign Out */}
         <div className="p-3 border-t border-stone-100">
           <button
+            type="button"
             onClick={handleLogout}
             className="flex w-full items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-stone-700 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
           >

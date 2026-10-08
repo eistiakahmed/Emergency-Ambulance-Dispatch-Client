@@ -1,7 +1,6 @@
-import React from "react";
+import { ArrowLeft, ShieldAlert } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ShieldAlert } from "lucide-react";
 import { EmergencyBookingForm } from "@/components/patient/EmergencyBookingForm";
 
 export const metadata: Metadata = {
@@ -32,7 +31,8 @@ export default function NewEmergencyPage() {
             </span>
           </div>
           <p className="text-xs text-stone-500">
-            Fill in the medical emergency triage details below for rapid dispatch routing.
+            Fill in the medical emergency triage details below for rapid
+            dispatch routing.
           </p>
         </div>
 

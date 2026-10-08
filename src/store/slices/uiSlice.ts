@@ -29,7 +29,7 @@ export const uiSlice = createSlice({
     },
     setDriverShiftStatus: (
       state,
-      action: PayloadAction<"AVAILABLE" | "BUSY" | "OFFLINE">
+      action: PayloadAction<"AVAILABLE" | "BUSY" | "OFFLINE">,
     ) => {
       state.driverShiftStatus = action.payload;
     },

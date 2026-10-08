@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function AdminLoading() {
   return (
     <div className="space-y-6 animate-pulse">
@@ -9,7 +7,7 @@ export default function AdminLoading() {
           <div key={i} className="h-32 bg-stone-200/80 rounded-2xl" />
         ))}
       </div>
-      <div className="h-64 bg-stone-200/80 rounded-3xl" />
+      <div className="h-64 bg-stone-200/80 rounded-2xl" />
       <div className="h-80 bg-stone-200/80 rounded-2xl" />
     </div>
   );

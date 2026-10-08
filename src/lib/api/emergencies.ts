@@ -1,5 +1,5 @@
-import { api } from "../api";
 import type { EmergencyRequest, PaginatedResponse } from "@/types";
+import { api } from "../api";
 
 export interface EmergencyFilterParams {
   page?: number;
@@ -15,7 +15,13 @@ export interface CreateEmergencyPayload {
   patientPhone: string;
   priority?: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
   severityLevel?: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
-  emergencyType?: "CARDIAC" | "TRAUMA" | "RESPIRATORY" | "PREGNANCY" | "GENERAL" | "OTHER";
+  emergencyType?:
+    | "CARDIAC"
+    | "TRAUMA"
+    | "RESPIRATORY"
+    | "PREGNANCY"
+    | "GENERAL"
+    | "OTHER";
   symptoms?: string;
   pickupAddress: string;
   pickupLatitude: number;
@@ -26,8 +32,11 @@ export interface CreateEmergencyPayload {
 
 export const emergenciesApi = {
   // Create SOS emergency request
-  create: async (payload: CreateEmergencyPayload): Promise<EmergencyRequest> => {
-    const formattedPriority = payload.priority || payload.severityLevel || "MEDIUM";
+  create: async (
+    payload: CreateEmergencyPayload,
+  ): Promise<EmergencyRequest> => {
+    const formattedPriority =
+      payload.priority || payload.severityLevel || "MEDIUM";
     const formattedSymptoms =
       payload.symptoms ||
       (payload.emergencyType
@@ -43,7 +52,9 @@ export const emergenciesApi = {
       pickupLongitude: payload.pickupLongitude,
       symptoms: formattedSymptoms,
       ...(payload.notes ? { notes: payload.notes } : {}),
-      ...(payload.destinationHospitalId ? { destinationHospitalId: payload.destinationHospitalId } : {}),
+      ...(payload.destinationHospitalId
+        ? { destinationHospitalId: payload.destinationHospitalId }
+        : {}),
     };
 
     return api.post<EmergencyRequest>("/emergencies", body);
@@ -51,7 +62,7 @@ export const emergenciesApi = {
 
   // List emergencies with pagination & filters
   list: async (
-    params?: EmergencyFilterParams
+    params?: EmergencyFilterParams,
   ): Promise<PaginatedResponse<EmergencyRequest>> => {
     return api.get<PaginatedResponse<EmergencyRequest>>("/emergencies", {
       params,

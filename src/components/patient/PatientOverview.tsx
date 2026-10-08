@@ -1,34 +1,34 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
 import {
-  Siren,
-  PhoneCall,
-  Clock,
-  MapPin,
-  Hospital as HospitalIcon,
-  ShieldAlert,
-  ArrowRight,
-  Ambulance as AmbulanceIcon,
   Activity,
+  Ambulance as AmbulanceIcon,
+  ArrowRight,
+  Clock,
+  Hospital as HospitalIcon,
+  MapPin,
+  PhoneCall,
+  ShieldAlert,
+  Siren,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { EmptyState } from "@/components/dashboard/EmptyState";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
-import { EmptyState } from "@/components/dashboard/EmptyState";
-import { useActiveTrip } from "@/lib/hooks/useTrips";
+import { Button } from "@/components/ui/button";
 import { useEmergencies } from "@/lib/hooks/useEmergencies";
 import { useHospitals } from "@/lib/hooks/useHospitals";
+import { useActiveTrip } from "@/lib/hooks/useTrips";
 import { useAppSelector } from "@/store/hooks";
-import type { Hospital, Emergency, Trip } from "@/types";
+import type { Emergency, Hospital } from "@/types";
 
 export function PatientOverview() {
   const { user } = useAppSelector((state) => state.auth);
   const { data: activeTrip, isLoading: loadingTrip } = useActiveTrip();
-  const { data: emergenciesData, isLoading: loadingEmergencies } = useEmergencies({
-    limit: 5,
-  });
+  const { data: emergenciesData, isLoading: loadingEmergencies } =
+    useEmergencies({
+      limit: 5,
+    });
   const { data: hospitalsData } = useHospitals({ limit: 4 });
 
   const emergencies = Array.isArray(emergenciesData)
@@ -49,11 +49,13 @@ export function PatientOverview() {
               <span>Priority Medical Emergency Hotline</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-              Need Immediate Emergency Help, {user?.name?.split(" ")[0] || "Citizen"}?
+              Need Immediate Emergency Help,{" "}
+              {user?.name?.split(" ")[0] || "Citizen"}?
             </h1>
             <p className="text-xs sm:text-sm text-red-100/90 leading-relaxed">
-              Broadcast high-priority emergency SOS to the nearest available ICU ambulances
-              and discover real-time hospital bed availability across the network.
+              Broadcast high-priority emergency SOS to the nearest available ICU
+              ambulances and discover real-time hospital bed availability across
+              the network.
             </p>
           </div>
 
@@ -70,14 +72,13 @@ export function PatientOverview() {
             </Link>
 
             <a href="tel:999" className="w-full sm:w-auto">
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto gap-2 border-white/40 text-white hover:bg-white/15 font-bold"
+              <button
+                type="button"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-13 px-7 rounded-xl bg-red hover:bg-red-700 text-white font-black text-sm sm:text-base shadow-md border border-white transition-all active:scale-[0.98] cursor-pointer"
               >
-                <PhoneCall className="h-4 w-4" />
-                <span>Call 999 Hotline</span>
-              </Button>
+                <PhoneCall className="h-4.5 w-4.5 text-red-400 shrink-0" />
+                <span>CALL 999 HOTLINE</span>
+              </button>
             </a>
           </div>
         </div>
@@ -109,7 +110,11 @@ export function PatientOverview() {
             </div>
 
             <Link href={`/dashboard/trips/${activeTrip.id}`}>
-              <Button variant="emergency" size="sm" className="font-bold text-xs gap-1.5">
+              <Button
+                variant="emergency"
+                size="sm"
+                className="font-bold text-xs gap-1.5"
+              >
                 <span>View Live Tracker</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
@@ -123,7 +128,8 @@ export function PatientOverview() {
               </span>
               <p className="font-semibold text-stone-900 flex items-center gap-1.5 truncate">
                 <MapPin className="h-3.5 w-3.5 text-red-600 shrink-0" />
-                {activeTrip.emergencyRequest?.pickupAddress || "Specified Pickup Address"}
+                {activeTrip.emergencyRequest?.pickupAddress ||
+                  "Specified Pickup Address"}
               </p>
             </div>
 
@@ -155,34 +161,38 @@ export function PatientOverview() {
       {/* 3. Quick Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Total SOS Calls"
+          title="Total SOS Requests"
           value={emergencies.length}
-          description="Emergency records on file"
+          description="Logged medical incidents"
           icon={Siren}
           variant="red"
           loading={loadingEmergencies}
         />
         <StatCard
-          title="Avg. Response Time"
-          value="7.4 min"
-          description="National emergency average"
+          title="Active Care Status"
+          value={activeTrip ? "Active Mission" : "Standby"}
+          description={
+            activeTrip ? "Ambulance dispatched" : "No ongoing medical transit"
+          }
           icon={Clock}
-          variant="emerald"
-          trend={{ value: "18% faster", direction: "up" }}
+          variant={activeTrip ? "red" : "emerald"}
+          loading={loadingTrip}
         />
         <StatCard
           title="Available ICU Beds"
-          value={
-            hospitals.reduce((acc: number, h: Hospital) => acc + (h.availableIcuBeds || 0), 0) || "42"
-          }
-          description="Network-wide free capacity"
+          value={hospitals.reduce(
+            (acc: number, h: Hospital) =>
+              acc + (h.availableIcuBeds ?? h.icuBedsAvailable ?? 0),
+            0,
+          )}
+          description={`${hospitals.length} partner hospital networks`}
           icon={Activity}
           variant="blue"
         />
         <StatCard
-          title="Fleet Status"
-          value="98.2%"
-          description="Active coverage readiness"
+          title="EMS Dispatch Radar"
+          value="24/7 Live"
+          description="Real-time triage & GPS routing"
           icon={AmbulanceIcon}
           variant="stone"
         />
@@ -212,7 +222,9 @@ export function PatientOverview() {
               title="No Past Emergency Incidents"
               description="Your emergency call history is completely clean. In case of an emergency, use the SOS button above."
               actionLabel="Request SOS Ambulance"
-              onAction={() => window.location.assign("/dashboard/emergency/new")}
+              onAction={() =>
+                window.location.assign("/dashboard/emergency/new")
+              }
             />
           ) : (
             <div className="space-y-2.5">
@@ -230,7 +242,9 @@ export function PatientOverview() {
                     </div>
                     <p className="text-xs text-stone-500 flex items-center gap-1">
                       <MapPin className="h-3 w-3 text-stone-400 shrink-0" />
-                      <span className="truncate max-w-sm">{em.pickupAddress}</span>
+                      <span className="truncate max-w-sm">
+                        {em.pickupAddress}
+                      </span>
                     </p>
                   </div>
 
@@ -239,7 +253,11 @@ export function PatientOverview() {
                       {new Date(em.createdAt).toLocaleDateString()}
                     </span>
                     <Link href={`/dashboard/trips`}>
-                      <Button variant="outline" size="sm" className="h-7 text-xs font-bold px-2.5">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-7 text-xs font-bold px-2.5"
+                      >
                         Details
                       </Button>
                     </Link>

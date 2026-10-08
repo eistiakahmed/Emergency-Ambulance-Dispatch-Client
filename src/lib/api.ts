@@ -31,7 +31,7 @@ export class ApiError extends Error {
   constructor(
     message: string,
     status: number,
-    errors?: Array<{ field?: string; message: string }> | string[]
+    errors?: Array<{ field?: string; message: string }> | string[],
   ) {
     super(message);
     this.name = "ApiError";
@@ -43,13 +43,24 @@ export class ApiError extends Error {
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined | null>;
   skipAuthRefresh?: boolean;
+  timeoutMs?: number;
+  retry?: number;
+  responseType?: "json" | "text" | "blob" | "raw";
 }
 
 async function request<T>(
   endpoint: string,
-  options: RequestOptions = {}
+  options: RequestOptions = {},
 ): Promise<T> {
-  const { params, skipAuthRefresh, headers: customHeaders, ...customConfig } = options;
+  const {
+    params,
+    skipAuthRefresh,
+    timeoutMs = 30000,
+    retry = 0,
+    responseType = "json",
+    headers: customHeaders,
+    ...customConfig
+  } = options;
 
   let url = endpoint.startsWith("http")
     ? endpoint
@@ -86,7 +97,57 @@ async function request<T>(
   };
 
   try {
-    const res = await fetch(url, config);
+    let res: Response | null = null;
+    let lastError: unknown = null;
+
+    for (let attempt = 0; attempt <= retry; attempt++) {
+      const controller = new AbortController();
+      let didTimeout = false;
+      const timer =
+        timeoutMs > 0
+          ? setTimeout(() => {
+              didTimeout = true;
+              controller.abort();
+            }, timeoutMs)
+          : null;
+
+      const externalSignal = customConfig.signal;
+      const onExternalAbort = () => controller.abort();
+      if (externalSignal) {
+        if (externalSignal.aborted) {
+          controller.abort();
+        } else {
+          externalSignal.addEventListener("abort", onExternalAbort, {
+            once: true,
+          });
+        }
+      }
+
+      try {
+        res = await fetch(url, { ...config, signal: controller.signal });
+        lastError = null;
+        break;
+      } catch (error) {
+        lastError = didTimeout
+          ? new ApiError(`Request timed out after ${timeoutMs}ms`, 408)
+          : error;
+        if (externalSignal?.aborted) break;
+      } finally {
+        if (timer) clearTimeout(timer);
+        externalSignal?.removeEventListener("abort", onExternalAbort);
+      }
+    }
+
+    if (!res) {
+      throw lastError instanceof ApiError
+        ? lastError
+        : new ApiError(
+            lastError instanceof Error
+              ? lastError.message
+              : "Network error occurred",
+            500,
+          );
+    }
 
     // Handle Token Refresh on 401 Unauthorized
     if (
@@ -121,13 +182,26 @@ async function request<T>(
       }
     }
 
-    const data = await res.json().catch(() => null);
+    if (responseType === "raw") {
+      return res as unknown as T;
+    }
 
     if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
       const errorMessage =
-        data?.message || `Request failed with status code ${res.status}`;
-      throw new ApiError(errorMessage, res.status, data?.errors);
+        errorData?.message || `Request failed with status code ${res.status}`;
+      throw new ApiError(errorMessage, res.status, errorData?.errors);
     }
+
+    if (responseType === "text") {
+      return (await res.text()) as T;
+    }
+
+    if (responseType === "blob") {
+      return (await res.blob()) as T;
+    }
+
+    const data = await res.json().catch(() => null);
 
     // Preserve paginated envelope with meta if present
     if (data && typeof data === "object" && "meta" in data && "data" in data) {
@@ -141,7 +215,7 @@ async function request<T>(
     }
     throw new ApiError(
       error instanceof Error ? error.message : "Network error occurred",
-      500
+      500,
     );
   }
 }

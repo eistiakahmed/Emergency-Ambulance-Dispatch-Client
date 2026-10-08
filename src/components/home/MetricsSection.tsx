@@ -1,5 +1,3 @@
-import React from "react";
-
 const metrics = [
   { value: "< 8.4 Mins", label: "Average Paramedic Arrival Time" },
   { value: "99.8%", label: "Geospatial Auto-Match Accuracy" },
@@ -10,7 +8,7 @@ const metrics = [
 export function MetricsSection() {
   return (
     <section className="border-b border-stone-200 bg-stone-50 py-10 sm:py-12">
-      <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-384 px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {metrics.map((m, idx) => (
             <div

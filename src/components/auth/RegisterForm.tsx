@@ -1,28 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import { Ambulance, Loader2, Mail, Phone, User, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { UserPlus, Loader2, User, Ambulance, Mail, Phone, Lock, FileText, Truck } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { Tabs } from "@/components/ui/Tabs";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
+import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/FormField";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
-import { Button } from "@/components/ui/button";
-import {
-  registerPatientSchema,
-  registerDriverSchema,
-  type RegisterPatientInput,
-  type RegisterDriverInput,
-} from "@/lib/schemas/auth.schema";
+import { Tabs } from "@/components/ui/Tabs";
 import { authApi } from "@/lib/api/auth";
+import {
+  type RegisterDriverInput,
+  type RegisterPatientInput,
+  registerDriverSchema,
+  registerPatientSchema,
+} from "@/lib/schemas/auth.schema";
 import { useAppDispatch } from "@/store/hooks";
 import { setCredentials } from "@/store/slices/authSlice";
 
 export function RegisterForm() {
-  const router = useRouter();
+  const _router = useRouter();
   const dispatch = useAppDispatch();
-  const [activeRoleTab, setActiveRoleTab] = useState<"PATIENT" | "DRIVER">("PATIENT");
+  const [activeRoleTab, setActiveRoleTab] = useState<"PATIENT" | "DRIVER">(
+    "PATIENT",
+  );
 
   // Patient Form State
   const [patientForm, setPatientForm] = useState<RegisterPatientInput>({
@@ -78,7 +82,7 @@ export function RegisterForm() {
           setCredentials({
             user: res.user,
             accessToken: res.accessToken,
-          })
+          }),
         );
         toast.success(`Account Created!`, {
           description: `Welcome to Pulse EMS, ${res.user.name}.`,
@@ -87,7 +91,9 @@ export function RegisterForm() {
       }
     } catch (err: unknown) {
       const message =
-        err instanceof Error ? err.message : "Failed to register patient account.";
+        err instanceof Error
+          ? err.message
+          : "Failed to register patient account.";
       toast.error("Registration Failed", {
         description: message,
       });
@@ -123,7 +129,7 @@ export function RegisterForm() {
           setCredentials({
             user: res.user,
             accessToken: res.accessToken,
-          })
+          }),
         );
         toast.success(`Driver Onboarded!`, {
           description: `Welcome to the active fleet, ${res.user.name}.`,
@@ -132,7 +138,9 @@ export function RegisterForm() {
       }
     } catch (err: unknown) {
       const message =
-        err instanceof Error ? err.message : "Failed to register driver account.";
+        err instanceof Error
+          ? err.message
+          : "Failed to register driver account.";
       toast.error("Registration Failed", {
         description: message,
       });
@@ -165,7 +173,12 @@ export function RegisterForm() {
       {/* Patient Registration Form */}
       {activeRoleTab === "PATIENT" && (
         <form onSubmit={handlePatientSubmit} className="space-y-4">
-          <FormField label="Full Name" error={errors.name} required htmlFor="patientName">
+          <FormField
+            label="Full Name"
+            error={errors.name}
+            required
+            htmlFor="patientName"
+          >
             <div className="relative">
               <Input
                 id="patientName"
@@ -181,7 +194,12 @@ export function RegisterForm() {
             </div>
           </FormField>
 
-          <FormField label="Email Address" error={errors.email} required htmlFor="patientEmail">
+          <FormField
+            label="Email Address"
+            error={errors.email}
+            required
+            htmlFor="patientEmail"
+          >
             <div className="relative">
               <Input
                 id="patientEmail"
@@ -222,7 +240,12 @@ export function RegisterForm() {
           </FormField>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <FormField label="Password" error={errors.password} required htmlFor="patientPassword">
+            <FormField
+              label="Password"
+              error={errors.password}
+              required
+              htmlFor="patientPassword"
+            >
               <PasswordInput
                 id="patientPassword"
                 placeholder="••••••••"
@@ -281,7 +304,12 @@ export function RegisterForm() {
       {/* Driver Registration Form */}
       {activeRoleTab === "DRIVER" && (
         <form onSubmit={handleDriverSubmit} className="space-y-4">
-          <FormField label="Driver Full Name" error={errors.name} required htmlFor="driverName">
+          <FormField
+            label="Driver Full Name"
+            error={errors.name}
+            required
+            htmlFor="driverName"
+          >
             <div className="relative">
               <Input
                 id="driverName"
@@ -298,7 +326,12 @@ export function RegisterForm() {
           </FormField>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <FormField label="Email Address" error={errors.email} required htmlFor="driverEmail">
+            <FormField
+              label="Email Address"
+              error={errors.email}
+              required
+              htmlFor="driverEmail"
+            >
               <Input
                 id="driverEmail"
                 type="email"
@@ -314,7 +347,12 @@ export function RegisterForm() {
               />
             </FormField>
 
-            <FormField label="Phone Number" error={errors.phone} required htmlFor="driverPhone">
+            <FormField
+              label="Phone Number"
+              error={errors.phone}
+              required
+              htmlFor="driverPhone"
+            >
               <Input
                 id="driverPhone"
                 type="tel"
@@ -365,13 +403,18 @@ export function RegisterForm() {
                 onChange={(e) =>
                   setDriverForm((prev) => ({
                     ...prev,
-                    vehicleType: e.target.value as RegisterDriverInput["vehicleType"],
+                    vehicleType: e.target
+                      .value as RegisterDriverInput["vehicleType"],
                   }))
                 }
-                className="flex h-11 w-full rounded-xl border border-stone-300 bg-white px-3 text-xs font-semibold text-stone-900 focus:border-red-600 focus:ring-2 focus:ring-red-600/20 focus:outline-none"
+                className="flex h-11 w-full rounded-xl border border-stone-300 bg-white px-3 text-xs font-semibold text-stone-900 outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20"
               >
-                <option value="BASIC_LIFE_SUPPORT">Basic Life Support (BLS)</option>
-                <option value="ADVANCED_LIFE_SUPPORT">Advanced Life Support (ALS)</option>
+                <option value="BASIC_LIFE_SUPPORT">
+                  Basic Life Support (BLS)
+                </option>
+                <option value="ADVANCED_LIFE_SUPPORT">
+                  Advanced Life Support (ALS)
+                </option>
                 <option value="PATIENT_TRANSPORT">Patient Transport</option>
                 <option value="NEONATAL">Neonatal ICU Unit</option>
               </select>
@@ -379,7 +422,12 @@ export function RegisterForm() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <FormField label="Password" error={errors.password} required htmlFor="driverPassword">
+            <FormField
+              label="Password"
+              error={errors.password}
+              required
+              htmlFor="driverPassword"
+            >
               <PasswordInput
                 id="driverPassword"
                 placeholder="••••••••"
@@ -434,6 +482,19 @@ export function RegisterForm() {
           </Button>
         </form>
       )}
+
+      {/* Or Social Sign-Up Divider */}
+      <div className="relative flex items-center justify-center my-2 pt-2">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-stone-200" />
+        </div>
+        <div className="relative bg-white px-2.5 text-[11px] font-semibold uppercase tracking-wider text-stone-500">
+          Or register faster with
+        </div>
+      </div>
+
+      {/* Google OAuth One-Tap & Button */}
+      <GoogleSignInButton role={activeRoleTab} text="signup_with" />
     </div>
   );
 }

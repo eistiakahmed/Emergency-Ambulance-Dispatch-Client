@@ -1,6 +1,11 @@
-import React from "react";
+import {
+  Activity,
+  Ambulance,
+  ArrowRight,
+  Check,
+  HeartPulse,
+} from "lucide-react";
 import Link from "next/link";
-import { HeartPulse, Ambulance, Activity, Check, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -49,13 +54,14 @@ const fleetCategories = [
 export function FleetSection() {
   return (
     <section className="py-16 sm:py-24 bg-stone-50 border-b border-stone-200">
-      <div className="mx-auto max-w-[1536px] px-4 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-384 px-4 sm:px-8 lg:px-12">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 sm:mb-16">
           <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-stone-900">
             Emergency Fleet Categories
           </h2>
           <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
-            Every unit in our emergency network is equipped to handle clinical escalations with certified crews.
+            Every unit in our emergency network is equipped to handle clinical
+            escalations with certified crews.
           </p>
         </div>
 
@@ -98,7 +104,10 @@ export function FleetSection() {
                 </div>
 
                 <Link href="/dashboard/emergency/new" className="pt-2 sm:pt-4">
-                  <Button variant="outline" className="w-full justify-between font-bold text-xs">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between font-bold text-xs"
+                  >
                     <span>Dispatch This Unit</span>
                     <ArrowRight className="h-4 w-4 text-red-600" />
                   </Button>

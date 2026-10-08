@@ -1,36 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import {
-  Building2,
-  Plus,
-  Search,
-  Phone,
-  MapPin,
   Activity,
   Bed,
-  CheckCircle2,
-  Trash2,
-  Edit2,
-  AlertCircle,
-  PlusCircle,
-  MinusCircle,
+  Building2,
   Loader2,
+  MapPin,
+  Phone,
+  Plus,
+  Trash2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
-import { Pagination } from "@/components/dashboard/Pagination";
-import { EmptyState } from "@/components/dashboard/EmptyState";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { CreateHospitalDialog } from "@/components/admin/CreateHospitalDialog";
+import { EmptyState } from "@/components/dashboard/EmptyState";
+import { Pagination } from "@/components/dashboard/Pagination";
+import { SearchFilterBar } from "@/components/dashboard/SearchFilterBar";
+import { Button } from "@/components/ui/button";
 import {
+  useDeleteHospital,
   useHospitals,
   useUpdateBedCapacity,
-  useDeleteHospital,
 } from "@/lib/hooks/useHospitals";
 import type { Hospital } from "@/types";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 export function HospitalManager() {
   const searchParams = useSearchParams();
@@ -59,15 +51,19 @@ export function HospitalManager() {
   const handleQuickAdjustBeds = async (
     hospital: Hospital,
     field: "icu" | "general",
-    delta: number
+    delta: number,
   ) => {
-    const currentIcu = hospital.icuBedsAvailable || hospital.availableIcuBeds || 0;
+    const currentIcu =
+      hospital.icuBedsAvailable || hospital.availableIcuBeds || 0;
     const currentGeneral =
       hospital.emergencyBedsAvailable || hospital.availableGeneralBeds || 0;
 
-    const newIcu = field === "icu" ? Math.max(0, currentIcu + delta) : currentIcu;
+    const newIcu =
+      field === "icu" ? Math.max(0, currentIcu + delta) : currentIcu;
     const newGeneral =
-      field === "general" ? Math.max(0, currentGeneral + delta) : currentGeneral;
+      field === "general"
+        ? Math.max(0, currentGeneral + delta)
+        : currentGeneral;
 
     await updateBedMutation.mutateAsync({
       id: hospital.id,
@@ -79,7 +75,11 @@ export function HospitalManager() {
   };
 
   const handleDeleteHospital = async (id: string, name: string) => {
-    if (confirm(`Are you sure you want to remove "${name}" from the dispatch registry?`)) {
+    if (
+      confirm(
+        `Are you sure you want to remove "${name}" from the dispatch registry?`,
+      )
+    ) {
       setDeletingId(id);
       try {
         await deleteHospitalMutation.mutateAsync(id);
@@ -110,7 +110,8 @@ export function HospitalManager() {
               Partner Hospital Bed Network
             </h2>
             <p className="text-xs text-stone-500">
-              {hospitals.length} registered hospital emergency centers in registry
+              {hospitals.length} registered hospital emergency centers in
+              registry
             </p>
           </div>
         </div>
@@ -138,17 +139,8 @@ export function HospitalManager() {
           title="No Hospitals Found"
           description="Register your first hospital or adjust your search filter."
           icon={Building2}
-          action={
-            <Button
-              onClick={() => setCreateDialogOpen(true)}
-              variant="outline"
-              size="sm"
-              className="font-bold text-xs gap-1"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              <span>Add Hospital</span>
-            </Button>
-          }
+          actionLabel="Add Hospital"
+          onAction={() => setCreateDialogOpen(true)}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -156,7 +148,9 @@ export function HospitalManager() {
             const icuAvail =
               hospital.icuBedsAvailable ?? hospital.availableIcuBeds ?? 0;
             const erAvail =
-              hospital.emergencyBedsAvailable ?? hospital.availableGeneralBeds ?? 0;
+              hospital.emergencyBedsAvailable ??
+              hospital.availableGeneralBeds ??
+              0;
             const erTotal =
               hospital.emergencyBedsTotal ?? hospital.totalGeneralBeds ?? 20;
 
@@ -204,7 +198,11 @@ export function HospitalManager() {
                     </p>
                     <p className="flex items-center gap-1.5 font-mono text-[11px]">
                       <Phone className="h-3.5 w-3.5 text-stone-400 shrink-0" />
-                      <span>{hospital.contactPhone || hospital.contactNumber || "+88029883701"}</span>
+                      <span>
+                        {hospital.contactPhone ||
+                          hospital.contactNumber ||
+                          "+88029883701"}
+                      </span>
                     </p>
                   </div>
 
@@ -225,7 +223,9 @@ export function HospitalManager() {
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
-                          onClick={() => handleQuickAdjustBeds(hospital, "general", -1)}
+                          onClick={() =>
+                            handleQuickAdjustBeds(hospital, "general", -1)
+                          }
                           disabled={erAvail <= 0 || updateBedMutation.isPending}
                           className="h-6 w-6 rounded-md bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-stone-700 font-bold disabled:opacity-40 cursor-pointer"
                         >
@@ -236,7 +236,9 @@ export function HospitalManager() {
                         </span>
                         <button
                           type="button"
-                          onClick={() => handleQuickAdjustBeds(hospital, "general", 1)}
+                          onClick={() =>
+                            handleQuickAdjustBeds(hospital, "general", 1)
+                          }
                           disabled={updateBedMutation.isPending}
                           className="h-6 w-6 rounded-md bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-stone-700 font-bold disabled:opacity-40 cursor-pointer"
                         >
@@ -257,8 +259,12 @@ export function HospitalManager() {
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
-                            onClick={() => handleQuickAdjustBeds(hospital, "icu", -1)}
-                            disabled={icuAvail <= 0 || updateBedMutation.isPending}
+                            onClick={() =>
+                              handleQuickAdjustBeds(hospital, "icu", -1)
+                            }
+                            disabled={
+                              icuAvail <= 0 || updateBedMutation.isPending
+                            }
                             className="h-6 w-6 rounded-md bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-stone-700 font-bold disabled:opacity-40 cursor-pointer"
                           >
                             -
@@ -268,7 +274,9 @@ export function HospitalManager() {
                           </span>
                           <button
                             type="button"
-                            onClick={() => handleQuickAdjustBeds(hospital, "icu", 1)}
+                            onClick={() =>
+                              handleQuickAdjustBeds(hospital, "icu", 1)
+                            }
                             disabled={updateBedMutation.isPending}
                             className="h-6 w-6 rounded-md bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-stone-700 font-bold disabled:opacity-40 cursor-pointer"
                           >
@@ -283,13 +291,22 @@ export function HospitalManager() {
                 {/* Card Footer Actions */}
                 <div className="flex items-center justify-between pt-3 mt-4 border-t border-stone-100 text-xs">
                   <span className="text-[10px] text-stone-400 font-mono">
-                    GPS: {hospital.latitude?.toFixed(2)}, {hospital.longitude?.toFixed(2)}
+                    GPS:{" "}
+                    {hospital.latitude != null
+                      ? Number(hospital.latitude).toFixed(2)
+                      : "23.79"}
+                    ,{" "}
+                    {hospital.longitude != null
+                      ? Number(hospital.longitude).toFixed(2)
+                      : "90.40"}
                   </span>
 
                   <Button
                     variant="ghost"
-                    size="xs"
-                    onClick={() => handleDeleteHospital(hospital.id, hospital.name)}
+                    size="sm"
+                    onClick={() =>
+                      handleDeleteHospital(hospital.id, hospital.name)
+                    }
                     disabled={isDeleting}
                     className="h-7 text-[11px] text-stone-400 hover:text-red-600 hover:bg-red-50 font-bold gap-1"
                   >

@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { DashboardSidebar } from "./DashboardSidebar";
+import type React from "react";
 import { DashboardHeader } from "./DashboardHeader";
+import { DashboardSidebar } from "./DashboardSidebar";
 
 interface DashboardShellProps {
   title?: string;
@@ -29,7 +29,7 @@ export function DashboardShell({
           onRefresh={onRefresh}
           isRefreshing={isRefreshing}
         />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1440px] w-full mx-auto space-y-6">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-360 w-full mx-auto space-y-6">
           {children}
         </main>
       </div>

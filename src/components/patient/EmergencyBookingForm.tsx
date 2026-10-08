@@ -1,32 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
-  Siren,
-  Heart,
   Activity,
-  Wind,
+  AlertTriangle,
   Baby,
   Cross,
-  AlertTriangle,
-  MapPin,
-  Phone,
-  User,
-  Hospital as HospitalIcon,
-  Navigation,
-  Loader2,
   FileText,
+  Heart,
+  Hospital as HospitalIcon,
+  Loader2,
+  MapPin,
+  Navigation,
+  Phone,
+  Siren,
+  User,
+  Wind,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/ui/FormField";
-import { useHospitals } from "@/lib/hooks/useHospitals";
+import { Input } from "@/components/ui/input";
 import { useCreateEmergency } from "@/lib/hooks/useEmergencies";
+import { useHospitals } from "@/lib/hooks/useHospitals";
+import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/store/hooks";
 import type { Hospital } from "@/types";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 
 const EMERGENCY_TYPES = [
   {
@@ -106,7 +107,7 @@ export function EmergencyBookingForm() {
   const [patientName, setPatientName] = useState(user?.name || "");
   const [patientPhone, setPatientPhone] = useState(user?.phone || "");
   const [pickupAddress, setPickupAddress] = useState(
-    "Banani Road 11, Block D, Dhaka, Bangladesh"
+    "Banani Road 11, Block D, Dhaka, Bangladesh",
   );
   const [latitude, setLatitude] = useState(23.7937);
   const [longitude, setLongitude] = useState(90.4066);
@@ -138,7 +139,7 @@ export function EmergencyBookingForm() {
         setLocating(false);
         toast.error("Could not fetch GPS", { description: err.message });
       },
-      { timeout: 10000, enableHighAccuracy: true }
+      { timeout: 10000, enableHighAccuracy: true },
     );
   };
 
@@ -181,7 +182,8 @@ export function EmergencyBookingForm() {
             <span>1. Select Emergency Medical Category</span>
           </h3>
           <p className="text-xs text-stone-500 mt-0.5">
-            Helps dispatch the best suited ALS/BLS crew and specialized medical equipment.
+            Helps dispatch the best suited ALS/BLS crew and specialized medical
+            equipment.
           </p>
         </div>
 
@@ -199,13 +201,13 @@ export function EmergencyBookingForm() {
                   "flex flex-col items-start p-3 sm:p-4 rounded-xl border text-left transition-all cursor-pointer gap-2",
                   isSelected
                     ? "border-red-600 bg-red-50/70 ring-2 ring-red-500/20 shadow-xs"
-                    : "border-stone-200 hover:border-stone-300 bg-stone-50/40"
+                    : "border-stone-200 hover:border-stone-300 bg-stone-50/40",
                 )}
               >
                 <div
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-lg border",
-                    type.color
+                    type.color,
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -239,23 +241,27 @@ export function EmergencyBookingForm() {
               <button
                 key={sev.id}
                 type="button"
-                onClick={() => setSeverityLevel(sev.id as "CRITICAL" | "HIGH" | "MEDIUM")}
+                onClick={() =>
+                  setSeverityLevel(sev.id as "CRITICAL" | "HIGH" | "MEDIUM")
+                }
                 className={cn(
                   "p-3.5 rounded-xl border text-left space-y-2 transition-all cursor-pointer",
                   isSelected
                     ? `${sev.border} bg-stone-50/80 ring-2 ring-red-500/15 shadow-xs`
-                    : "border-stone-200 hover:border-stone-300"
+                    : "border-stone-200 hover:border-stone-300",
                 )}
               >
                 <span
                   className={cn(
                     "inline-block px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider",
-                    sev.badge
+                    sev.badge,
                   )}
                 >
                   {sev.label}
                 </span>
-                <p className="text-xs text-stone-600 leading-snug">{sev.desc}</p>
+                <p className="text-xs text-stone-600 leading-snug">
+                  {sev.desc}
+                </p>
               </button>
             );
           })}
@@ -327,7 +333,9 @@ export function EmergencyBookingForm() {
                 ) : (
                   <Navigation className="h-3 w-3 text-red-600" />
                 )}
-                <span>{locating ? "Acquiring GPS..." : "Auto-Locate Me via GPS"}</span>
+                <span>
+                  {locating ? "Acquiring GPS..." : "Auto-Locate Me via GPS"}
+                </span>
               </Button>
             </div>
           </div>
@@ -342,7 +350,8 @@ export function EmergencyBookingForm() {
             <span>4. Destination Hospital & Medical Notes</span>
           </h3>
           <p className="text-xs text-stone-500 mt-0.5">
-            Select a preferred emergency hospital or let our dispatch router select the nearest.
+            Select a preferred emergency hospital or let our dispatch router
+            select the nearest.
           </p>
         </div>
 
@@ -357,7 +366,8 @@ export function EmergencyBookingForm() {
             </option>
             {hospitals.map((h: Hospital) => (
               <option key={h.id} value={h.id}>
-                {h.name} — {h.availableIcuBeds} ICU / {h.availableGeneralBeds} Gen Free
+                {h.name} — {h.availableIcuBeds} ICU / {h.availableGeneralBeds}{" "}
+                Gen Free
               </option>
             ))}
           </select>

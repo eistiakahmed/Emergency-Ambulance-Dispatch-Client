@@ -10,7 +10,10 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, leftIcon, prefixIcon, rightIcon, ...props }, ref) => {
+  (
+    { className, type, error, leftIcon, prefixIcon, rightIcon, ...props },
+    ref,
+  ) => {
     const iconLeft = leftIcon || prefixIcon;
     return (
       <div className="w-full">
@@ -23,11 +26,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             type={type}
             className={cn(
-              "flex h-11 w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-sm text-stone-900 shadow-xs transition-all placeholder:text-stone-400 focus:bg-white focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:opacity-60",
+              "flex h-11 w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-sm text-stone-900 shadow-xs transition-all placeholder:text-stone-400 outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:opacity-60",
               iconLeft && "pl-10",
               rightIcon && "pr-10",
-              error && "border-red-500 focus:border-red-600 focus:ring-red-500/20 bg-red-50/30",
-              className
+              error &&
+                "border-red-500 focus:border-red-600 focus:ring-red-500/20 bg-red-50/30",
+              className,
             )}
             ref={ref}
             {...props}
@@ -56,7 +60,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 Input.displayName = "Input";
 

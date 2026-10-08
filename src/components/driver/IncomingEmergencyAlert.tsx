@@ -1,20 +1,9 @@
 "use client";
 
-import React from "react";
-import {
-  Siren,
-  MapPin,
-  Phone,
-  Clock,
-  AlertTriangle,
-  Check,
-  X,
-  Hospital,
-  Loader2,
-} from "lucide-react";
+import { Check, Loader2, MapPin, Phone, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCreateTrip } from "@/lib/hooks/useTrips";
 import { useMyVehicle } from "@/lib/hooks/useAmbulances";
+import { useCreateTrip } from "@/lib/hooks/useTrips";
 import type { EmergencyRequest } from "@/types";
 
 export interface IncomingEmergencyAlertProps {

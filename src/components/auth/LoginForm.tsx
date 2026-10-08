@@ -1,21 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import { Loader2, Lock, LogIn, Mail } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { LogIn, Loader2, Mail, Lock } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { DemoLoginBar } from "@/components/auth/DemoLoginBar";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
+import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/FormField";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
-import { Button } from "@/components/ui/button";
-import { DemoLoginBar } from "@/components/auth/DemoLoginBar";
-import { loginSchema, type LoginInput } from "@/lib/schemas/auth.schema";
 import { authApi } from "@/lib/api/auth";
+import { type LoginInput, loginSchema } from "@/lib/schemas/auth.schema";
 import { useAppDispatch } from "@/store/hooks";
 import { setCredentials } from "@/store/slices/authSlice";
 
 export function LoginForm() {
-  const router = useRouter();
+  const _router = useRouter();
   const searchParams = useSearchParams();
   const redirectParam = searchParams.get("redirect");
   const dispatch = useAppDispatch();
@@ -64,7 +66,7 @@ export function LoginForm() {
           setCredentials({
             user: res.user,
             accessToken: res.accessToken,
-          })
+          }),
         );
 
         toast.success(`Welcome back, ${res.user.name}!`, {
@@ -76,8 +78,8 @@ export function LoginForm() {
           (res.user.role === "ADMIN"
             ? "/admin"
             : res.user.role === "DRIVER"
-            ? "/provider"
-            : "/dashboard");
+              ? "/provider"
+              : "/dashboard");
 
         window.location.assign(target);
       }
@@ -98,7 +100,12 @@ export function LoginForm() {
       {/* Main Credentials Login Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email Field */}
-        <FormField label="Email Address" error={errors.email} required htmlFor="email">
+        <FormField
+          label="Email Address"
+          error={errors.email}
+          required
+          htmlFor="email"
+        >
           <div className="relative">
             <Input
               id="email"
@@ -117,7 +124,12 @@ export function LoginForm() {
         </FormField>
 
         {/* Password Field */}
-        <FormField label="Password" error={errors.password} required htmlFor="password">
+        <FormField
+          label="Password"
+          error={errors.password}
+          required
+          htmlFor="password"
+        >
           <div className="relative">
             <PasswordInput
               id="password"
@@ -151,8 +163,8 @@ export function LoginForm() {
             <span>Remember this device</span>
           </label>
 
-          <a
-            href="#"
+          <button
+            type="button"
             onClick={(e) => {
               e.preventDefault();
               toast.info("Password Reset", {
@@ -163,7 +175,7 @@ export function LoginForm() {
             className="font-medium text-stone-500 hover:text-stone-800 transition-colors"
           >
             Forgot password?
-          </a>
+          </button>
         </div>
 
         {/* Submit Button */}
@@ -186,8 +198,26 @@ export function LoginForm() {
         </Button>
       </form>
 
+      {/* Or Social Login Divider */}
+      <div className="relative flex items-center justify-center my-2">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-stone-200" />
+        </div>
+        <div className="relative bg-white px-2.5 text-[11px] font-semibold uppercase tracking-wider text-stone-500">
+          Or continue with
+        </div>
+      </div>
+
+      {/* Google OAuth One-Tap & Button */}
+      <div className="w-full my-1">
+        <GoogleSignInButton text="continue_with" />
+      </div>
+
       {/* 1-Click Quick Demo Login Section */}
-      <DemoLoginBar onFillCredentials={handleFillCredentials} />
+      <DemoLoginBar
+        onFillCredentials={handleFillCredentials}
+        className="mt-3"
+      />
     </div>
   );
 }

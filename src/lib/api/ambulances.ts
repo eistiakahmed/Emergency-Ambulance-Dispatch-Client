@@ -1,5 +1,5 @@
-import { api } from "../api";
 import type { Ambulance, PaginatedResponse } from "@/types";
+import { api } from "../api";
 
 export interface AmbulanceFilterParams {
   page?: number;
@@ -26,7 +26,9 @@ export interface UpdateDriverStatusPayload {
 
 export const ambulancesApi = {
   // Get all ambulances with pagination and filters
-  list: async (params?: AmbulanceFilterParams): Promise<PaginatedResponse<Ambulance>> => {
+  list: async (
+    params?: AmbulanceFilterParams,
+  ): Promise<PaginatedResponse<Ambulance>> => {
     return api.get<PaginatedResponse<Ambulance>>("/ambulances", {
       params,
     });
@@ -50,7 +52,9 @@ export const ambulancesApi = {
   },
 
   // Driver update availability status & location
-  updateDriverStatus: async (payload: UpdateDriverStatusPayload): Promise<Ambulance> => {
+  updateDriverStatus: async (
+    payload: UpdateDriverStatusPayload,
+  ): Promise<Ambulance> => {
     return api.patch<Ambulance>("/ambulances/driver/status", payload);
   },
 
