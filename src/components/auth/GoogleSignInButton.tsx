@@ -3,7 +3,7 @@
 import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { authApi } from "@/lib/api/auth";
 import { cn } from "@/lib/utils";
@@ -22,20 +22,21 @@ declare global {
             auto_select?: boolean;
             cancel_on_tap_outside?: boolean;
           }) => void;
-          renderButton: (
-            parent: HTMLElement,
-            options: {
-              type?: "standard" | "icon";
-              theme?: "outline" | "filled_blue" | "filled_black";
-              size?: "large" | "medium" | "small";
-              text?: "signin_with" | "signup_with" | "continue_with" | "signin";
-              shape?: "rectangular" | "pill" | "circle" | "square";
-              logo_alignment?: "left" | "center";
-              width?: number | string;
-              locale?: string;
-            },
-          ) => void;
-          prompt?: () => void;
+          prompt?: (momentListener?: (notification: unknown) => void) => void;
+        };
+        oauth2: {
+          initTokenClient: (config: {
+            client_id: string;
+            scope: string;
+            callback: (response: {
+              access_token?: string;
+              error?: string;
+              error_description?: string;
+            }) => void;
+            error_callback?: (error: unknown) => void;
+          }) => {
+            requestAccessToken: (overrideConfig?: { prompt?: string }) => void;
+          };
         };
       };
     };
@@ -61,14 +62,13 @@ function GoogleSignInButtonInner({
   const searchParams = useSearchParams();
   const redirectParam = searchParams.get("redirect");
 
-  const buttonRef = useRef<HTMLDivElement>(null);
   const [clientId, setClientId] = useState<string>(
     process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
   );
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  // Fetch client ID from backend fallback if missing from env
+  // Fetch client ID fallback from backend if env var is missing
   useEffect(() => {
     if (!clientId) {
       authApi.getGoogleClientId().then((id) => {
@@ -77,18 +77,12 @@ function GoogleSignInButtonInner({
     }
   }, [clientId]);
 
-  const handleCredentialResponse = useCallback(
-    async (response: { credential: string }) => {
-      if (!response.credential) {
-        toast.error("Google Authentication Failed", {
-          description: "No authentication credential received from Google.",
-        });
-        return;
-      }
-
+  // Unified authentication handler for both ID token (One-Tap) and Access token (OAuth popup)
+  const handleAuthPayload = useCallback(
+    async (payload: { idToken?: string; accessToken?: string }) => {
       try {
         setIsAuthenticating(true);
-        const res = await authApi.googleSignIn(response.credential, role);
+        const res = await authApi.googleSignIn(payload, role);
 
         if (res?.user && res?.accessToken) {
           dispatch(
@@ -130,14 +124,13 @@ function GoogleSignInButtonInner({
     [dispatch, onError, onSuccess, redirectParam, role],
   );
 
-  // Initialize and render Google button once SDK is loaded and Client ID is available
+  // Optional: Initialize Google One Tap in background
   useEffect(() => {
     if (
       !scriptLoaded ||
       typeof window === "undefined" ||
-      !window.google ||
-      !clientId ||
-      !buttonRef.current
+      !window.google?.accounts?.id ||
+      !clientId
     ) {
       return;
     }
@@ -145,26 +138,88 @@ function GoogleSignInButtonInner({
     try {
       window.google.accounts.id.initialize({
         client_id: clientId,
-        callback: handleCredentialResponse,
+        callback: (response) => {
+          if (response?.credential) {
+            handleAuthPayload({ idToken: response.credential });
+          }
+        },
         auto_select: false,
         cancel_on_tap_outside: true,
       });
 
-      buttonRef.current.innerHTML = "";
-
-      window.google.accounts.id.renderButton(buttonRef.current, {
-        theme: "outline",
-        size: "large",
-        text,
-        shape: "rectangular",
-        logo_alignment: "left",
-        width: buttonRef.current.offsetWidth || 340,
-        locale: "en",
-      });
-    } catch (e) {
-      console.warn("Failed to render Google Sign-In button:", e);
+      // Silently request prompt for returning users
+      window.google.accounts.id.prompt?.();
+    } catch {
+      // Non-blocking
     }
-  }, [clientId, text, handleCredentialResponse, scriptLoaded]);
+  }, [clientId, scriptLoaded, handleAuthPayload]);
+
+  // Click handler for our native, full-width, perfectly styled button
+  const handleCustomGoogleClick = () => {
+    if (isAuthenticating) return;
+
+    if (!clientId) {
+      toast.error("Google Authentication Error", {
+        description: "Google Client ID is not configured.",
+      });
+      return;
+    }
+
+    if (!window.google?.accounts?.oauth2) {
+      toast.info("Initializing Google...", {
+        description: "Please wait a moment while the Google service connects.",
+      });
+      return;
+    }
+
+    try {
+      setIsAuthenticating(true);
+      const tokenClient = window.google.accounts.oauth2.initTokenClient({
+        client_id: clientId,
+        scope: "email profile openid",
+        callback: async (tokenResponse) => {
+          if (tokenResponse.error) {
+            setIsAuthenticating(false);
+            if (tokenResponse.error !== "popup_closed_by_user") {
+              toast.error("Google Sign-In Error", {
+                description:
+                  tokenResponse.error_description || tokenResponse.error,
+              });
+            }
+            return;
+          }
+
+          if (tokenResponse.access_token) {
+            await handleAuthPayload({
+              accessToken: tokenResponse.access_token,
+            });
+          } else {
+            setIsAuthenticating(false);
+          }
+        },
+        error_callback: (err) => {
+          setIsAuthenticating(false);
+          console.warn("Google OAuth error:", err);
+        },
+      });
+
+      tokenClient.requestAccessToken({ prompt: "select_account" });
+    } catch (err: unknown) {
+      setIsAuthenticating(false);
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Could not open Google authentication.";
+      toast.error("Google Sign-In Failed", { description: message });
+    }
+  };
+
+  const buttonLabel =
+    text === "signup_with"
+      ? "Sign up with Google"
+      : text === "signin_with"
+        ? "Sign in with Google"
+        : "Continue with Google";
 
   return (
     <div className={cn("relative w-full py-1", className)}>
@@ -174,29 +229,27 @@ function GoogleSignInButtonInner({
         onLoad={() => setScriptLoaded(true)}
       />
 
-      {isAuthenticating && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-white/90 backdrop-blur-xs border border-stone-200">
-          <div className="flex items-center gap-2 text-xs font-semibold text-stone-700">
-            <Loader2 className="h-4 w-4 animate-spin text-red-600" />
-            <span>Verifying with Google...</span>
-          </div>
-        </div>
-      )}
-
-      {/* Official Google Button Render Target */}
-      <div
-        ref={buttonRef}
-        className="w-full flex justify-center [&>div]:w-full [&>div>iframe]:!w-full [&>div>iframe]:!rounded-xl overflow-hidden min-h-[44px]"
+      <button
+        type="button"
+        onClick={handleCustomGoogleClick}
+        disabled={isAuthenticating}
+        className={cn(
+          "relative w-full h-12 flex items-center justify-center gap-3 px-4",
+          "rounded-xl border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100",
+          "text-stone-700 font-semibold text-sm shadow-2xs hover:border-stone-400",
+          "transition-all duration-150 active:scale-[0.99]",
+          "disabled:opacity-60 disabled:cursor-not-allowed",
+        )}
       >
-        {/* Placeholder / Pre-render skeleton while script loads */}
-        {!scriptLoaded && (
-          <button
-            type="button"
-            disabled
-            className="w-full h-11 flex items-center justify-center gap-3 px-4 rounded-xl border border-stone-300 bg-white text-stone-700 font-medium text-xs sm:text-sm shadow-2xs hover:bg-stone-50 transition-colors"
-          >
+        {isAuthenticating ? (
+          <span className="flex items-center gap-2 text-stone-600 text-xs sm:text-sm font-semibold">
+            <Loader2 className="h-4 w-4 animate-spin text-red-600" />
+            <span>Connecting with Google...</span>
+          </span>
+        ) : (
+          <>
             <svg
-              className="h-4 w-4 shrink-0"
+              className="h-5 w-5 shrink-0"
               viewBox="0 0 24 24"
               role="img"
               aria-label="Google logo"
@@ -219,10 +272,10 @@ function GoogleSignInButtonInner({
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
               />
             </svg>
-            <span>Continue with Google</span>
-          </button>
+            <span className="truncate">{buttonLabel}</span>
+          </>
         )}
-      </div>
+      </button>
     </div>
   );
 }
@@ -235,7 +288,7 @@ export function GoogleSignInButton(props: GoogleSignInButtonProps) {
           <button
             type="button"
             disabled
-            className="w-full h-11 flex items-center justify-center gap-3 px-4 rounded-xl border border-stone-200 bg-white text-stone-500 font-medium text-xs sm:text-sm shadow-2xs opacity-80 cursor-wait"
+            className="w-full h-12 flex items-center justify-center gap-3 px-4 rounded-xl border border-stone-200 bg-white text-stone-400 font-semibold text-sm shadow-2xs opacity-75 cursor-wait"
           >
             <Loader2 className="h-4 w-4 animate-spin text-stone-400" />
             <span>Continue with Google</span>

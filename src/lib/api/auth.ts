@@ -130,11 +130,15 @@ export const authApi = {
   },
 
   googleSignIn: async (
-    idToken: string,
+    tokenOrPayload: string | { idToken?: string; accessToken?: string },
     role?: Role,
   ): Promise<AuthResponseData> => {
+    const payload =
+      typeof tokenOrPayload === "string"
+        ? { idToken: tokenOrPayload }
+        : tokenOrPayload;
     const raw = await api.post<RawAuthResponse>("/auth/google", {
-      idToken,
+      ...payload,
       ...(role ? { role } : {}),
     });
 
