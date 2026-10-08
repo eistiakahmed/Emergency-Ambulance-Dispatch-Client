@@ -3,7 +3,7 @@
 import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { authApi } from "@/lib/api/auth";
 import { cn } from "@/lib/utils";
@@ -50,7 +50,7 @@ interface GoogleSignInButtonProps {
   onError?: (error: string) => void;
 }
 
-export function GoogleSignInButton({
+function GoogleSignInButtonInner({
   role = "PATIENT",
   text = "continue_with",
   className,
@@ -224,5 +224,26 @@ export function GoogleSignInButton({
         )}
       </div>
     </div>
+  );
+}
+
+export function GoogleSignInButton(props: GoogleSignInButtonProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className={cn("relative w-full py-1", props.className)}>
+          <button
+            type="button"
+            disabled
+            className="w-full h-11 flex items-center justify-center gap-3 px-4 rounded-xl border border-stone-200 bg-white text-stone-500 font-medium text-xs sm:text-sm shadow-2xs opacity-80 cursor-wait"
+          >
+            <Loader2 className="h-4 w-4 animate-spin text-stone-400" />
+            <span>Continue with Google</span>
+          </button>
+        </div>
+      }
+    >
+      <GoogleSignInButtonInner {...props} />
+    </Suspense>
   );
 }

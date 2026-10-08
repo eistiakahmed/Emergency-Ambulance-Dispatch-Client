@@ -1,4 +1,6 @@
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
@@ -24,7 +26,15 @@ export default function RegisterPage() {
         </p>
       }
     >
-      <RegisterForm />
+      <Suspense
+        fallback={
+          <div className="min-h-[300px] flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-red-600" />
+          </div>
+        }
+      >
+        <RegisterForm />
+      </Suspense>
     </AuthCard>
   );
 }
