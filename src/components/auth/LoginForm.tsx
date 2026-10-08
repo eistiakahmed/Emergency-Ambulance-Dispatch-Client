@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2, Lock, LogIn, Mail } from "lucide-react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
@@ -163,19 +164,12 @@ export function LoginForm() {
             <span>Remember this device</span>
           </label>
 
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              toast.info("Password Reset", {
-                description:
-                  "For demo accounts, use the 1-Click Demo Login below or contact support.",
-              });
-            }}
-            className="font-medium text-stone-500 hover:text-stone-800 transition-colors"
+          <Link
+            href="/forgot-password"
+            className="font-medium text-stone-500 hover:text-red-600 transition-colors"
           >
             Forgot password?
-          </button>
+          </Link>
         </div>
 
         {/* Submit Button */}

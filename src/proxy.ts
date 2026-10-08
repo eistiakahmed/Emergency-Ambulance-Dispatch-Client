@@ -10,7 +10,11 @@ export function proxy(request: NextRequest) {
   const isAuthenticated = Boolean(authToken);
 
   // 2. Auth Routes Redirect for Already Authenticated Users
-  const isAuthRoute = pathname === "/login" || pathname === "/register";
+  const isAuthRoute =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password";
   if (isAuthRoute && isAuthenticated && userRole) {
     if (userRole === "ADMIN") {
       return NextResponse.redirect(new URL("/admin", request.url));
@@ -73,5 +77,7 @@ export const config = {
     "/dashboard/:path*",
     "/login",
     "/register",
+    "/forgot-password",
+    "/reset-password",
   ],
 };

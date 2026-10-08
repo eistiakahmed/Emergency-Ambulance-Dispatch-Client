@@ -68,3 +68,35 @@ export const registerDriverSchema = z
   });
 
 export type RegisterDriverInput = z.infer<typeof registerDriverSchema>;
+
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Email address is required")
+    .email("Please enter a valid email address"),
+});
+
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = z
+  .object({
+    email: z
+      .string()
+      .min(1, "Email address is required")
+      .email("Please enter a valid email address"),
+    otp: z
+      .string()
+      .min(6, "Verification code must be 6 digits")
+      .max(6, "Verification code must be 6 digits")
+      .regex(/^\d{6}$/, "Code must consist of 6 numbers"),
+    newPassword: z
+      .string()
+      .min(6, "New password must be at least 6 characters"),
+    confirmNewPassword: z.string().min(1, "Please confirm your new password"),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "Passwords do not match",
+    path: ["confirmNewPassword"],
+  });
+
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;

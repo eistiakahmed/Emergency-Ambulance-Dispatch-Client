@@ -160,4 +160,16 @@ export const authApi = {
       return "";
     }
   },
+
+  forgotPassword: async (email: string): Promise<{ message?: string }> => {
+    return api.post<{ message?: string }>("/auth/forgot-password", { email });
+  },
+
+  resetPassword: async (payload: {
+    email: string;
+    otp: string;
+    newPassword: string;
+  }): Promise<{ message?: string }> => {
+    return api.post<{ message?: string }>("/auth/reset-password", payload);
+  },
 };
